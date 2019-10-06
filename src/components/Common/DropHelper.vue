@@ -110,6 +110,11 @@ export default {
             });
             this.helperOverlayVisible = false;
         }
+    },
+    watch: {
+        helperOverlayVisible() {
+            document.title = this.helperOverlayVisible ? '请在对应区域释放文件' : 'Meriix';
+        }
     }
 }
 </script>

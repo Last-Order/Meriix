@@ -4,9 +4,7 @@
       <v-tabs v-model="active" color="cyan" dark slider-color="yellow">
         <v-tab key="videoEncode" ripple>视频编码</v-tab>
         <v-tab-item key="videoEncode">
-          <v-card flat>
-            <video-encode />
-          </v-card>
+          <video-encode />
         </v-tab-item>
       </v-tabs>
     </v-app>
@@ -18,6 +16,9 @@ body {
   padding: 0px;
   margin: 0px;
   overflow: hidden;
+}
+.v-tabs-items {
+  background-color: rgba(250, 250, 250) !important;
 }
 </style>
 <script>

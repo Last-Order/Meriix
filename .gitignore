@@ -22,3 +22,9 @@ yarn-error.log*
 
 #Electron-builder output
 /dist_electron
+
+# External binaries
+/lib
+
+# icons
+/build

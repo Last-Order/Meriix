@@ -1,9 +1,10 @@
 <template>
-  <div class="video-encode-container">
+  <v-container grid-list-md class="video-encode-container">
     <v-layout row wrap justify-center>
       <v-flex xs6>
         <v-card>
           <v-card-text>
+            <h3>添加任务</h3>
             <v-form>
               <v-file-input v-model="form.video" label="视频文件" prepend-icon="mdi-video" />
               <v-file-input v-model="form.subtitle" label="字幕文件" prepend-icon="mdi-text" />
@@ -11,8 +12,15 @@
           </v-card-text>
         </v-card>
       </v-flex>
+      <v-flex xs6>
+        <v-card>
+          <v-card-text>
+            <h3>队列</h3>
+          </v-card-text>
+        </v-card>
+      </v-flex>
     </v-layout>
-  </div>
+  </v-container>
 </template>
 <script>
 export default {

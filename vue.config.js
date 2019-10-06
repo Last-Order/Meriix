@@ -5,9 +5,9 @@ module.exports = {
         disableHostCheck: true
     },
     transpileDependencies: [
-        
+
     ],
-    chainWebpack: (config)=>{
+    chainWebpack: (config) => {
         config.resolve.alias
             .set('@', path.resolve('src'))
     },
@@ -31,6 +31,15 @@ module.exports = {
                     oneClick: false,
                     allowToChangeInstallationDirectory: true
                 },
+                extraResources: [
+                    {
+                        "from": "./lib/",
+                        "to": "lib",
+                        "filter": [
+                            "**/*"
+                        ]
+                    }
+                ]
             }
         }
     }
