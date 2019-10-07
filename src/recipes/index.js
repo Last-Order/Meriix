@@ -1,0 +1,1 @@
+export { default as StaticImageVideo } from './static_image_video';

@@ -1,14 +1,14 @@
 <template>
     <div class="drop-helper" ref="container">
         <div class="helper-overlay" :style="{ opacity: helperOverlayVisible ? 1 : 0 }">
-            <div class="top-overlay">
+            <div class="top-overlay" :style="{ height: options.length > 1 ? '50%' : '100%' }">
                 <template v-for="item in options.slice(0, Math.ceil(options.length / 2))">
                     <div class="overlay-item" :key="item.name" :data-name="item.name">
                         <span>{{ item.text }}</span>
                     </div>
                 </template>
             </div>
-            <div class="bottom-overlay">
+            <div class="bottom-overlay" v-if="options.length > 1">
                 <template v-for="item in options.slice(Math.ceil(options.length / 2))">
                     <div class="overlay-item" :key="item.name" :data-name="item.name">
                         <span>{{ item.text }}</span>

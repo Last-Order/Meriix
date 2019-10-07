@@ -12,13 +12,6 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex xs6>
-        <v-card>
-          <v-card-text>
-            <h3>队列</h3>
-          </v-card-text>
-        </v-card>
-      </v-flex>
     </v-layout>
   </v-container>
 </template>
