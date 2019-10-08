@@ -59,9 +59,18 @@ import TaskQueue from "@/components/TaskQueue/Index";
 export default {
   name: "App",
   data: () => ({
-    active: 0,
-    queueDrawerVisible: false
+    active: 0
   }),
+  computed: {
+    queueDrawerVisible: {
+      get() {
+        return this.$store.state.global.queueDrawerVisible;
+      },
+      set(visible) {
+        this.$store.commit('setQueueDrawerVisible', visible);
+      }
+    }
+  },
   methods: {
     droppedHandler(e) {
       this.$store.state.global.dropHandler(e);

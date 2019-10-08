@@ -18,7 +18,7 @@ export default class StaticImageVideo extends BaseRecipe {
             return false;
         }
         for (let index = 0; index < files.length; index++) {
-            const audioRegex = new RegExp('^.+(mp3|flac|aac|alac|wav)$')
+            const audioRegex = new RegExp('^.+(mp3|flac|aac|alac|wav)$', 'i')
             const isAudio = audioRegex.test(files[index].path);
             if (!isAudio && index !== imageFileIndex) {
                 return false;

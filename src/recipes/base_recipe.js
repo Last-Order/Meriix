@@ -14,4 +14,13 @@ export default class BaseRecipe {
     static check(files) {
         return files.length > 0;
     }
+
+    /**
+     * 生成任务
+     * @param {FileList} files 
+     */
+    // eslint-disable-next-line no-unused-vars
+    static generateTasks(files) {
+        return [];
+    }
 }
