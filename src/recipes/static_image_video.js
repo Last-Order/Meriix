@@ -59,6 +59,18 @@ export default class StaticImageVideo extends BaseRecipe {
                     type: 'encode',
                     encoder: 'avs2nvencc',
                     command: '${avs2pipemod}' + ` --y4mp "${path.resolve(path.dirname(imageFile.path), 'template.avs')}" | ` + '${nvencc}' + ` --y4m -i - -o "${audioFile.path + '.scg.mp4'}"`
+                }, {
+                    stepName: '混流',
+                    type: 'execute',
+                    command: '${ffmpeg}' + ` -i "${audioFile.path + '.scg.mp4'}" -i "${audioFile.path}" -c:v copy -c:a aac -b:a 320k "${audioFile.path + '.scg.mux.mp4'}"`
+                }, {
+                    stepName: '清理文件',
+                    type: 'delete',
+                    files: [
+                        path.resolve(path.dirname(imageFile.path), 'template.avs'),
+                        imageFile.path + '.output.png',
+                        audioFile.path + '.scg.mp4'
+                    ]
                 }]
             })
         }

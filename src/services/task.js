@@ -3,6 +3,7 @@ import CommandExecuter from './task_runners/command_executer';
 import AVS2NvencEncoder from './task_runners/avs2evenc';
 import NvencEncoder from './task_runners/nvenc';
 import systemUtils from '@/utils/system';
+const fs = require('fs');
 
 class TaskService extends EventEmitter {
     constructor(task) {
@@ -24,10 +25,19 @@ class TaskService extends EventEmitter {
         this.emit('progress', {
             phase: currentStep.stepName
         });
+        // 自定义函数
         if (currentStep.type === 'function') {
             currentStep.stepFunction().then(() => {
                 this.runNextStep();
             });
+            return;
+        }
+        // 删除文件
+        if (currentStep.type === 'delete') {
+            for (const file of currentStep.files) {
+                fs.unlinkSync(file);
+            }
+            this.runNextStep();
             return;
         }
         let executer;
