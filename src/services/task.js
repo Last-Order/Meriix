@@ -1,5 +1,7 @@
-import { EventEmitter } from "events";
-import CommandExecuter from "./task_runners/command_executer";
+import { EventEmitter } from 'events';
+import CommandExecuter from './task_runners/command_executer';
+import AVS2NvencEncoder from './task_runners/avs2evenc';
+import NvencEncoder from './task_runners/nvenc';
 import systemUtils from '@/utils/system';
 
 class TaskService extends EventEmitter {
@@ -19,32 +21,51 @@ class TaskService extends EventEmitter {
             return;
         }
         const currentStep = this.task.steps[this.currentStepIndex];
-        if (currentStep.type === 'execute') {
-            this.emit('progress', {
-                phase: currentStep.stepName
-            });
-            const executer = new CommandExecuter();
-            executer.run(systemUtils.fillPlaceholders(currentStep.command));
-            executer.on('success', () => {
+        this.emit('progress', {
+            phase: currentStep.stepName
+        });
+        if (currentStep.type === 'function') {
+            currentStep.stepFunction().then(() => {
                 this.runNextStep();
-                this.emit('success');
             });
-            executer.on('fail', () => {
-                this.emit('fail');
-            });
-            executer.on('stdout', (data) => {
-                this.emit('output', {
-                    type: 'normal',
-                    content: data
-                });
-            });
-            executer.on('stderr', (data) => {
-                this.emit('output', {
-                    type: 'error',
-                    content: data
-                });
-            });
+            return;
         }
+        let executer;
+        if (currentStep.type === 'execute') {
+            executer = new CommandExecuter();
+            executer.run(systemUtils.fillPlaceholders(currentStep.command));
+        } else if (currentStep.type === 'encode') {
+            if (currentStep.encoder === 'nvencc') {
+                executer = new NvencEncoder();
+                executer.run(systemUtils.fillPlaceholders(currentStep.command));
+            }
+            if (currentStep.encoder === 'avs2nvencc') {
+                executer = new AVS2NvencEncoder();
+                executer.run(systemUtils.fillPlaceholders(currentStep.command));
+            }
+        }
+        executer.on('progress', event => {
+            this.emit('progress', event);
+        })
+        executer.on('success', () => {
+            this.runNextStep();
+            this.emit('success');
+        });
+        executer.on('fail', () => {
+            this.emit('fail');
+        });
+        executer.on('stdout', (data) => {
+            this.emit('output', {
+                type: 'normal',
+                content: data
+            });
+        });
+        executer.on('stderr', (data) => {
+            this.emit('output', {
+                type: 'error',
+                content: data
+            });
+        });
     }
 }
 

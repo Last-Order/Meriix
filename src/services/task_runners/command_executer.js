@@ -8,6 +8,7 @@ const exec = require('child_process').exec;
  */
 export default class CommandExecuter extends EventEmitter {
     run(command, { output = ['stdout', 'stderr'] } = {}) {
+        console.log('RUN: ' + command);
         const child = exec(command, {
             encoding: 'binary'
         });

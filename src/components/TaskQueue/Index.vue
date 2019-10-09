@@ -1,7 +1,7 @@
 <template>
   <v-list two-line class="task-queue-container">
     <template v-for="task in $store.state.queue.tasks">
-      <task-item :key="task.id" :task="task" @viewLog="viewLog" />
+      <task-item :key="task.uuid" :task="task" @viewLog="viewLog" />
     </template>
     <v-btn @click="go">Go!</v-btn>
     <v-dialog v-model="logViewerVisible" width="600">
