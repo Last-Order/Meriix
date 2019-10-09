@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
 import CommandExecuter from "./task_runners/command_executer";
+import systemUtils from '@/utils/system';
 
 class TaskService extends EventEmitter {
     constructor(task) {
@@ -8,7 +9,7 @@ class TaskService extends EventEmitter {
         this.currentStepIndex = -1;
     }
     run() {
-        this.task.startTime = new Date();
+        this.emit('start');
         this.runNextStep();
     }
     runNextStep() {
@@ -19,9 +20,15 @@ class TaskService extends EventEmitter {
         }
         const currentStep = this.task.steps[this.currentStepIndex];
         if (currentStep.type === 'execute') {
+            this.emit('progress', {
+                phase: currentStep.stepName
+            });
             const executer = new CommandExecuter();
-            executer.run(currentStep.command);
-            executer.on('success', this.runNextStep);
+            executer.run(systemUtils.fillPlaceholders(currentStep.command));
+            executer.on('success', () => {
+                this.runNextStep();
+                this.emit('success');
+            });
             executer.on('fail', () => {
                 this.emit('fail');
             });
@@ -35,7 +42,7 @@ class TaskService extends EventEmitter {
                 this.emit('output', {
                     type: 'error',
                     content: data
-                })
+                });
             });
         }
     }

@@ -17,7 +17,7 @@ module.exports = {
                 // Chain webpack config for electron main process only
                 config.mode('development');
             },
-            externals: [],
+            externals: ['iconv-lite'],
             builderOptions: {
                 appId: 'moe.sound.sora.meriix',
                 // asar: false,

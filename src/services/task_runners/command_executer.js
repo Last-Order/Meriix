@@ -1,4 +1,5 @@
 import EventEmitter from 'events';
+import { decode } from '@/utils/encoding';
 
 const exec = require('child_process').exec;
 /**
@@ -6,14 +7,22 @@ const exec = require('child_process').exec;
  * @param {string} command 
  */
 export default class CommandExecuter extends EventEmitter {
-    run(command) {
-        const child = exec(command);
-        child.stdout.on('data', (data) => {
-            this.emit('stdout', data);
+    run(command, { output = ['stdout', 'stderr'] } = {}) {
+        const child = exec(command, {
+            encoding: 'binary'
         });
-        child.stderr.on('data', (data) => {
-            this.emit('stderr', data);
-        });
+        if (output.includes('stdout')) {
+            child.stdout.on('data', (data) => {
+                // eslint-disable-next-line no-control-regex
+                this.emit('stdout', decode(data.replace(/\x08/ig, ''), 'binary', 'cp936'));
+            });
+        }
+        if (output.includes('stderr')) {
+            child.stderr.on('data', (data) => {
+                // eslint-disable-next-line no-control-regex
+                this.emit('stderr', decode(data.replace(/\x08/ig, ''), 'binary', 'cp936'));
+            });
+        }
         child.on('close', (code) => {
             if (code === 0) {
                 this.emit('success');
