@@ -3,7 +3,6 @@
     <template v-for="task in $store.state.queue.tasks">
       <task-item :key="task.uuid" :task="task" @viewLog="viewLog" />
     </template>
-    <v-btn @click="go">Go!</v-btn>
     <v-dialog v-model="logViewerVisible" width="600">
       <v-card>
         <v-card-title>
@@ -31,9 +30,6 @@ export default {
     };
   },
   methods: {
-    go() {
-      this.$store.dispatch("runTask", this.$store.state.queue.tasks[0].uuid);
-    },
     viewLog(uuid) {
       this.logViewerVisible = true;
       this.logs = this.$store.state.queue.tasks.find(t => t.uuid === uuid).logs;

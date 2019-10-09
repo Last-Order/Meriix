@@ -45,7 +45,7 @@ export default {
     },
     handleRecipeSelected(recipe) {
       const tasks = recipe.generateTasks(this.files);
-      this.$store.commit('addTasks', tasks);
+      this.$store.dispatch('addTasks', tasks);
       this.$store.commit('setQueueDrawerVisible', true);
       this.recipeDialogVisible = false;
     }

@@ -35,7 +35,11 @@ class TaskService extends EventEmitter {
         // 删除文件
         if (currentStep.type === 'delete') {
             for (const file of currentStep.files) {
-                fs.unlinkSync(file);
+                try {
+                    fs.unlinkSync(file);
+                } catch {
+                    // 无事发生
+                }
             }
             this.runNextStep();
             return;
@@ -59,7 +63,6 @@ class TaskService extends EventEmitter {
         })
         executer.on('success', () => {
             this.runNextStep();
-            this.emit('success');
         });
         executer.on('fail', () => {
             this.emit('fail');

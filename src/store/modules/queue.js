@@ -1,12 +1,26 @@
 import TaskExecuter from '@/services/task';
 const uuid = require('uuid/v4');
 const state = {
-    tasks: []
+    tasks: [],
+    runningTasks: 0
 };
 
 const getters = {};
 const actions = {
-    runTask({ commit, state }, uuid) {
+    addTasks({ commit, dispatch }, tasks) {
+        commit('addTasks', tasks);
+        dispatch('checkQueue');
+    },
+    checkQueue({ state, dispatch }) {
+        if (state.runningTasks > 0) {
+            return;
+        }
+        const task = state.tasks.find(t => t.status === 'pending');
+        if (task) {
+            dispatch('runTask', task.uuid);
+        }
+    },
+    runTask({ commit, state, dispatch }, uuid) {
         const task = state.tasks.find(t => t.uuid === uuid);
         const executer = new TaskExecuter(task);
         executer.on('output', log => {
@@ -24,15 +38,6 @@ const actions = {
                 }
             });
         })
-        executer.on('success', () => {
-            commit('updateTask', {
-                uuid,
-                payload: {
-                    status: 'success',
-                    phase: '已完成'
-                }
-            });
-        });
         executer.on('fail', () => {
             commit('updateTask', {
                 uuid,
@@ -42,7 +47,19 @@ const actions = {
                 }
             });
         });
+        executer.on('finish', () => {
+            commit('updateTask', {
+                uuid,
+                payload: {
+                    status: 'finish',
+                    phase: '已完成'
+                }
+            });
+            commit('decRunningTasksCount');
+            dispatch('checkQueue');
+        });
         executer.run();
+        commit('incRunningTasksCount');
     }
 };
 const mutations = {
@@ -73,6 +90,12 @@ const mutations = {
     },
     addLog(state, { uuid, log }) {
         state.tasks.find(t => t.uuid === uuid).logs.push(log);
+    },
+    incRunningTasksCount(state) {
+        state.runningTasks = state.runningTasks + 1;
+    },
+    decRunningTasksCount(state) {
+        state.runningTasks = state.runningTasks - 1;
     }
 };
 
