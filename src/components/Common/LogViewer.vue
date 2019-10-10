@@ -1,5 +1,5 @@
 <template>
-  <div class="log-viewer-container" v-if="logs">
+  <div class="log-viewer-container" v-if="logs" ref="container">
     <template v-for="(log, index) in logs">
       <div class="log-viewer-line" :key="index">{{ log.content }}</div>
     </template>
@@ -16,6 +16,11 @@
 </style>
 <script>
 export default {
-  props: ["logs"]
+  props: ["logs"],
+  watch: {
+    logs() {
+      this.$refs.container.scrollTop = this.$refs.container.scrollHeight;
+    }
+  }
 };
 </script>

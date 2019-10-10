@@ -1,7 +1,7 @@
 {
   "name": "meriix",
-  "version": "0.1.2",
-  "private": true,
+  "version": "0.1.3",
+  "description": "A Erii App",
   "author": {
     "name": "Eridanus Sora"
   },

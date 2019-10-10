@@ -38,7 +38,7 @@ export default class ExtractAudioFromTS extends BaseRecipe {
                 steps: [{
                     stepName: '抽取',
                     type: 'execute',
-                    command: '${eac3to}' + ` "${files[index].path}" "${outputPath}"`
+                    command: '"${eac3to}"' + ` "${files[index].path}" "${outputPath}"`
                 }]
             });
         }

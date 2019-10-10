@@ -45,7 +45,7 @@ export default class StaticImageVideo extends BaseRecipe {
                 steps: [{
                     stepName: '生成背景图片',
                     type: 'execute',
-                    command: '${scg}' + ` -i "${imageFile.path}" -o "${imageFile.path + '.output.png'}"`
+                    command: '"${scg}"' + ` -i "${imageFile.path}" -o "${imageFile.path + '.output.png'}"`
                 }, {
                     stepName: '写入 AVS 脚本',
                     type: 'function',
@@ -61,11 +61,11 @@ export default class StaticImageVideo extends BaseRecipe {
                     stepName: '压制',
                     type: 'encode',
                     encoder: 'avs2nvencc',
-                    command: '${avs2pipemod}' + ` --y4mp "${path.resolve(path.dirname(imageFile.path), 'template.avs')}" | ` + '${nvencc}' + ` --y4m -i - -o "${audioFile.path + '.scg.mp4'}"`
+                    command: '"${avs2pipemod}"' + ` --y4mp "${path.resolve(path.dirname(imageFile.path), 'template.avs')}" | ` + '${nvencc}' + ` --y4m -i - -o "${audioFile.path + '.scg.mp4'}"`
                 }, {
                     stepName: '混流',
                     type: 'execute',
-                    command: '${ffmpeg}' + ` -i "${audioFile.path + '.scg.mp4'}" -i "${audioFile.path}" -c:v copy -c:a aac -b:a 320k "${audioFile.path + '.scg.mux.mp4'}"`
+                    command: '"${ffmpeg}"' + ` -i "${audioFile.path + '.scg.mp4'}" -i "${audioFile.path}" -c:v copy -c:a aac -b:a 320k "${audioFile.path + '.scg.mux.mp4'}"`
                 }, {
                     stepName: '清理文件',
                     type: 'delete',
