@@ -55,6 +55,7 @@ import DropHelper from "@/components/Common/DropHelper";
 import TaskQueue from "@/components/TaskQueue/Index";
 import NewVersionTip from "@/components/Common/NewVersionTip";
 import Version from '@/services/version';
+import Storage from '@/services/storage';
 
 export default {
   name: "App",
@@ -78,6 +79,7 @@ export default {
     try {
       const latestVersion = await Version.getLatestVersion();
       const localVersion = Version.getLocalVersion();
+      console.log(localVersion);
       const skippedVersions = Storage.getSetting("skippedVersions") || [];
       if (
         latestVersion.tag_name !== localVersion &&
@@ -86,7 +88,8 @@ export default {
         this.latestVersion = latestVersion;
         this.showNewVersionTip = true;
       }   
-    } catch {
+    } catch (e) {
+      console.log(e);
       this.$store.commit('showError', '检查最新版本失败');
     }
   },

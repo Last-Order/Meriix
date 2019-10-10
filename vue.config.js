@@ -24,7 +24,7 @@ module.exports = {
                 artifactName: "meriix-${os}-${version}.${ext}",
                 productName: 'Meriix',
                 win: {
-                    target: ['msi'],
+                    target: ['nsis'],
                     icon: 'build/icons/icon.ico',
                 },
                 nsis: {

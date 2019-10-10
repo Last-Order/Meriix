@@ -13,9 +13,9 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer/>
-      <v-btn flat color="#aaa" @click="remindLater">稍后提醒</v-btn>
-      <v-btn flat color="#aaa" @click="skipVersion">跳过本版本</v-btn>
-      <v-btn flat color="primary" @click="downloadNewVersion">下载新版本</v-btn>
+      <v-btn text color="#aaa" @click="remindLater">稍后提醒</v-btn>
+      <v-btn text color="#aaa" @click="skipVersion">跳过本版本</v-btn>
+      <v-btn text color="primary" @click="downloadNewVersion">下载新版本</v-btn>
     </v-card-actions>
   </v-card>
 </template>
