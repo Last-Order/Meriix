@@ -27,12 +27,10 @@
         <task-queue />
       </v-navigation-drawer>
       <drop-helper :options="$store.state.global.dropHelperOptions" @dropped="droppedHandler" />
-      <v-snackbar
-        v-model="$store.state.error.show"
-        color="error"
-        :top="true"
-        :timeout="50000"
-      >
+      <v-dialog v-model="showNewVersionTip">
+        <new-version-tip :version="latestVersion" @close="showNewVersionTip = false" />
+      </v-dialog>
+      <v-snackbar v-model="$store.state.error.show" color="error" :top="true" :timeout="50000">
         {{ $store.state.error.message }}
         <v-btn dark text @click="$store.commit('hideError')">×</v-btn>
       </v-snackbar>
@@ -55,11 +53,15 @@ import QuickAction from "@/components/QuickAction/Index";
 import VideoEncode from "@/components/VideoEncode/Index";
 import DropHelper from "@/components/Common/DropHelper";
 import TaskQueue from "@/components/TaskQueue/Index";
+import NewVersionTip from "@/components/Common/NewVersionTip";
+import Version from '@/services/version';
 
 export default {
   name: "App",
   data: () => ({
-    active: 0
+    active: 0,
+    showNewVersionTip: false,
+    latestVersion: null
   }),
   computed: {
     queueDrawerVisible: {
@@ -67,8 +69,25 @@ export default {
         return this.$store.state.global.queueDrawerVisible;
       },
       set(visible) {
-        this.$store.commit('setQueueDrawerVisible', visible);
+        this.$store.commit("setQueueDrawerVisible", visible);
       }
+    }
+  },
+  async mounted() {
+    // Check Version
+    try {
+      const latestVersion = await Version.getLatestVersion();
+      const localVersion = Version.getLocalVersion();
+      const skippedVersions = Storage.getSetting("skippedVersions") || [];
+      if (
+        latestVersion.tag_name !== localVersion &&
+        !skippedVersions.includes(latestVersion.tag_name)
+      ) {
+        this.latestVersion = latestVersion;
+        this.showNewVersionTip = true;
+      }   
+    } catch {
+      this.$store.commit('showError', '检查最新版本失败');
     }
   },
   methods: {
@@ -80,7 +99,8 @@ export default {
     QuickAction,
     VideoEncode,
     DropHelper,
-    TaskQueue
+    TaskQueue,
+    NewVersionTip
   }
 };
 </script>

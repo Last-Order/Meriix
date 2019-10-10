@@ -46,6 +46,7 @@ const actions = {
                     phase: '发生错误'
                 }
             });
+            dispatch('checkQueue');
         });
         executer.on('finish', () => {
             commit('updateTask', {

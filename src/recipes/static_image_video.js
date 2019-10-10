@@ -20,6 +20,9 @@ export default class StaticImageVideo extends BaseRecipe {
         if (imageFileIndex === -1) {
             return false;
         }
+        if (files.length < 2) {
+            return false;
+        }
         for (let index = 0; index < files.length; index++) {
             const audioRegex = new RegExp('^.+(mp3|flac|aac|alac|wav)$', 'i')
             const isAudio = audioRegex.test(files[index].path);
@@ -47,7 +50,7 @@ export default class StaticImageVideo extends BaseRecipe {
                     stepName: '写入 AVS 脚本',
                     type: 'function',
                     stepFunction: async () => {
-                        const avsTemplate = `audio = DirectShowSource("${audioFile.path}")
+                        const avsTemplate = `audio = FFAudioSource("${audioFile.path}")
                         video = ImageSource("${imageFile.path + '.output.png'}", fps=30, start=1, end=ceil(30*AudioLengthF(audio)/AudioRate(audio)))
                         video = ConvertToYV12(video)
                         return video`;
@@ -69,7 +72,8 @@ export default class StaticImageVideo extends BaseRecipe {
                     files: [
                         path.resolve(path.dirname(imageFile.path), 'template.avs'),
                         imageFile.path + '.output.png',
-                        audioFile.path + '.scg.mp4'
+                        audioFile.path + '.scg.mp4',
+                        audioFile.path + '.ffindex'
                     ]
                 }]
             })
