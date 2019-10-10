@@ -1,5 +1,6 @@
 import TaskExecuter from '@/services/task';
 const uuid = require('uuid/v4');
+const kill = require('tree-kill');
 const state = {
     tasks: [],
     runningTasks: 0
@@ -15,7 +16,7 @@ const actions = {
         if (state.runningTasks > 0) {
             return;
         }
-        const task = state.tasks.find(t => t.status === 'pending');
+        const task = state.tasks.find(t => t.category === 'unfinished');
         if (task) {
             dispatch('runTask', task.uuid);
         }
@@ -27,6 +28,15 @@ const actions = {
             commit('addLog', {
                 uuid,
                 log
+            });
+        });
+        executer.on('start', (child) => {
+            commit('updateTask', {
+                uuid,
+                payload: {
+                    startTime: new Date(),
+                    child
+                }
             });
         });
         executer.on('progress', e => {
@@ -53,6 +63,7 @@ const actions = {
                 uuid,
                 payload: {
                     status: 'finish',
+                    category: 'finished',
                     phase: '已完成'
                 }
             });
@@ -61,6 +72,24 @@ const actions = {
         });
         executer.run();
         commit('incRunningTasksCount');
+    },
+    killTask({ commit, state }, uuid) {
+        const task = state.tasks.find(t => t.uuid === uuid);
+        if (task.child && task.child.pid) {
+            try {
+                kill(task.child.pid);
+            } catch {
+                // 无事发生
+            }
+        }
+        commit('updateTask', {
+            uuid,
+            payload: {
+                phase: '已取消',
+                category: 'canceled'
+            }
+        });
+        commit('decRunningTasksCount');
     }
 };
 const mutations = {
@@ -74,7 +103,9 @@ const mutations = {
                 phase: undefined,
                 progress: undefined,
                 logs: [],
-                status: 'pending'
+                status: 'pending',
+                category: 'unfinished',
+                child: undefined
             }
         }));
     },

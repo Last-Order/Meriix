@@ -13,6 +13,7 @@ export default class CommandExecuter extends EventEmitter {
         const child = exec(command, {
             encoding: 'binary'
         });
+        this.emit('start', child);
         if (output.includes('stdout')) {
             child.stdout.on('data', (data) => {
                 // eslint-disable-next-line no-control-regex

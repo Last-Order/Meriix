@@ -30,6 +30,9 @@ export default class AVSToNvencEncoder extends EventEmitter {
         this.commandExecuter.on('success', () => {
             this.emit('success');
         });
+        this.commandExecuter.on('start', (child) => {
+            this.emit('start', child);
+        });
         this.commandExecuter.run(command, ['stderr']);
     }
 }

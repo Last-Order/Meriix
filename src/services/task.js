@@ -47,17 +47,17 @@ class TaskService extends EventEmitter {
         let executer;
         if (currentStep.type === 'execute') {
             executer = new CommandExecuter();
-            executer.run(systemUtils.fillPlaceholders(currentStep.command));
         } else if (currentStep.type === 'encode') {
             if (currentStep.encoder === 'nvencc') {
                 executer = new NvencEncoder();
-                executer.run(systemUtils.fillPlaceholders(currentStep.command));
             }
             if (currentStep.encoder === 'avs2nvencc') {
                 executer = new AVS2NvencEncoder();
-                executer.run(systemUtils.fillPlaceholders(currentStep.command));
             }
         }
+        executer.on('start', (child) => {
+            this.emit('start', child)
+        });
         executer.on('progress', event => {
             this.emit('progress', event);
         })
@@ -79,6 +79,7 @@ class TaskService extends EventEmitter {
                 content: data
             });
         });
+        executer.run(systemUtils.fillPlaceholders(currentStep.command));
     }
 }
 

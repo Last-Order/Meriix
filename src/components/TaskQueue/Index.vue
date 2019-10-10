@@ -1,43 +1,33 @@
 <template>
   <v-list two-line class="task-queue-container">
-    <template v-for="task in $store.state.queue.tasks">
-      <task-item :key="task.uuid" :task="task" @viewLog="viewLog" />
-    </template>
-    <v-dialog v-model="logViewerVisible" width="600">
-      <v-card>
-        <v-card-title>
-          <span class="headline">日志</span>
-        </v-card-title>
-        <v-card-text>
-          <log-viewer :logs="logs" />
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn text color="primary" @click="logViewerVisible = false">关闭</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <v-tabs v-model="activeTab" fixed-tabs>
+      <v-tab key="unfinished">未完成</v-tab>
+      <v-tab key="finished">已完成</v-tab>
+      <v-tab key="canceled">已取消</v-tab>
+      <v-tabs-items v-model="activeTab">
+        <v-tab-item key="unfinished">
+          <task-list :tasks="$store.state.queue.tasks.filter(t => t.category === 'unfinished')"></task-list>
+        </v-tab-item>
+        <v-tab-item key="finished">
+          <task-list :tasks="$store.state.queue.tasks.filter(t => t.category === 'finished')"></task-list>
+        </v-tab-item>
+        <v-tab-item key="canceled">
+          <task-list :tasks="$store.state.queue.tasks.filter(t => t.category === 'canceled')"></task-list>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-tabs>
   </v-list>
 </template>
 <script>
-import LogViewer from "@/components/Common/LogViewer";
-import TaskItem from "./TaskItem";
+import TaskList from "./TaskList";
 export default {
   data() {
     return {
-      logViewerVisible: false,
-      logs: []
+      activeTab: 0
     };
   },
-  methods: {
-    viewLog(uuid) {
-      this.logViewerVisible = true;
-      this.logs = this.$store.state.queue.tasks.find(t => t.uuid === uuid).logs;
-    }
-  },
   components: {
-    TaskItem,
-    LogViewer
+    TaskList
   }
 };
 </script>

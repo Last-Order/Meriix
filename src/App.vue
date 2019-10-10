@@ -79,7 +79,6 @@ export default {
     try {
       const latestVersion = await Version.getLatestVersion();
       const localVersion = Version.getLocalVersion();
-      console.log(localVersion);
       const skippedVersions = Storage.getSetting("skippedVersions") || [];
       if (
         latestVersion.tag_name !== localVersion &&
@@ -89,7 +88,6 @@ export default {
         this.showNewVersionTip = true;
       }   
     } catch (e) {
-      console.log(e);
       this.$store.commit('showError', '检查最新版本失败');
     }
   },

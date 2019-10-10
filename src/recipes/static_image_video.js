@@ -1,4 +1,5 @@
 import BaseRecipe from "./base_recipe";
+import systemUtils from "@/utils/system";
 const iconv = require('iconv-lite');
 const fs = require('fs');
 const path = require('path');
@@ -50,7 +51,9 @@ export default class StaticImageVideo extends BaseRecipe {
                     stepName: '写入 AVS 脚本',
                     type: 'function',
                     stepFunction: async () => {
-                        const avsTemplate = `audio = FFAudioSource("${audioFile.path}")
+                        const avsTemplate = `
+                        LoadPlugin("${path.resolve(systemUtils.externalBasePath(), './avs/plugins/ffms2.dll')}")
+                        audio = FFAudioSource("${audioFile.path}")
                         video = ImageSource("${imageFile.path + '.output.png'}", fps=30, start=1, end=ceil(30*AudioLengthF(audio)/AudioRate(audio)))
                         video = ConvertToYV12(video)
                         return video`;

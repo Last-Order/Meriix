@@ -20,6 +20,7 @@
   </v-card>
 </template>
 <script>
+const shell = require('electron').shell;
 import Storage from "@/services/storage";
 export default {
   props: ["version"],
@@ -38,7 +39,7 @@ export default {
       this.$emit("close");
     },
     downloadNewVersion() {
-      window.open("https://github.com/Last-Order/Meriix/releases");
+      shell.openExternal("https://github.com/Last-Order/Meriix/releases");
     }
   }
 };
