@@ -1,7 +1,7 @@
 <template>
   <div class="task-list">
     <template v-for="task in tasks">
-      <task-item :key="task.uuid" :task="task" @viewLog="viewLog" @killTask="killTask" />
+      <task-item :key="task.uuid" :task="task" @viewLog="viewLog" @killTask="killTask" @openOutput="openOutput" />
     </template>
     <v-dialog v-model="logViewerVisible" width="600">
       <v-card>
@@ -20,6 +20,7 @@
   </div>
 </template>
 <script>
+const { shell } = require('electron');
 import LogViewer from '@/components/Common/LogViewer'
 import TaskItem from './TaskItem';
 export default {
@@ -37,6 +38,11 @@ export default {
     },
     killTask(uuid) {
       this.$store.dispatch("killTask", uuid);
+    },
+    openOutput(output) {
+      if (output) {
+        shell.showItemInFolder(output);
+      }
     }
   },
   components: {

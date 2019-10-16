@@ -34,6 +34,7 @@ export default class ExtractAudioFromTS extends BaseRecipe {
             tasks.push({
                 id: ExtractAudioFromTS.definition.id,
                 name: ExtractAudioFromTS.definition.name,
+                output: outputPath,
                 displayName: `${ExtractAudioFromTS.definition.name} - ${files[index].name}`,
                 steps: [{
                     stepName: '抽取',

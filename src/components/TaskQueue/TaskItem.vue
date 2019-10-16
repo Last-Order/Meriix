@@ -12,6 +12,9 @@
       <v-btn v-if="task.category === 'unfinished'" text icon @click="killTask(task.uuid)">
         <v-icon>mdi-close</v-icon>
       </v-btn>
+      <v-btn v-if="task.category === 'finished'" text icon @click="openOutput(task.output)">
+        <v-icon>mdi-folder</v-icon>
+      </v-btn>
     </v-list-item-action>
   </v-list-item>
 </template>
@@ -32,6 +35,9 @@ export default {
     },
     killTask(uuid) {
       this.$emit('killTask', uuid);
+    },
+    openOutput(output) {
+      this.$emit('openOutput', output);
     }
   }
 };

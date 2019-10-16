@@ -43,6 +43,7 @@ export default class StaticImageVideo extends BaseRecipe {
                 id: StaticImageVideo.definition.id,
                 name: StaticImageVideo.definition.name,
                 displayName: `${StaticImageVideo.definition.name} - ${audioFile.name}`,
+                output: `${audioFile.path + '.scg.mux.mp4'}`,
                 steps: [{
                     stepName: '生成背景图片',
                     type: 'execute',

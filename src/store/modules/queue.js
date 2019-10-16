@@ -58,13 +58,14 @@ const actions = {
             });
             dispatch('checkQueue');
         });
-        executer.on('finish', () => {
+        executer.on('finish', (task) => {
             commit('updateTask', {
                 uuid,
                 payload: {
                     status: 'finish',
                     category: 'finished',
-                    phase: '已完成'
+                    phase: '已完成',
+                    output: task.output
                 }
             });
             commit('decRunningTasksCount');
@@ -105,7 +106,7 @@ const mutations = {
                 logs: [],
                 status: 'pending',
                 category: 'unfinished',
-                child: undefined
+                child: undefined,
             }
         }));
     },
