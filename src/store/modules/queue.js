@@ -19,6 +19,10 @@ const actions = {
         const task = state.tasks.find(t => t.category === 'unfinished');
         if (task) {
             dispatch('runTask', task.uuid);
+        } else {
+            new Notification('Meriix', {
+                body: '队列内任务已全部完成'
+            });
         }
     },
     runTask({ commit, state, dispatch }, uuid) {
@@ -118,7 +122,7 @@ const mutations = {
                 ...state.tasks[index],
                 ...payload
             },
-            ...state.tasks.slice(index +  1)
+            ...state.tasks.slice(index + 1)
         ];
     },
     addLog(state, { uuid, log }) {
