@@ -33,7 +33,7 @@
       <v-dialog v-model="showNewVersionTip">
         <new-version-tip :version="latestVersion" @close="showNewVersionTip = false" />
       </v-dialog>
-      <v-dialog v-model="settingsVisible" width="50vw">
+      <v-dialog v-model="settingsVisible" width="70vw">
         <settings />
       </v-dialog>
       <v-snackbar v-model="$store.state.error.show" color="error" :top="true" :timeout="50000">
