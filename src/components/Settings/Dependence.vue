@@ -1,6 +1,14 @@
 <template>
   <v-container>
-    <v-data-table :headers="headers" :items="dependencies"></v-data-table>
+    <v-flex>
+      <v-row>
+        <v-spacer />
+        <v-col cols="4">
+          <v-text-field v-model="search" label="搜索" single-line hide-details></v-text-field>
+        </v-col>
+      </v-row>
+    </v-flex>
+    <v-data-table :headers="headers" :items="dependencies" :search="search"></v-data-table>
   </v-container>
 </template>
 <script>
@@ -18,7 +26,8 @@ export default {
           text: "版本号",
           value: "version"
         }
-      ]
+      ],
+      search: ""
     };
   },
   computed: {
