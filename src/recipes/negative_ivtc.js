@@ -48,6 +48,7 @@ class NegativeIVTC extends BaseRecipe {
                         LWLibavVideoSource("${file.path}")
                         tfm()
                         tdecimate()
+                        LanczosResize(1920, 1080)
                         ConvertToYV12()
                         `;
                         fs.writeFileSync(path.resolve(path.dirname(file.path), 'template.avs'), iconv.encode(avsTemplate, 'gbk'));
