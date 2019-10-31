@@ -11,7 +11,7 @@ const fs = require('fs');
 class NegativeIVTC extends BaseRecipe {
     static get definition() {
         return {
-            name: 'IVTC(消极)',
+            name: 'IVTC(消极、电视适用)',
             description: '进行消极的IVTC处理'
         };
     }
@@ -37,7 +37,7 @@ class NegativeIVTC extends BaseRecipe {
                 id: NegativeIVTC.definition.id,
                 name: NegativeIVTC.definition.name,
                 displayName: `${NegativeIVTC.definition.name} - ${file.name}`,
-                output: `${file.path}.ivtc.mp4`,
+                output: `${file.path}.ivtc.mux.mp4`,
                 steps: [{
                     stepName: '写入 AVS 脚本',
                     type: 'function',
@@ -58,12 +58,22 @@ class NegativeIVTC extends BaseRecipe {
                     stepName: '压制',
                     type: 'encode',
                     encoder: 'avs2nvencc',
-                    command: '"${avs2pipemod}"' + ` --y4mp "${path.resolve(path.dirname(file.path), 'template.avs')}" | ` + '"${nvencc}"' + ` --y4m -i - -o "${file.path + '.ivtc.mp4'}"`
+                    command: '"${avs2pipemod}"' + ` --y4mp "${path.resolve(path.dirname(file.path), 'template.avs')}" | ` + '"${nvencc}"' + ` --y4m -i - --vbrhq 5950 -o "${file.path + '.ivtc.mp4'}"`
+                }, {
+                    stepName: '抽取音频',
+                    type: 'execute',
+                    command: '"${eac3to}"' + ` "${file.path}" "${file.path}.aac"`
+                }, {
+                    stepName: '混流',
+                    type: 'execute',
+                    command: '"${ffmpeg}"' + ` -i "${file.path}.ivtc.mp4" -i "${file.path}.aac" -c copy "${file.path}.ivtc.mux.mp4"`
                 }, {
                     stepName: '清理文件',
                     type: 'delete',
                     files: [
                         path.resolve(path.dirname(file.path), 'template.avs'),
+                        path.resolve(path.dirname(file.path), `${file.name}.ivtc.mp4`),
+                        path.resolve(path.dirname(file.path), `${file.name}.aac`)
                     ]
                 }]
             })
