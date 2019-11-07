@@ -1,6 +1,16 @@
 <template>
   <v-container>
     <v-flex>
+      <h3>依赖设置</h3>
+      <v-row>
+        <v-col cols="6">
+          <v-form>
+            <v-text-field label="外部依赖仓库地址" v-model="remoteLibraryRepositoryUrl"></v-text-field>
+            <v-btn text color="primary">保存</v-btn>
+          </v-form>
+        </v-col>
+      </v-row>
+      <h3>依赖列表</h3>
       <v-row>
         <v-spacer />
         <v-col cols="4">
@@ -40,6 +50,14 @@ export default {
         });
       }
       return result;
+    },
+    remoteLibraryRepositoryUrl: {
+      get() {
+        return this.$store.state.settings.dependence.remoteLibraryRepositoryUrl;
+      },
+      set(remoteLibraryRepositoryUrl) {
+        this.$store.commit('updateRemoteLibraryRepositoryUrl', remoteLibraryRepositoryUrl);
+      }
     }
   },
   mounted() {
