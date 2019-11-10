@@ -4,6 +4,7 @@ import global from './modules/global';
 import queue from './modules/queue';
 import error from './modules/error';
 import settings from './modules/settings';
+import download from './modules/download';
 
 Vue.use(Vuex);
 
@@ -12,12 +13,13 @@ export default new Vuex.Store({
 
   },
   actions: {
-
+    
   },
   modules: {
     global,
     queue,
     error,
-    settings
+    settings,
+    download
   }
 });

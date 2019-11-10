@@ -12,7 +12,8 @@ class NegativeIVTC extends BaseRecipe {
     static get definition() {
         return {
             name: 'IVTC(消极、电视适用)',
-            description: '进行消极的IVTC处理'
+            description: '进行消极的IVTC处理',
+            dependencies: ['avs2pipemod', 'eac3to', 'ffmpeg']
         };
     }
 

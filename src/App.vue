@@ -33,6 +33,9 @@
       <v-dialog v-model="showNewVersionTip">
         <new-version-tip :version="latestVersion" @close="showNewVersionTip = false" />
       </v-dialog>
+      <v-dialog v-model="downloadVisible" width="70vw">
+        <dependence-download />
+      </v-dialog>
       <v-dialog v-model="settingsVisible" width="70vw">
         <settings />
       </v-dialog>
@@ -60,9 +63,10 @@ import VideoEncode from "@/components/VideoEncode/Index";
 import DropHelper from "@/components/Common/DropHelper";
 import TaskQueue from "@/components/TaskQueue/Index";
 import NewVersionTip from "@/components/Common/NewVersionTip";
+import DependenceDownload from "@/components/Dependence/Download";
 import Settings from "@/components/Settings/Index";
-import Version from '@/services/version';
-import Storage from '@/services/storage';
+import Version from "@/services/version";
+import Storage from "@/services/storage";
 
 export default {
   name: "App",
@@ -80,9 +84,13 @@ export default {
       set(visible) {
         this.$store.commit("setQueueDrawerVisible", visible);
       }
+    },
+    downloadVisible() {
+      return this.$store.state.global.downloadVisible;
     }
   },
   async mounted() {
+    this.$store.commit("setDownloadVisible", true);
     // Check Version
     try {
       const latestVersion = await Version.getLatestVersion();
@@ -94,9 +102,9 @@ export default {
       ) {
         this.latestVersion = latestVersion;
         this.showNewVersionTip = true;
-      }   
+      }
     } catch (e) {
-      this.$store.commit('showError', '检查最新版本失败');
+      this.$store.commit("showError", "检查最新版本失败");
     }
   },
   methods: {
@@ -110,7 +118,8 @@ export default {
     DropHelper,
     TaskQueue,
     NewVersionTip,
-    Settings
+    Settings,
+    DependenceDownload
   }
 };
 </script>

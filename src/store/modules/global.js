@@ -2,6 +2,7 @@ const state = {
     dropHelperOptions: [],
     dropHandler: () => { },
     queueDrawerVisible: false,
+    downloadVisible: false
 };
 
 const getters = {};
@@ -15,6 +16,9 @@ const mutations = {
     },
     setQueueDrawerVisible(state, payload) {
         state.queueDrawerVisible = payload;
+    },
+    setDownloadVisible(state, payload) {
+        state.downloadVisible = payload;
     }
 };
 
