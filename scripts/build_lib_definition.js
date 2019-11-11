@@ -9,28 +9,34 @@ const hashFolder = (folderPath) => {
     const folder = fs.readdirSync(folderPath);
     const files = [];
     let hashes = '';
+    let size = 0;
     for (const item of folder) {
         const fileStat = fs.statSync(path.resolve(folderPath, item));
         if (fileStat.isDirectory()) {
+            const subDirectoryHash = hashFolder(path.resolve(folderPath, item));
+            size += subDirectoryHash.size;
             files.push({
                 type: 'directory',
                 name: item,
-                ...hashFolder(path.resolve(folderPath, item)),
+                ...subDirectoryHash,
             });
         } else {
             const hash = hashFile(path.resolve(folderPath, item));
             hashes += hash;
-            console.log(`Hash file: ${path.dirname(folderPath)}/${item} -> ${hash}`);
+            size += fileStat.size;
+            console.log(`Hash file: ${path.dirname(folderPath)}/${item} -> ${hash}; Size: ${fileStat.size}`);
             files.push({
                 type: 'file',
                 name: item,
-                hash
+                hash,
+                size
             });
         }
     }
     return {
         hash: crypto.createHash('sha1').update(hashes).digest('hex'),
-        files
+        files,
+        size
     }
 }
 
