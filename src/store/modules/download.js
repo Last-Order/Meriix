@@ -1,6 +1,6 @@
 import DownloadService from '@/services/download';
 const state = {
-    nowDownloadingName: '',
+    nowDownloadingNames: ['eac3to'],
     nowDownloadingPercent: 0
 };
 
