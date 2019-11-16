@@ -41,8 +41,7 @@ export default class StaticImageVideo extends BaseRecipe {
         const audioFiles = Array.prototype.filter.call(files, f => !f.type.startsWith('image'));
         for (const audioFile of audioFiles) {
             tasks.push({
-                id: StaticImageVideo.definition.id,
-                name: StaticImageVideo.definition.name,
+                ...StaticImageVideo.definition,
                 displayName: `${StaticImageVideo.definition.name} - ${audioFile.name}`,
                 output: `${audioFile.path + '.scg.mux.mp4'}`,
                 steps: [{

@@ -35,8 +35,7 @@ class NegativeIVTC extends BaseRecipe {
         const tasks = [];
         for (const file of files) {
             tasks.push({
-                id: NegativeIVTC.definition.id,
-                name: NegativeIVTC.definition.name,
+                ...NegativeIVTC.definition,
                 displayName: `${NegativeIVTC.definition.name} - ${file.name}`,
                 output: `${file.path}.ivtc.mux.mp4`,
                 steps: [{

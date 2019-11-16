@@ -90,7 +90,6 @@ export default {
     }
   },
   async mounted() {
-    this.$store.commit("setDownloadVisible", true);
     // Check Version
     try {
       const latestVersion = await Version.getLatestVersion();

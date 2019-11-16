@@ -1,4 +1,5 @@
 import TaskExecuter from '@/services/task';
+import DependenceService from '@/services/dependence';
 const uuid = require('uuid/v4');
 const kill = require('tree-kill');
 const state = {
@@ -9,8 +10,22 @@ const state = {
 const getters = {};
 const actions = {
     addTasks({ commit, dispatch }, tasks) {
-        commit('addTasks', tasks);
-        dispatch('checkQueue');
+        const taskDependencies = tasks[0].dependencies;
+        const missingDeps = [];
+        for (const dep of taskDependencies) {
+            if (!DependenceService.isModuleInstalled(dep)){
+                missingDeps.push(dep);
+            }
+        }
+        if (missingDeps.length > 0) {
+            commit('setNowDownloadingNames', missingDeps);
+            commit("setDownloadVisible", true);
+            commit('setNowDownloadingPercent', 0);
+        } else {
+            commit('addTasks', tasks);
+            commit('setQueueDrawerVisible', true);
+            dispatch('checkQueue');
+        }
     },
     checkQueue({ state, dispatch }) {
         if (state.runningTasks > 0) {

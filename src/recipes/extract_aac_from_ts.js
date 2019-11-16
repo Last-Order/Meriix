@@ -33,8 +33,7 @@ export default class ExtractAudioFromTS extends BaseRecipe {
             const parsedPath = path.parse(files[index].path);
             const outputPath = path.resolve(parsedPath.dir, `${parsedPath.name}.aac`);
             tasks.push({
-                id: ExtractAudioFromTS.definition.id,
-                name: ExtractAudioFromTS.definition.name,
+                ...ExtractAudioFromTS.definition,
                 output: outputPath,
                 displayName: `${ExtractAudioFromTS.definition.name} - ${files[index].name}`,
                 steps: [{

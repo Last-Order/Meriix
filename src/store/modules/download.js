@@ -11,8 +11,8 @@ const actions = {
     }
 };
 const mutations = {
-    setNowDownloadingName: (state, name) => {
-        state.nowDownloadingName = name;
+    setNowDownloadingNames: (state, name) => {
+        state.nowDownloadingNames = name;
     },
     setNowDownloadingPercent: (state, percent) => {
         state.nowDownloadingPercent = percent;

@@ -24,6 +24,7 @@ export default {
     };
   },
   mounted() {
+    this.$store.commit("setDownloadVisible", true);
     this.$store.commit("setDropHelperOptions", [
       {
         name: "video",
@@ -46,7 +47,6 @@ export default {
     handleRecipeSelected(recipe) {
       const tasks = recipe.generateTasks(this.files);
       this.$store.dispatch('addTasks', tasks);
-      this.$store.commit('setQueueDrawerVisible', true);
       this.recipeDialogVisible = false;
     }
   },
