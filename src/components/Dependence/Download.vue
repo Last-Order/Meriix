@@ -27,9 +27,9 @@
       </v-flex>
       <v-flex v-if="step === 1">
         <v-row justify="start">
-          <v-col>{{ nowDownloadingNames }}</v-col>
+          <v-col>正在下载 {{ nowDownloadingPercentText }}</v-col>
           <v-spacer />
-          <v-col class="text-right">50%</v-col>
+          <v-col class="text-right">{{ nowDownloadingPercent }}%</v-col>
         </v-row>
         <v-row>
           <v-col>
@@ -61,6 +61,9 @@ export default {
     nowDownloadingPercent() {
       return this.$store.state.download.nowDownloadingPercent;
     },
+    nowDownloadingPercentText() {
+      return this.$store.state.download.nowDownloadingPercentText;
+    },
     modules() {
       return this.$store.state.download.nowDownloadingNames.map(name => {
         return {
@@ -83,8 +86,20 @@ export default {
       }
     },
     download() {
-      const downloader = new Downloader(this.nowDownloadingNames, this.$store.state.settings.dependence.remoteLibraryRepositoryUrl);
-      console.log(downloader.getDownloadFiles());
+      const downloader = new Downloader(
+        this.nowDownloadingNames,
+        this.$store.state.settings.dependence.remoteLibraryRepositoryUrl
+      );
+      downloader.on("download", fileName => {
+        this.$store.commit("setNowDownloadingPercentText", fileName);
+      });
+      downloader.on("progress", percent => {
+        this.$store.commit("setNowDownloadingPercent", percent);
+      });
+      downloader.on("finish", () => {
+        // update library definition file
+      });
+      downloader.download();
       this.step = 1;
     },
     cancel() {
@@ -93,7 +108,7 @@ export default {
   },
   filters: {
     parseSize(size) {
-      return (size / 1024 / 1024).toFixed(2) + 'MB';
+      return (size / 1024 / 1024).toFixed(2) + "MB";
     }
   },
   mounted() {}

@@ -23,6 +23,16 @@ class DependenceService {
         return DependenceService.getCurrentDependenceInfo()[name];
     }
     /**
+     * 添加本地模块定义
+     * @param {string} name 模块名
+     * @param {object} moduleInfo 模块定义信息
+     */
+    static addLocalModule(name, moduleInfo) {
+        const definition = DependenceService.getCurrentDependenceInfo();
+        definition[name] = moduleInfo;
+        fs.writeFileSync(path.resolve(SystemUtils.externalBasePath(), 'libs.json'), JSON.stringify(definition, null, 2));
+    }
+    /**
      * 获取远程模块定义
      * @param {string} name 模块名
      * @throws {RemoteDependenceDefinitionFileNotFoundError}

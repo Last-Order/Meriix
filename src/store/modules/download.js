@@ -1,7 +1,8 @@
 import DownloadService from '@/services/download';
 const state = {
     nowDownloadingNames: ['eac3to'],
-    nowDownloadingPercent: 0
+    nowDownloadingPercent: 0,
+    nowDownloadingPercentText: ''
 };
 
 const getters = {};
@@ -16,6 +17,9 @@ const mutations = {
     },
     setNowDownloadingPercent: (state, percent) => {
         state.nowDownloadingPercent = percent;
+    },
+    setNowDownloadingPercentText: (state, text) => {
+        state.nowDownloadingPercentText = text;
     }
 };
 
