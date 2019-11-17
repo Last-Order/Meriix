@@ -5,15 +5,15 @@ const path = require('path');
 const basePath = path.resolve(__dirname, '../lib');
 const libsInfo = JSON.parse(fs.readFileSync(path.resolve(basePath, 'libs.json')).toString());
 
-const hashFolder = (folderPath) => {
-    const folder = fs.readdirSync(folderPath);
+const hashDirectory = (directoryPath) => {
+    const directory = fs.readdirSync(directoryPath);
     const files = [];
     let hashes = '';
     let size = 0;
-    for (const item of folder) {
-        const fileStat = fs.statSync(path.resolve(folderPath, item));
+    for (const item of directory) {
+        const fileStat = fs.statSync(path.resolve(directoryPath, item));
         if (fileStat.isDirectory()) {
-            const subDirectoryHash = hashFolder(path.resolve(folderPath, item));
+            const subDirectoryHash = hashDirectory(path.resolve(directoryPath, item));
             size += subDirectoryHash.size;
             files.push({
                 type: 'directory',
@@ -21,10 +21,10 @@ const hashFolder = (folderPath) => {
                 ...subDirectoryHash,
             });
         } else {
-            const hash = hashFile(path.resolve(folderPath, item));
+            const hash = hashFile(path.resolve(directoryPath, item));
             hashes += hash;
             size += fileStat.size;
-            console.log(`Hash file: ${path.dirname(folderPath)}/${item} -> ${hash}; Size: ${fileStat.size}`);
+            console.log(`Hash file: ${path.dirname(directoryPath)}/${item} -> ${hash}; Size: ${fileStat.size}`);
             files.push({
                 type: 'file',
                 name: item,
@@ -45,10 +45,10 @@ const hashFile = (path) => {
 }
 
 for (const key of Object.keys(libsInfo)) {
-    const folderBase = path.resolve(basePath, libsInfo[key].folder);
+    const directoryBase = path.resolve(basePath, libsInfo[key].directory);
     libsInfo[key] = {
         ...libsInfo[key],
-        ...hashFolder(folderBase)
+        ...hashDirectory(directoryBase)
     };
 }
 
