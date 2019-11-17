@@ -13,14 +13,15 @@ const actions = {
         const taskDependencies = tasks[0].dependencies;
         const missingDeps = [];
         for (const dep of taskDependencies) {
-            if (!DependenceService.isModuleInstalled(dep)){
+            if (!DependenceService.isModuleInstalled(dep)) {
                 missingDeps.push(dep);
             }
         }
         if (missingDeps.length > 0) {
             commit('setNowDownloadingNames', missingDeps);
-            commit("setDownloadVisible", true);
+            commit('setDownloadVisible', true);
             commit('setNowDownloadingPercent', 0);
+            commit('setTasksAfterDownload', tasks);
         } else {
             commit('addTasks', tasks);
             commit('setQueueDrawerVisible', true);

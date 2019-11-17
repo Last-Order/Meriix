@@ -24,7 +24,6 @@ export default {
     };
   },
   mounted() {
-    this.$store.commit("setDownloadVisible", true);
     this.$store.commit("setDropHelperOptions", [
       {
         name: "video",

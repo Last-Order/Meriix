@@ -1,15 +1,13 @@
-import DownloadService from '@/services/download';
 const state = {
-    nowDownloadingNames: ['eac3to'],
+    nowDownloadingNames: [],
     nowDownloadingPercent: 0,
-    nowDownloadingPercentText: ''
+    nowDownloadingPercentText: '',
+    tasksAfterDownload: []
 };
 
 const getters = {};
 const actions = {
-    async downloadModule({ commit, dispatch }, modules) {
 
-    }
 };
 const mutations = {
     setNowDownloadingNames: (state, name) => {
@@ -20,6 +18,9 @@ const mutations = {
     },
     setNowDownloadingPercentText: (state, text) => {
         state.nowDownloadingPercentText = text;
+    },
+    setTasksAfterDownload: (state, tasks) => {
+        state.tasksAfterDownload = tasks;
     }
 };
 

@@ -97,7 +97,19 @@ export default {
         this.$store.commit("setNowDownloadingPercent", percent);
       });
       downloader.on("finish", () => {
-        // update library definition file
+        for (const name of this.nowDownloadingNames) {
+          DependenceService.addLocalModule(
+            name,
+            DependenceService.getRemoteModuleInfo(name)
+          );
+        }
+        if (this.$store.state.download.tasksAfterDownload.length > 0) {
+          this.$store.dispatch(
+            "addTasks",
+            this.$store.state.download.tasksAfterDownload
+          );
+        }
+        this.$store.commit('setDownloadVisible', false);
       });
       downloader.download();
       this.step = 1;

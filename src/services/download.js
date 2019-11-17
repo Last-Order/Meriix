@@ -26,13 +26,16 @@ class DownloadService extends EventEmitter {
     }
     async download() {
         this.files = this.getDownloadFiles();
+        this.downloadedFileCount = 0;
         this.totalFileCount = this.files.length;
         for (const file of this.files) {
             this.emit('download', file.name);
             const response = await axios({
                 url: file.url,
+                method: 'GET',
                 responseType: 'arraybuffer',
             });
+            console.log(response.data);
             this.saveFile(response.data, path.resolve(SystemUtils.externalBasePath(), `.${file.path}`));
             this.downloadedFileCount++;
             this.emit('progress', (this.downloadedFileCount / this.totalFileCount * 100).toFixed(2));
@@ -51,7 +54,7 @@ class DownloadService extends EventEmitter {
                 recursive: true
             });
         }
-        fs.writeFileSync(savePath, data);
+        fs.writeFileSync(savePath, Buffer.from(data), 'binary')
     }
 }
 
