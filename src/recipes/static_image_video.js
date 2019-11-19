@@ -53,7 +53,7 @@ export default class StaticImageVideo extends BaseRecipe {
                     type: 'function',
                     stepFunction: async () => {
                         const avsTemplate = `
-                        LoadPlugin("${path.resolve(systemUtils.externalBasePath(), './avs/plugins/ffms2.dll')}")
+                        LoadPlugin("${path.resolve(systemUtils.externalBasePath(), './avs2pipemod/plugins/ffms2.dll')}")
                         audio = FFAudioSource("${audioFile.path}")
                         video = ImageSource("${imageFile.path + '.output.png'}", fps=30, start=1, end=ceil(30*AudioLengthF(audio)/AudioRate(audio)))
                         video = ConvertToYV12(video)

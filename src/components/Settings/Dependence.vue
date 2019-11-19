@@ -5,7 +5,7 @@
       <v-row>
         <v-col cols="6">
           <v-form>
-            <v-text-field label="外部依赖仓库地址" v-model="remoteLibraryRepositoryUrl"></v-text-field>
+            <v-text-field label="外部依赖仓库地址 / 刷新后生效" v-model="remoteLibraryRepositoryUrl"></v-text-field>
             <v-btn text color="primary">保存</v-btn>
           </v-form>
         </v-col>
@@ -56,6 +56,9 @@ export default {
         return this.$store.state.settings.dependence.remoteLibraryRepositoryUrl;
       },
       set(remoteLibraryRepositoryUrl) {
+        if (remoteLibraryRepositoryUrl.endsWith('/')) {
+          remoteLibraryRepositoryUrl = remoteLibraryRepositoryUrl.slice(0, remoteLibraryRepositoryUrl.length - 1);
+        }
         this.$store.commit('updateRemoteLibraryRepositoryUrl', remoteLibraryRepositoryUrl);
       }
     }

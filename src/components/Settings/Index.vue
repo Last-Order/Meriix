@@ -3,13 +3,13 @@
     <v-card-title>设置</v-card-title>
     <v-card-text>
       <v-tabs v-model="activeTab">
-        <v-tab :key="1" ripple>通用</v-tab>
+        <!-- <v-tab :key="1" ripple>通用</v-tab> -->
         <v-tab :key="2" ripple>外部依赖</v-tab>
         <v-tab :key="3" ripple>关于</v-tab>
         <v-tabs-items v-model="activeTab">
-          <v-tab-item :key="1">
+          <!-- <v-tab-item :key="1">
             <general />
-          </v-tab-item>
+          </v-tab-item> -->
           <v-tab-item :key="2">
             <dependence />
           </v-tab-item>

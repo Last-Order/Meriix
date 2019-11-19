@@ -43,8 +43,8 @@ class NegativeIVTC extends BaseRecipe {
                     type: 'function',
                     stepFunction: async () => {
                         const avsTemplate = `
-                        LoadPlugin("${path.resolve(systemUtils.externalBasePath(), './avs/plugins/LSMASHSource.dll')}")
-                        LoadPlugin("${path.resolve(systemUtils.externalBasePath(), './avs/plugins/TIVTC.dll')}")
+                        LoadPlugin("${path.resolve(systemUtils.externalBasePath(), './avs2pipemod/plugins/LSMASHSource.dll')}")
+                        LoadPlugin("${path.resolve(systemUtils.externalBasePath(), './avs2pipemod/plugins/TIVTC.dll')}")
                         LWLibavVideoSource("${file.path}")
                         tfm()
                         tdecimate()

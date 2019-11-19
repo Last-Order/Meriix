@@ -39,6 +39,19 @@
       <v-dialog v-model="settingsVisible" width="70vw">
         <settings />
       </v-dialog>
+      <v-dialog v-model="remoteDependenceLibraryUrlSettingTipVisble" width="70vw">
+        <v-card>
+          <v-card-title>提示</v-card-title>
+          <v-card-text>
+            暂未设置远程依赖库地址，无法下载依赖，是否设置？
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn text @click="remoteDependenceLibraryUrlSettingTipVisble = false">以后再说</v-btn>
+            <v-btn text color="primary" @click="showSettings">设置</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-snackbar v-model="$store.state.error.show" color="error" :top="true" :timeout="50000">
         {{ $store.state.error.message }}
         <v-btn dark text @click="$store.commit('hideError')">×</v-btn>
@@ -74,6 +87,7 @@ export default {
     active: 0,
     showNewVersionTip: false,
     settingsVisible: false,
+    remoteDependenceLibraryUrlSettingTipVisble: false,
     latestVersion: null
   }),
   computed: {
@@ -105,10 +119,18 @@ export default {
     } catch (e) {
       this.$store.commit("showError", "检查最新版本失败");
     }
+    // Check Remote Dependence Library
+    if (!this.$store.state.settings.dependence.remoteLibraryRepositoryUrl) {
+      this.remoteDependenceLibraryUrlSettingTipVisble = true;
+    }
   },
   methods: {
     droppedHandler(e) {
       this.$store.state.global.dropHandler(e);
+    },
+    showSettings() {
+      this.remoteDependenceLibraryUrlSettingTipVisble = false;
+      this.settingsVisible = true;
     }
   },
   components: {
