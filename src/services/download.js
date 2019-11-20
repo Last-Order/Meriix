@@ -35,7 +35,6 @@ class DownloadService extends EventEmitter {
                 method: 'GET',
                 responseType: 'arraybuffer',
             });
-            console.log(response.data);
             this.saveFile(response.data, path.resolve(SystemUtils.externalBasePath(), `.${file.path}`));
             this.downloadedFileCount++;
             this.emit('progress', (this.downloadedFileCount / this.totalFileCount * 100).toFixed(2));

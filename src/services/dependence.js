@@ -1,6 +1,7 @@
 import SystemUtils from '@/utils/system';
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
 class RemoteDependenceDefinitionFileNotFoundError extends Error {}
 class RemoteModuleNotFoundError extends Error {}
 class DependenceService {
@@ -71,6 +72,18 @@ class DependenceService {
         }
         getDirectoryFiles(moduleInfo, `/${name}`);
         return result;
+    }
+    /**
+     * 从远程下载库定义
+     * @param {string} base 远程仓库 base url
+     */
+    static async downloadRemoteLibraryDefinition(base) {
+        const response = await axios({
+            url: base + '/libs.json',
+            method: 'GET',
+            responseType: 'arraybuffer',
+        });
+        fs.writeFileSync(path.resolve(SystemUtils.externalBasePath(), 'libs_remote.json'), Buffer.from(response.data));
     }
 }
 
