@@ -4,6 +4,7 @@ const path = require('path');
 const axios = require('axios');
 class RemoteDependenceDefinitionFileNotFoundError extends Error {}
 class RemoteModuleNotFoundError extends Error {}
+class RemoteDependenceDefinitionDownloadError extends Error {}
 class DependenceService {
     static getCurrentDependenceInfo() {
         const dependenceInfoFile = path.resolve(SystemUtils.externalBasePath(), 'libs.json');
@@ -78,12 +79,18 @@ class DependenceService {
      * @param {string} base 远程仓库 base url
      */
     static async downloadRemoteLibraryDefinition(base) {
-        const response = await axios({
-            url: base + '/libs.json',
-            method: 'GET',
-            responseType: 'arraybuffer',
-        });
-        fs.writeFileSync(path.resolve(SystemUtils.externalBasePath(), 'libs_remote.json'), Buffer.from(response.data));
+        try {
+            const response = await axios({
+                url: base + '/libs.json',
+                method: 'GET',
+                responseType: 'arraybuffer',
+            });
+            fs.writeFileSync(path.resolve(SystemUtils.externalBasePath(), 'libs_remote.json'), Buffer.from(response.data));
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.log(e);
+            throw new RemoteDependenceDefinitionDownloadError('下载远程仓库定义文件失败');
+        }
     }
 }
 

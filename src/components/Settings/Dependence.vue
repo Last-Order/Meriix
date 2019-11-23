@@ -6,7 +6,7 @@
         <v-col cols="6">
           <v-form>
             <v-text-field label="外部依赖仓库地址 / 刷新后生效" v-model="remoteLibraryRepositoryUrl"></v-text-field>
-            <v-btn text color="primary">保存</v-btn>
+            <v-btn text color="primary" @click="saveRemoteLibraryRepositoryUrl">保存</v-btn>
           </v-form>
         </v-col>
       </v-row>
@@ -65,6 +65,15 @@ export default {
   },
   mounted() {
     this.dependenceInfo = DependenceService.getCurrentDependenceInfo();
+  },
+  methods: {
+    async saveRemoteLibraryRepositoryUrl() {
+      try {
+        await DependenceService.downloadRemoteLibraryDefinition(this.remoteLibraryRepositoryUrl);
+      } catch (e) {
+        this.$store.commit('showError', e.message);
+      }
+    }
   }
 };
 </script>
