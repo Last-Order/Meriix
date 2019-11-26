@@ -19,9 +19,12 @@
       </v-row>
     </v-flex>
     <v-data-table :headers="headers" :items="dependencies" :search="search">
+      <template v-slot:item.version="{ item }">
+        <template v-if="item.type === 'local'">{{ item.version }}</template>
+        <template v-else>未下载</template>
+      </template>
       <template v-slot:item.remote_version="{ item }">
-        <template v-if="item.type === 'local'">{{ getRemoteModuleInfo(item.name).version }}</template>
-        <template v-else>不适用</template>
+        {{ getRemoteModuleInfo(item.name).version }}
       </template>
       <template v-slot:item.operations="{ item }">
         <template v-if="item.type === 'local'">无可用操作</template>
@@ -53,7 +56,7 @@ export default {
         },
         {
           text: "操作",
-          value: 'operations'
+          value: "operations"
         }
       ],
       search: ""
@@ -62,11 +65,19 @@ export default {
   computed: {
     dependencies() {
       const result = [];
+      const remoteDependenceInfo = DependenceService.getRemoteDependenceInfo();
       for (const key of Object.keys(this.dependenceInfo)) {
         result.push({
           ...this.dependenceInfo[key],
           name: key,
           type: "local"
+        });
+      }
+      for (const key of Object.keys(remoteDependenceInfo).filter(k => !Object.keys(this.dependenceInfo).includes(k))) {
+        result.push({
+          ...remoteDependenceInfo[key],
+          name: key,
+          type: "remote"
         });
       }
       return result;
@@ -94,13 +105,9 @@ export default {
   },
   methods: {
     async saveRemoteLibraryRepositoryUrl() {
-      try {
-        await DependenceService.downloadRemoteLibraryDefinition(
-          this.remoteLibraryRepositoryUrl
-        );
-      } catch (e) {
-        this.$store.commit("showError", e.message);
-      }
+      await DependenceService.downloadRemoteLibraryDefinition(
+        this.remoteLibraryRepositoryUrl
+      );
     },
     getRemoteModuleInfo(name) {
       return DependenceService.getRemoteModuleInfo(name);

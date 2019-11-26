@@ -140,6 +140,11 @@ export default {
       this.settingsVisible = true;
     }
   },
+  errorCaptured(err) {
+    if (err.message) {
+      this.$store.commit("showError", err.message);
+    }
+  },
   components: {
     QuickAction,
     VideoEncode,
