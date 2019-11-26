@@ -18,7 +18,18 @@
         </v-col>
       </v-row>
     </v-flex>
-    <v-data-table :headers="headers" :items="dependencies" :search="search"></v-data-table>
+    <v-data-table :headers="headers" :items="dependencies" :search="search">
+      <template v-slot:item.remote_version="{ item }">
+        <template v-if="item.type === 'local'">{{ getRemoteModuleInfo(item.name).version }}</template>
+        <template v-else>不适用</template>
+      </template>
+      <template v-slot:item.operations="{ item }">
+        <template v-if="item.type === 'local'">无可用操作</template>
+        <template v-if="item.type === 'remote'">
+          <v-btn text>下载</v-btn>
+        </template>
+      </template>
+    </v-data-table>
   </v-container>
 </template>
 <script>
@@ -33,8 +44,16 @@ export default {
           value: "name"
         },
         {
-          text: "版本号",
+          text: "本地版本号",
           value: "version"
+        },
+        {
+          text: "远程版本号",
+          value: "remote_version"
+        },
+        {
+          text: "操作",
+          value: 'operations'
         }
       ],
       search: ""
@@ -46,7 +65,8 @@ export default {
       for (const key of Object.keys(this.dependenceInfo)) {
         result.push({
           ...this.dependenceInfo[key],
-          name: key
+          name: key,
+          type: "local"
         });
       }
       return result;
@@ -56,10 +76,16 @@ export default {
         return this.$store.state.settings.dependence.remoteLibraryRepositoryUrl;
       },
       set(remoteLibraryRepositoryUrl) {
-        if (remoteLibraryRepositoryUrl.endsWith('/')) {
-          remoteLibraryRepositoryUrl = remoteLibraryRepositoryUrl.slice(0, remoteLibraryRepositoryUrl.length - 1);
+        if (remoteLibraryRepositoryUrl.endsWith("/")) {
+          remoteLibraryRepositoryUrl = remoteLibraryRepositoryUrl.slice(
+            0,
+            remoteLibraryRepositoryUrl.length - 1
+          );
         }
-        this.$store.commit('updateRemoteLibraryRepositoryUrl', remoteLibraryRepositoryUrl);
+        this.$store.commit(
+          "updateRemoteLibraryRepositoryUrl",
+          remoteLibraryRepositoryUrl
+        );
       }
     }
   },
@@ -69,10 +95,15 @@ export default {
   methods: {
     async saveRemoteLibraryRepositoryUrl() {
       try {
-        await DependenceService.downloadRemoteLibraryDefinition(this.remoteLibraryRepositoryUrl);
+        await DependenceService.downloadRemoteLibraryDefinition(
+          this.remoteLibraryRepositoryUrl
+        );
       } catch (e) {
-        this.$store.commit('showError', e.message);
+        this.$store.commit("showError", e.message);
       }
+    },
+    getRemoteModuleInfo(name) {
+      return DependenceService.getRemoteModuleInfo(name);
     }
   }
 };
