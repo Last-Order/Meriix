@@ -42,9 +42,7 @@
       <v-dialog v-model="remoteDependenceLibraryUrlSettingTipVisble" width="70vw">
         <v-card>
           <v-card-title>提示</v-card-title>
-          <v-card-text>
-            暂未设置远程依赖库地址，无法下载依赖，是否设置？
-          </v-card-text>
+          <v-card-text>暂未设置远程依赖库地址，无法下载依赖，是否设置？</v-card-text>
           <v-card-actions>
             <v-spacer />
             <v-btn text @click="remoteDependenceLibraryUrlSettingTipVisble = false">以后再说</v-btn>
@@ -78,6 +76,7 @@ import TaskQueue from "@/components/TaskQueue/Index";
 import NewVersionTip from "@/components/Common/NewVersionTip";
 import DependenceDownload from "@/components/Dependence/Download";
 import Settings from "@/components/Settings/Index";
+import Dependence from "@/services/dependence";
 import Version from "@/services/version";
 import Storage from "@/services/storage";
 
@@ -122,6 +121,14 @@ export default {
     // Check Remote Dependence Library
     if (!this.$store.state.settings.dependence.remoteLibraryRepositoryUrl) {
       this.remoteDependenceLibraryUrlSettingTipVisble = true;
+    } else {
+      try {
+        await Dependence.downloadRemoteLibraryDefinition(
+          this.$store.state.settings.dependence.remoteLibraryRepositoryUrl
+        );
+      } catch (e) {
+        this.$store.commit("showError", e.message);
+      }
     }
   },
   methods: {
