@@ -109,6 +109,9 @@ export default {
             this.$store.state.download.tasksAfterDownload
           );
         }
+        if (this.$store.state.download.callbackAfterDownload !== undefined) {
+          this.$store.state.download.callbackAfterDownload();
+        }
         this.$store.commit('setDownloadVisible', false);
       });
       downloader.download();

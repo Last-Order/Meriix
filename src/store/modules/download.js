@@ -2,7 +2,8 @@ const state = {
     nowDownloadingNames: [],
     nowDownloadingPercent: 0,
     nowDownloadingPercentText: '',
-    tasksAfterDownload: []
+    tasksAfterDownload: [],
+    callbackAfterDownload: undefined
 };
 
 const getters = {};
@@ -21,6 +22,9 @@ const mutations = {
     },
     setTasksAfterDownload: (state, tasks) => {
         state.tasksAfterDownload = tasks;
+    },
+    setCallbackAfterDownload: (state, callback) => {
+        state.callbackAfterDownload = callback;
     }
 };
 

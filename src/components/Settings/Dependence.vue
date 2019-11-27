@@ -23,13 +23,11 @@
         <template v-if="item.type === 'local'">{{ item.version }}</template>
         <template v-else>未下载</template>
       </template>
-      <template v-slot:item.remote_version="{ item }">
-        {{ getRemoteModuleInfo(item.name).version }}
-      </template>
+      <template v-slot:item.remote_version="{ item }">{{ getRemoteModuleInfo(item.name).version }}</template>
       <template v-slot:item.operations="{ item }">
         <template v-if="item.type === 'local'">无可用操作</template>
         <template v-if="item.type === 'remote'">
-          <v-btn text>下载</v-btn>
+          <v-btn text @click="downloadModule(item.name)">下载</v-btn>
         </template>
       </template>
     </v-data-table>
@@ -73,7 +71,9 @@ export default {
           type: "local"
         });
       }
-      for (const key of Object.keys(remoteDependenceInfo).filter(k => !Object.keys(this.dependenceInfo).includes(k))) {
+      for (const key of Object.keys(remoteDependenceInfo).filter(
+        k => !Object.keys(this.dependenceInfo).includes(k)
+      )) {
         result.push({
           ...remoteDependenceInfo[key],
           name: key,
@@ -111,6 +111,17 @@ export default {
     },
     getRemoteModuleInfo(name) {
       return DependenceService.getRemoteModuleInfo(name);
+    },
+    downloadModule(name) {
+      const { commit } = this.$store;
+      commit("setNowDownloadingNames", [name]);
+      commit("setDownloadVisible", true);
+      commit("setNowDownloadingPercent", 0);
+      commit("setTasksAfterDownload", []);
+      commit("setCallbackAfterDownload", () => {
+        // refresh table
+        this.dependenceInfo = DependenceService.getCurrentDependenceInfo();
+      });
     }
   }
 };
