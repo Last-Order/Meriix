@@ -63,7 +63,12 @@ export default {
   computed: {
     dependencies() {
       const result = [];
-      const remoteDependenceInfo = DependenceService.getRemoteDependenceInfo();
+      let remoteDependenceInfo = {};
+      try {
+        remoteDependenceInfo = DependenceService.getRemoteDependenceInfo();
+      } catch {
+        // pass
+      }
       for (const key of Object.keys(this.dependenceInfo)) {
         result.push({
           ...this.dependenceInfo[key],
