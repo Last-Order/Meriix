@@ -43,9 +43,14 @@ export default {
       this.suitableRecipes = suitableRecipes;
       this.recipeDialogVisible = true;
     },
-    handleRecipeSelected(recipe) {
-      const tasks = recipe.generateTasks(this.files);
-      this.$store.dispatch('addTasks', tasks);
+    async handleRecipeSelected(recipe) {
+      const taskGernerationResult = recipe.generateTasks(this.files);
+      // check if task generation result is a promise
+      if (typeof taskGernerationResult.then === 'function') {
+        this.$store.dispatch('addTasks', await taskGernerationResult);
+      } else {
+        this.$store.dispatch('addTasks', taskGernerationResult);
+      }
       this.recipeDialogVisible = false;
     }
   },
