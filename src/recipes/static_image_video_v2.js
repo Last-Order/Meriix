@@ -1,7 +1,5 @@
 import BaseRecipe from "./base_recipe";
 import Media from "@/services/media";
-const fs = require('fs');
-const path = require('path');
 
 export class AudioParsingError extends Error { }
 
@@ -51,7 +49,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                 steps: [{
                     stepName: '渲染视频',
                     type: 'encode',
-                    encoder: 'nvencc',
+                    encoder: 'smg2nvencc',
                     command: '"${smg}"' + ` --input "${imageFile.path}" -d ${Math.ceil(audioDuration)} -c | ` + '"${nvencc}"' + ` --y4m -i - -o "${audioFile.path}.smg.mp4"`
                 }, {
                     stepName: '混流',

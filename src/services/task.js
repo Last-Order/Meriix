@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 import CommandExecuter from './task_runners/command_executer';
-import AVS2NvencEncoder from './task_runners/avs2evenc';
+import AVS2NvenccEncoder from './task_runners/avs2nvencc';
+import SMG2NvenccEncoder from './task_runners/smg2nvencc';
 import NvencEncoder from './task_runners/nvenc';
 import systemUtils from '@/utils/system';
 const fs = require('fs');
@@ -52,7 +53,10 @@ class TaskService extends EventEmitter {
                 executer = new NvencEncoder();
             }
             if (currentStep.encoder === 'avs2nvencc') {
-                executer = new AVS2NvencEncoder();
+                executer = new AVS2NvenccEncoder();
+            }
+            if (currentStep.encoder === 'smg2nvencc') {
+                executer = new SMG2NvenccEncoder();
             }
         }
         executer.on('start', (child) => {
