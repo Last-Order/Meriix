@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import CommandExecuter from './command_executer';
-export default class AVSToNvencEncoder extends EventEmitter {
+export default class SMGToNvencEncoder extends EventEmitter {
     constructor() {
         super();
         this.commandExecuter = new CommandExecuter();
