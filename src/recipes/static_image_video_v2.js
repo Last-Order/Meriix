@@ -35,6 +35,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
         const tasks = [];
         const imageFile = Array.prototype.find.call(files, f => f.type.startsWith('image'));
         const audioFiles = Array.prototype.filter.call(files, f => !f.type.startsWith('image'));
+
         for (const audioFile of audioFiles) {
             let audioDuration;
             try {
