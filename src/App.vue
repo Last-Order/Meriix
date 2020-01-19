@@ -3,7 +3,7 @@
     <v-app light>
       <v-tabs v-model="active" dark>
         <v-tab key="quickAction" ripple>快速操作</v-tab>
-        <v-tab key="videoEncode" ripple>视频编码</v-tab>
+        <!-- <v-tab key="videoEncode" ripple>视频编码</v-tab> -->
         <div class="flex-grow-1"></div>
         <v-btn icon height="48px" width="48px" @click="settingsVisible = true">
           <v-icon>mdi-settings</v-icon>

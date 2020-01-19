@@ -6,7 +6,12 @@
         <v-col cols="6">
           <v-form>
             <v-text-field label="外部依赖仓库地址 / 刷新后生效" v-model="remoteLibraryRepositoryUrl"></v-text-field>
-            <v-btn text color="primary" @click="saveRemoteLibraryRepositoryUrl">保存</v-btn>
+            <v-btn text color="primary" @click="saveRemoteLibraryRepositoryUrl">
+              <template v-if="saveRemoteLibraryRepositoryUrlLoading">
+                <v-icon class="loading">mdi-loading</v-icon>
+              </template>
+              <template v-else>保存</template>
+            </v-btn>
           </v-form>
         </v-col>
       </v-row>
@@ -23,7 +28,9 @@
         <template v-if="item.type === 'local'">{{ item.version }}</template>
         <template v-else>未下载</template>
       </template>
-      <template v-slot:item.remote_version="{ item }">{{ getRemoteModuleInfo(item.name).version }}</template>
+      <template
+        v-slot:item.remote_version="{ item }"
+      >{{ remoteLibraryRepositoryUrl ? getRemoteModuleInfo(item.name).version : '不适用' }}</template>
       <template v-slot:item.operations="{ item }">
         <template v-if="item.type === 'local'">无可用操作</template>
         <template v-if="item.type === 'remote'">
@@ -33,6 +40,19 @@
     </v-data-table>
   </v-container>
 </template>
+<style scoped>
+@keyframes loading {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.loading {
+  animation: 1s loading 0s infinite;
+}
+</style>
 <script>
 import DependenceService from "@/services/dependence";
 export default {
@@ -57,7 +77,8 @@ export default {
           value: "operations"
         }
       ],
-      search: ""
+      search: "",
+      saveRemoteLibraryRepositoryUrlLoading: false,
     };
   },
   computed: {
@@ -110,9 +131,14 @@ export default {
   },
   methods: {
     async saveRemoteLibraryRepositoryUrl() {
-      await DependenceService.downloadRemoteLibraryDefinition(
-        this.remoteLibraryRepositoryUrl
-      );
+      this.saveRemoteLibraryRepositoryUrlLoading = true;
+      try {
+        await DependenceService.downloadRemoteLibraryDefinition(
+          this.remoteLibraryRepositoryUrl
+        );
+      } finally {
+        this.saveRemoteLibraryRepositoryUrlLoading = false;
+      }
     },
     getRemoteModuleInfo(name) {
       return DependenceService.getRemoteModuleInfo(name);
