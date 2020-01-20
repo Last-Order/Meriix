@@ -54,6 +54,7 @@
         {{ $store.state.error.message }}
         <v-btn dark text @click="$store.commit('hideError')">×</v-btn>
       </v-snackbar>
+      <notification-center />
     </v-app>
   </div>
 </template>
@@ -73,6 +74,7 @@ import QuickAction from "@/components/QuickAction/Index";
 import VideoEncode from "@/components/VideoEncode/Index";
 import DropHelper from "@/components/Common/DropHelper";
 import TaskQueue from "@/components/TaskQueue/Index";
+import NotificationCenter from "@/components/NotificationCenter/Index";
 import NewVersionTip from "@/components/Common/NewVersionTip";
 import DependenceDownload from "@/components/Dependence/Download";
 import Settings from "@/components/Settings/Index";
@@ -152,7 +154,8 @@ export default {
     TaskQueue,
     NewVersionTip,
     Settings,
-    DependenceDownload
+    DependenceDownload,
+    NotificationCenter
   }
 };
 </script>

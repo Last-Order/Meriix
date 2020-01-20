@@ -5,6 +5,7 @@ import queue from './modules/queue';
 import error from './modules/error';
 import settings from './modules/settings';
 import download from './modules/download';
+import notification from './modules/notification';
 
 Vue.use(Vuex);
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     queue,
     error,
     settings,
-    download
+    download,
+    notification
   }
 });
