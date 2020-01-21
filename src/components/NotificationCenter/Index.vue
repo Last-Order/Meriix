@@ -4,7 +4,12 @@
             <v-col lg="11" class="message-preview">中文</v-col>
             <v-col lg="1" class="expand-button">
                 <v-spacer />
-                <v-icon color="white">mdi-chevron-up</v-icon>
+                <v-icon color="white" @click="toggleLogWindowVisible">{{ logWindowVisible ? 'mdi-chevron-down' : 'mdi-chevron-up' }}</v-icon>
+            </v-col>
+        </v-row>
+        <v-row v-if="logWindowVisible">
+            <v-col class="main">
+                <!-- <div class="log-item log-error">xxxxxxxxxxxxxxxxxxxxxx</div> -->
             </v-col>
         </v-row>
     </div>
@@ -12,8 +17,13 @@
 <style lang="scss" scoped>
     .notification-center-container {
         bottom: 0;
-        height: 1.8rem;
         background-color: rgb(66, 66, 66);
+        &.hide-log-window {
+            height: 1.8rem;
+        }
+        &.show-hide-window {
+            height: 4.8rem;
+        }
         .message-preview {
             line-height: 1.8rem;
             margin: 0;
@@ -27,13 +37,34 @@
             line-height: 1.8rem;
             padding: 0;
             padding-right: 1rem;
+            i {
+                cursor: pointer;
+            }
+        }
+        .main {
+            min-height: 7rem;
+            background-color: white;
+            .log-item {
+                padding-left: .5rem;
+                font-size: .8rem;
+                &.log-error {
+                    color: red;
+                }
+            }
         }
     }
 </style>
 <script>
 export default {
     data() {
-        return {}
+        return {
+            logWindowVisible: false
+        }
+    },
+    methods: {
+        toggleLogWindowVisible() {
+            this.logWindowVisible = !this.logWindowVisible;
+        }
     }
 }
 </script>
