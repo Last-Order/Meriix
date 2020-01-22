@@ -1,5 +1,5 @@
 const state = {
-    
+    logs: []
 };
 
 const getters = {};

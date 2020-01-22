@@ -9,7 +9,9 @@
         </v-row>
         <v-row v-if="logWindowVisible">
             <v-col class="main">
-                <!-- <div class="log-item log-error">xxxxxxxxxxxxxxxxxxxxxx</div> -->
+                <template v-for="log in logs">
+                    <div :key="log.id" :class="logClassNames(log)">{{ log.content }}</div>
+                </template>
             </v-col>
         </v-row>
     </div>
@@ -47,8 +49,17 @@
             .log-item {
                 padding-left: .5rem;
                 font-size: .8rem;
+                &:hover {
+                    background-color: rgba(10, 10, 10, 0.05)
+                }
                 &.log-error {
-                    color: red;
+                    color: #ff5252;
+                }
+                &.log-warning {
+                    color: #fb8c00;
+                }
+                &.log-info {
+                    color: #aaa;
                 }
             }
         }
@@ -61,9 +72,20 @@ export default {
             logWindowVisible: false
         }
     },
+    computed: {
+        logs() {
+            return this.$store.state.notification.logs;
+        }
+    },
     methods: {
         toggleLogWindowVisible() {
             this.logWindowVisible = !this.logWindowVisible;
+        },
+        logClassNames(log) {
+            return {
+                'log-item': true,
+                ['log-' + log.type]: true
+            };
         }
     }
 }
