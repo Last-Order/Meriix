@@ -1,7 +1,7 @@
 <template>
     <div class="notification-center-container">
         <v-row justify="center">
-            <v-col lg="11" class="message-preview">中文</v-col>
+            <v-col lg="11" class="message-preview">{{ logs.length > 0 ? logs[0].content : '' }}</v-col>
             <v-col lg="1" class="expand-button">
                 <v-spacer />
                 <v-icon color="white" @click="toggleLogWindowVisible">{{ logWindowVisible ? 'mdi-chevron-down' : 'mdi-chevron-up' }}</v-icon>
@@ -10,7 +10,7 @@
         <v-row v-if="logWindowVisible">
             <v-col class="main">
                 <template v-for="log in logs">
-                    <div :key="log.id" :class="logClassNames(log)">{{ log.content }}</div>
+                    <div :key="log.time" :class="logClassNames(log)">{{ log.content }}</div>
                 </template>
             </v-col>
         </v-row>

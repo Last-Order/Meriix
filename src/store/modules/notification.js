@@ -5,7 +5,13 @@ const state = {
 const getters = {};
 const actions = {};
 const mutations = {
-    
+    addLog: (state, type, content) => {
+        state.logs.push({
+            type,
+            content,
+            time: new Date()
+        });
+    }
 };
 
 export default {
