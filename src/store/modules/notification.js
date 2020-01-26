@@ -5,11 +5,11 @@ const state = {
 const getters = {};
 const actions = {};
 const mutations = {
-    addLog: (state, type, content) => {
+    addSystemLog: (state, { type, content }) => {
         state.logs.push({
             type,
             content,
-            time: new Date()
+            time: new Date().valueOf()
         });
     }
 };

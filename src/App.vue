@@ -116,9 +116,17 @@ export default {
       ) {
         this.latestVersion = latestVersion;
         this.showNewVersionTip = true;
+        this.$store.commit("addSystemLog", {
+          type: "info",
+          content: "有新的版本可用"
+        });
       }
     } catch (e) {
       this.$store.commit("showError", "检查最新版本失败");
+      this.$store.commit("addSystemLog", {
+        type: "error",
+        content: "检查最新版本失败，请检查网络连接"
+      });
     }
     // Check Remote Dependence Library
     if (!this.$store.state.settings.dependence.remoteLibraryRepositoryUrl) {
@@ -130,6 +138,10 @@ export default {
         );
       } catch (e) {
         this.$store.commit("showError", e.message);
+        this.$store.commit("addSystemLog", {
+          type: "error",
+          content: "更新远程依赖库信息失败，请检查网络连接"
+        });
       }
     }
   },
@@ -144,6 +156,10 @@ export default {
   },
   errorCaptured(err) {
     if (err.message) {
+      this.$store.commit("addSystemLog", {
+        type: "info",
+        content: err.message
+      });
       this.$store.commit("showError", err.message);
     }
   },
