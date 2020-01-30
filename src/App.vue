@@ -81,6 +81,7 @@ import Settings from "@/components/Settings/Index";
 import Dependence from "@/services/dependence";
 import Version from "@/services/version";
 import Storage from "@/services/storage";
+import System from "@/services/system";
 
 export default {
   name: "App",
@@ -144,6 +145,8 @@ export default {
         });
       }
     }
+    // Check Available Encoders
+    const availableEncoders = await System.getAvailableEncoders();
   },
   methods: {
     droppedHandler(e) {

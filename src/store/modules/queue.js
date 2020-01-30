@@ -45,7 +45,7 @@ const actions = {
         const task = state.tasks.find(t => t.uuid === uuid);
         const executer = new TaskExecuter(task);
         executer.on('output', log => {
-            commit('addLog', {
+            commit('addTaskLog', {
                 uuid,
                 log
             });
@@ -141,7 +141,7 @@ const mutations = {
             ...state.tasks.slice(index + 1)
         ];
     },
-    addLog(state, { uuid, log }) {
+    addTaskLog(state, { uuid, log }) {
         state.tasks.find(t => t.uuid === uuid).logs.push(log);
     },
     incRunningTasksCount(state) {

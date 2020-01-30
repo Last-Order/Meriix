@@ -1,5 +1,6 @@
 const state = {
     dropHelperOptions: [],
+    availableEncoders: [],
     dropHandler: () => { },
     queueDrawerVisible: false,
     downloadVisible: false
@@ -19,6 +20,9 @@ const mutations = {
     },
     setDownloadVisible(state, payload) {
         state.downloadVisible = payload;
+    },
+    setAvailableEncoders(state, encoders) {
+        state.availableEncoders = encoders;
     }
 };
 
