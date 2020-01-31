@@ -1,12 +1,12 @@
 import BaseEncoder from './base_encoder';
 
 class NvenccEncoder extends BaseEncoder {
+    static encoderName = 'nvencc';
     constructor(input, output, settings) {
         super(input, output, settings);
         this.commandTemplate = '${nvencc} -i "${input}" -o "${output}"';
         this.encodedFrames = 0;
         this.progress = 0;
-        this.encoderName = 'nvencc';
     }
     onLogPrinted(log) {
         if (log.match(/(\d+) frames:/)) {
@@ -17,6 +17,7 @@ class NvenccEncoder extends BaseEncoder {
             this.progress = parseFloat(log.match(/\[(.+)%\]/)[1]);
             this.emit('progress', this.progress);
         }
+        this.emit('stderr', log);
     }
 }
 

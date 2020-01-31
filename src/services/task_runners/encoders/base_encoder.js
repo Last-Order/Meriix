@@ -45,4 +45,11 @@ export default class Encoder extends EventEmitter {
     onLogPrinted() {
         
     }
+    /**
+     * 设置命令模板
+     * @param {string} commandTemplate 
+     */
+    setCommandTemplate(commandTemplate) {
+        this.commandTemplate = commandTemplate;
+    }
 }
