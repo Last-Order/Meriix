@@ -82,6 +82,7 @@ import Dependence from "@/services/dependence";
 import Version from "@/services/version";
 import Storage from "@/services/storage";
 import System from "@/services/system";
+import DefaultEncoderPriority from "@/definitions/default_encoder_priority";
 
 export default {
   name: "App",
@@ -106,6 +107,9 @@ export default {
     }
   },
   async mounted() {
+    // Check Available Encoders
+    const availableEncoders = await System.getAvailableEncoders();
+    this.$store.commit("setAvailableEncoders", availableEncoders.sort((a, b) => DefaultEncoderPriority.indexOf(a) - DefaultEncoderPriority.indexOf(b)));
     // Check Version
     try {
       const latestVersion = await Version.getLatestVersion();
@@ -145,8 +149,6 @@ export default {
         });
       }
     }
-    // Check Available Encoders
-    const availableEncoders = await System.getAvailableEncoders();
   },
   methods: {
     droppedHandler(e) {

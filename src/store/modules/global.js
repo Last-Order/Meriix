@@ -1,9 +1,11 @@
+import Storage from '@/services/storage';
 const state = {
     dropHelperOptions: [],
     availableEncoders: [],
     dropHandler: () => { },
     queueDrawerVisible: false,
-    downloadVisible: false
+    downloadVisible: false,
+    encoderPriority: Storage.getSetting('global.encoderPriority', undefined)
 };
 
 const getters = {};
