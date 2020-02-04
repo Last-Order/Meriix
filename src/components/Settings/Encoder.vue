@@ -1,13 +1,14 @@
 <template>
     <div class="encoder-list-container">
-        <v-card flat v-for="encoder in availableEncoders" :key="encoder">
-            <v-card-title>{{ encoder }}</v-card-title>
+        <v-card flat v-for="(encoder, index) in availableEncoders" :key="encoder.name">
+            <v-card-title>{{ encoder.name }}</v-card-title>
             <v-card-text>
-                <component :is="encoder" />
+                <component :is="encoder.name" />
             </v-card-text>
             <v-card-actions>
                 <v-spacer />
-                <v-btn text>下移</v-btn>
+                <v-btn text v-if="index !== 0" @click="increasePriority(encoder)">上移</v-btn>
+                <v-btn text v-if="index !== availableEncoders.length - 1" @click="decreasePriority(encoder)">下移</v-btn>
             </v-card-actions>
         </v-card>
     </div>
@@ -16,13 +17,43 @@
 import X264 from './EncoderSettings/X264';
 import Nvencc from './EncoderSettings/Nvencc';
 import Qsvencc from './EncoderSettings/Qsvencc';
+import DefaultEncoderPriority from '@/definitions/default_encoder_priority';
 export default {
     data() {
         return {};
     },
     computed: {
         availableEncoders() {
-            return this.$store.state.global.availableEncoders;
+            const encoders = DefaultEncoderPriority;
+            const priority = this.$store.state.global.encoderPriority || encoders;
+            return priority.map((encoder) => {
+                return {
+                    name: encoder,
+                    isAvailable: this.$store.state.global.availableEncoders.includes(encoder)
+                }
+            });
+        }
+    },
+    methods: {
+        increasePriority(encoder) {
+            const previousIndex = this.availableEncoders.findIndex(ec => ec.name === encoder.name);
+            const encoderNames = this.availableEncoders.map(ec => ec.name);
+            this.$store.commit('setEncoderPriority', [
+                ...encoderNames.slice(0, previousIndex - 1),
+                encoderNames[previousIndex],
+                encoderNames[previousIndex - 1],
+                ...encoderNames.slice(previousIndex + 1)
+            ]);
+        },
+        decreasePriority(encoder) {
+            const previousIndex = this.availableEncoders.findIndex(ec => ec.name === encoder.name);
+            const encoderNames = this.availableEncoders.map(ec => ec.name);
+            this.$store.commit('setEncoderPriority', [
+                ...encoderNames.slice(0, previousIndex),
+                encoderNames[previousIndex + 1],
+                encoderNames[previousIndex],
+                ...encoderNames.slice(previousIndex + 2)
+            ]);
         }
     },
     components: {

@@ -109,7 +109,8 @@ export default {
   async mounted() {
     // Check Available Encoders
     const availableEncoders = await System.getAvailableEncoders();
-    this.$store.commit("setAvailableEncoders", availableEncoders.sort((a, b) => DefaultEncoderPriority.indexOf(a) - DefaultEncoderPriority.indexOf(b)));
+    const encoderPriority = this.$store.state.global.encoderPriority || DefaultEncoderPriority;
+    this.$store.commit("setAvailableEncoders", availableEncoders.sort((a, b) => encoderPriority.indexOf(a) - encoderPriority.indexOf(b)));
     // Check Version
     try {
       const latestVersion = await Version.getLatestVersion();

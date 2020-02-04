@@ -1,10 +1,10 @@
 import Storage from '@/services/storage';
 const state = {
     dropHelperOptions: [],
-    availableEncoders: [],
     dropHandler: () => { },
     queueDrawerVisible: false,
     downloadVisible: false,
+    availableEncoders: [],
     encoderPriority: Storage.getSetting('global.encoderPriority', undefined)
 };
 
@@ -25,6 +25,10 @@ const mutations = {
     },
     setAvailableEncoders(state, encoders) {
         state.availableEncoders = encoders;
+    },
+    setEncoderPriority(state, priority) {
+        state.encoderPriority = priority;
+        Storage.setSetting('global.encoderPriority', priority);
     }
 };
 
