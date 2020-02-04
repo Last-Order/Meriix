@@ -1,11 +1,12 @@
 import Storage from '@/services/storage';
+import DEFAULT_ENCODER_PRIORITY from '@/definitions/default_encoder_priority';
 const state = {
     dropHelperOptions: [],
     dropHandler: () => { },
     queueDrawerVisible: false,
     downloadVisible: false,
     availableEncoders: [],
-    encoderPriority: Storage.getSetting('global.encoderPriority', undefined)
+    encoderPriority: Storage.getSetting('global.encoderPriority', DEFAULT_ENCODER_PRIORITY)
 };
 
 const getters = {};

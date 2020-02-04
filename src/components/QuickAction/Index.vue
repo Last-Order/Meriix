@@ -45,11 +45,25 @@ export default {
     },
     async handleRecipeSelected(recipe) {
       const taskGernerationResult = recipe.generateTasks(this.files);
+      const encoderName = this.$store.state.global.encoderPriority[0];
+      const encoderSettings = this.$store.getters.getEncoderCommandArgumentsByName(encoderName);
       // check if task generation result is a promise
       if (typeof taskGernerationResult.then === 'function') {
-        this.$store.dispatch('addTasks', await taskGernerationResult);
+        this.$store.dispatch('addTasks', {
+          tasks: await taskGernerationResult,
+          settings: {
+            encoderSettings,
+            encoderName
+          }
+        });
       } else {
-        this.$store.dispatch('addTasks', taskGernerationResult);
+        this.$store.dispatch('addTasks', {
+          tasks: taskGernerationResult,
+          settings: {
+            encoderSettings,
+            encoderName
+          }
+        });
       }
       this.recipeDialogVisible = false;
     }

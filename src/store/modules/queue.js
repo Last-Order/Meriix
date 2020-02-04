@@ -9,7 +9,7 @@ const state = {
 
 const getters = {};
 const actions = {
-    addTasks({ commit, dispatch }, tasks) {
+    addTasks({ commit, dispatch }, { tasks, settings }) {
         const taskDependencies = tasks[0].dependencies;
         const missingDeps = [];
         for (const dep of taskDependencies) {
@@ -17,13 +17,20 @@ const actions = {
                 missingDeps.push(dep);
             }
         }
+        const tasksToAdd = tasks.map(t => {
+            return {
+                ...t,
+                ...settings,
+            };
+        });
+        console.log(tasksToAdd);
         if (missingDeps.length > 0) {
             commit('setNowDownloadingNames', missingDeps);
             commit('setDownloadVisible', true);
             commit('setNowDownloadingPercent', 0);
-            commit('setTasksAfterDownload', tasks);
+            commit('setTasksAfterDownload', tasksToAdd);
         } else {
-            commit('addTasks', tasks);
+            commit('addTasks', tasksToAdd);
             commit('setQueueDrawerVisible', true);
             dispatch('checkQueue');
         }
