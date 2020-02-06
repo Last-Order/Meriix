@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import CommandExecuter from '../command_executer';
+import systemUtils from '@/utils/system';
 import template from '@/utils/string_template';
 
 export default class Encoder extends EventEmitter {
@@ -37,7 +38,7 @@ export default class Encoder extends EventEmitter {
         this.commandExecuter.on('start', (child) => {
             this.emit('start', child);
         });
-        this.commandExecuter.run(command, ['stderr']);
+        this.commandExecuter.run(systemUtils.fillPlaceholders(command), ['stderr']);
     }
     /**
      * 日志打印时调用

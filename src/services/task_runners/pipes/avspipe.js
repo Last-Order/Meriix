@@ -4,7 +4,7 @@ import { EventEmitter } from "events";
  */
 class AVSPipe extends EventEmitter {
     static commandTemplates = {
-        'nvencc': '${avs2pipemod} -y4mp "${input}" | ${nvencc} --y4m -i - -o ${output}'
+        'nvencc': '"${avs2pipemod}" -y4mp "${input}" | "${nvencc}" --y4m -i - -o "${output}"'
     };
     constructor(input, output, encoder, encoderSettings) {
         super();
@@ -16,10 +16,10 @@ class AVSPipe extends EventEmitter {
         this.totalFrames = 0;
     }
     run() {
-        if (!this.commandTemplates[this.encoderName]) {
+        if (!AVSPipe.commandTemplates[this.encoderName]) {
             throw new Error(`Avisynth can not pipe to ${this.encoderName}`);
         }
-        this.encoder.setCommandTemplate(this.commandTemplates[this.encoderName]);
+        this.encoder.setCommandTemplate(AVSPipe.commandTemplates[this.encoderName]);
         this.encoder.on('stderr', log => {
             if (!this.totalFrames) {
                 const match = log.match(/writing (\d+) frame/);
@@ -27,6 +27,7 @@ class AVSPipe extends EventEmitter {
                     this.totalFrames = parseInt(match[1]);
                 }
             }
+            this.emit('stderr', log);
         });
         this.encoder.on('frame-encoded', encodedFrames => {
             if (this.totalFrames) {

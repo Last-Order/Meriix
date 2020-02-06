@@ -1,8 +1,5 @@
 import { EventEmitter } from 'events';
 import CommandExecuter from './task_runners/command_executer';
-import AVS2NvenccEncoder from './task_runners/avs2nvencc';
-import SMG2NvenccEncoder from './task_runners/smg2nvencc';
-import NvencEncoder from './task_runners/nvenc';
 import EncoderLoader from './task_runners/encoder_loader';
 import systemUtils from '@/utils/system';
 const fs = require('fs');
@@ -57,7 +54,7 @@ class TaskService extends EventEmitter {
         } else if (currentStep.type === 'pipe_encode') {
             const encoderClass = EncoderLoader(this.task.encoderName);
             if (currentStep.pipe === 'avs') {
-                const AVSPipe = require('./task_runners/pipes/avspipe');
+                const AVSPipe = require('./task_runners/pipes/avspipe').default;
                 executer = new AVSPipe(currentStep.input, currentStep.output, encoderClass, {
                     ...this.task.encoderSettings,
                     ...currentStep.settings
@@ -88,7 +85,11 @@ class TaskService extends EventEmitter {
                 content: data
             });
         });
-        executer.run(systemUtils.fillPlaceholders(currentStep.command));
+        if (currentStep.type === 'execute') {
+            executer.run(systemUtils.fillPlaceholders(currentStep.command));
+        } else {
+            executer.run();
+        }
     }
 }
 

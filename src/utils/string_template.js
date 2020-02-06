@@ -1,4 +1,4 @@
-export function template(string, keys) {
+export default function template(string, keys) {
     let result = string;
     for (const key of Object.keys(keys)) {
         const regExp = new RegExp('\\${' + key + '}', 'ig');

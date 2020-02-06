@@ -56,9 +56,13 @@ class NegativeIVTC extends BaseRecipe {
                     }
                 }, {
                     stepName: '压制',
-                    type: 'encode',
-                    encoder: 'avs2nvencc',
-                    command: '"${avs2pipemod}"' + ` --y4mp "${path.resolve(path.dirname(file.path), 'template.avs')}" | ` + '"${nvencc}"' + ` --y4m -i - --vbrhq 5950 -o "${file.path + '.ivtc.mp4'}"`
+                    type: 'pipe_encode',
+                    input: path.resolve(path.dirname(file.path), 'template.avs'),
+                    pipe: 'avs',
+                    output: file.path + '.ivtc.mp4',
+                    settings: {
+                        vbrhq: 5950
+                    },
                 }, {
                     stepName: '抽取音频',
                     type: 'execute',
