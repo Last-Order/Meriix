@@ -3,6 +3,7 @@ import CommandExecuter from './task_runners/command_executer';
 import AVS2NvenccEncoder from './task_runners/avs2nvencc';
 import SMG2NvenccEncoder from './task_runners/smg2nvencc';
 import NvencEncoder from './task_runners/nvenc';
+import EncoderLoader from './task_runners/encoder_loader';
 import systemUtils from '@/utils/system';
 const fs = require('fs');
 
@@ -49,14 +50,18 @@ class TaskService extends EventEmitter {
         if (currentStep.type === 'execute') {
             executer = new CommandExecuter();
         } else if (currentStep.type === 'encode') {
-            if (currentStep.encoder === 'nvencc') {
-                executer = new NvencEncoder();
-            }
-            if (currentStep.encoder === 'avs2nvencc') {
-                executer = new AVS2NvenccEncoder();
-            }
-            if (currentStep.encoder === 'smg2nvencc') {
-                executer = new SMG2NvenccEncoder();
+            executer = new (EncoderLoader(this.task.encoderName))(currentStep.input, currentStep.output, {
+                ...this.task.encoderSettings,
+                ...currentStep.settings
+            });
+        } else if (currentStep.type === 'pipe_encode') {
+            const encoderClass = EncoderLoader(this.task.encoderName);
+            if (currentStep.pipe === 'avs') {
+                const AVSPipe = require('./task_runners/pipes/avspipe');
+                executer = new AVSPipe(currentStep.input, currentStep.output, encoderClass, {
+                    ...this.task.encoderSettings,
+                    ...currentStep.settings
+                });
             }
         }
         executer.on('start', (child) => {

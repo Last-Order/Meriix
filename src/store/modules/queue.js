@@ -23,7 +23,6 @@ const actions = {
                 ...settings,
             };
         });
-        console.log(tasksToAdd);
         if (missingDeps.length > 0) {
             commit('setNowDownloadingNames', missingDeps);
             commit('setDownloadVisible', true);
