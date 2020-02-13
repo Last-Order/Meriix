@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import CommandExecuter from './task_runners/command_executer';
 import EncoderLoader from './task_runners/encoder_loader';
 import systemUtils from '@/utils/system';
+import { VideoMuxer, VideoTrack, AudioTrack } from './task_runners/video_muxer';
 const fs = require('fs');
 
 class TaskService extends EventEmitter {
@@ -45,13 +46,16 @@ class TaskService extends EventEmitter {
         }
         let executer;
         if (currentStep.type === 'execute') {
+            // 直接执行命令
             executer = new CommandExecuter();
         } else if (currentStep.type === 'encode') {
+            // 直接使用编码器
             executer = new (EncoderLoader(this.task.encoderName))(currentStep.input, currentStep.output, {
                 ...this.task.encoderSettings,
                 ...currentStep.settings
             });
         } else if (currentStep.type === 'pipe_encode') {
+            // 管道输出到编码器
             const encoderClass = EncoderLoader(this.task.encoderName);
             if (currentStep.pipe === 'avs') {
                 const AVSPipe = require('./task_runners/pipes/avspipe').default;
@@ -59,6 +63,18 @@ class TaskService extends EventEmitter {
                     ...this.task.encoderSettings,
                     ...currentStep.settings
                 });
+            }
+        } else if (currentStep.type === 'mux') {
+            // 混流
+            if (currentStep.type === 'mux') {
+                const videoMuxer = new VideoMuxer(currentStep.output);
+                if (currentStep.videoTracks) {
+                    videoMuxer.addVideoTracks(currentStep.videoTracks.map(track => new VideoTrack(track)));
+                }
+                if (currentStep.AudioTracks) {
+                    videoMuxer.addAudioTracks(currentStep.audioTracks.map(track => new AudioTrack(track)));
+                }
+                executer = videoMuxer;
             }
         }
         executer.on('start', (child) => {

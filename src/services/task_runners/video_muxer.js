@@ -21,19 +21,19 @@ const subtitleLanguageCodeMapping = {
     'ms': 'may'
 }
 class VideoTrack {
-    constructor(path) {
+    constructor({ path }) {
         this.type = 'video';
         this.path = path;
     }
 }
 class AudioTrack {
-    constructor(path) {
+    constructor({ path }) {
         this.type = 'audio';
         this.path = path;
     }
 }
 class Subtitle {
-    constructor(path, lang) {
+    constructor({ path, lang }) {
         this.type = 'subtitle';
         this.path = path;
         if (lang) {
@@ -64,7 +64,7 @@ class VideoMuxer {
     addSubtitles(...subtitles) {
         this.subtitles.push(...subtitles);
     }
-    async mux() {
+    async run() {
         const allTracks = [...this.videoTracks, ...this.audioTracks, ...this.subtitles];
         let command = '"${ffmpeg}" ';
         // Add input
