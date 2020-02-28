@@ -30,7 +30,7 @@
       </template>
       <template
         v-slot:item.remote_version="{ item }"
-      >{{ remoteLibraryRepositoryUrl ? getRemoteModuleInfo(item.name).version : '不适用' }}</template>
+      >{{ remoteDependenceInfo[item.name] && remoteDependenceInfo[item.name].version || '不适用' }}</template>
       <template v-slot:item.operations="{ item }">
         <template v-if="item.type === 'local'">无可用操作</template>
         <template v-if="item.type === 'remote'">
@@ -59,6 +59,7 @@ export default {
   data() {
     return {
       dependenceInfo: {},
+      remoteDependenceInfo: {},
       headers: [
         {
           text: "依赖项",
@@ -78,7 +79,7 @@ export default {
         }
       ],
       search: "",
-      saveRemoteLibraryRepositoryUrlLoading: false,
+      saveRemoteLibraryRepositoryUrlLoading: false
     };
   },
   computed: {
@@ -128,6 +129,7 @@ export default {
   },
   mounted() {
     this.dependenceInfo = DependenceService.getCurrentDependenceInfo();
+    this.remoteDependenceInfo = DependenceService.getRemoteDependenceInfo();
   },
   methods: {
     async saveRemoteLibraryRepositoryUrl() {
@@ -139,9 +141,6 @@ export default {
       } finally {
         this.saveRemoteLibraryRepositoryUrlLoading = false;
       }
-    },
-    getRemoteModuleInfo(name) {
-      return DependenceService.getRemoteModuleInfo(name);
     },
     downloadModule(name) {
       const { commit } = this.$store;

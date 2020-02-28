@@ -51,7 +51,7 @@ class DependenceService {
     static getRemoteModuleInfo(name) {
         const definition = DependenceService.getRemoteDependenceInfo();
         if (!definition[name]) {
-            throw new RemoteModuleNotFoundError('未定义的远程模块');
+            throw new RemoteModuleNotFoundError(`未定义的远程模块: ${name}`);
         }
         return definition[name];
     }
