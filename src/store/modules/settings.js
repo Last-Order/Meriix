@@ -7,7 +7,11 @@ const state = {
         x264: {
             bitrateControlMode: Storage.getSetting('encoders.x264.bitrateControlMode', 'crf'),
             bitrateControlValue: Storage.getSetting('encoders.x264.bitrateControlValue', 21)
-        }
+        },
+        nvencc: {
+            bitrateControlMode: Storage.getSetting('encoders.nvencc.bitrateControlMode', 'vbrhq'),
+            bitrateControlValue: Storage.getSetting('encoders.nvencc.bitrateControlValue', 5980)
+        },
     }
 };
 
@@ -16,6 +20,11 @@ const getters = {
         const encoderSettings = state.encoders[encoderName];
         switch (encoderName) {
             case 'x264': {
+                return {
+                    [encoderSettings.bitrateControlMode]: encoderSettings.bitrateControlValue
+                }
+            }
+            case 'nvencc': {
                 return {
                     [encoderSettings.bitrateControlMode]: encoderSettings.bitrateControlValue
                 }
