@@ -60,9 +60,14 @@ class TaskService extends EventEmitter {
             if (currentStep.pipe === 'avs') {
                 const AVSPipe = require('./task_runners/pipes/avspipe').default;
                 executer = new AVSPipe(currentStep.input, currentStep.output, encoderClass, {
-                    ...this.task.encoderSettings,
-                    ...currentStep.settings
+                    encoderSettings: {
+                        ...this.task.encoderSettings,
+                        ...currentStep.encoderSettings
+                    }
                 });
+            } else if (currentStep.pipe === 'smg') {
+                const SMGPipe = require('./task_runners/pipes/smgpipe').default;
+                executer = new SMGPipe(currentStep.input, currentStep.output, currentStep.duration, encoderClass);
             }
         } else if (currentStep.type === 'mux') {
             // 混流

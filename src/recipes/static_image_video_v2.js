@@ -49,9 +49,11 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                 output: `${audioFile.path + '.smg.mux.mp4'}`,
                 steps: [{
                     stepName: '渲染视频',
-                    type: 'encode',
-                    encoder: 'smg2nvencc',
-                    command: '"${smg}"' + ` --input "${imageFile.path}" -d ${Math.ceil(audioDuration)} -c | ` + '"${nvencc}"' + ` --y4m -i - -o "${audioFile.path}.smg.mp4"`
+                    type: 'pipe_encode',
+                    pipe: 'smg',
+                    input: imageFile.path,
+                    output: `${audioFile.path}.smg.mp4`,
+                    duration: Math.ceil(audioDuration)
                 }, {
                     stepName: '混流',
                     type: 'execute',

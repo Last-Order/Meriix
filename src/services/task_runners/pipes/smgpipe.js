@@ -1,29 +1,31 @@
 import { EventEmitter } from "events";
-/**
- * Avisynth Pipe
- */
-class AVSPipe extends EventEmitter {
+import template from '../../../utils/string_template';
+
+class SMGPipe extends EventEmitter {
     static commandTemplates = {
-        'nvencc': '"${avs2pipemod}" -y4mp "${input}" | "${nvencc}" --y4m -i - -o "${output}"',
-        'qsvencc': '"${avs2pipemod}" -y4mp "${input}" | "${qsvencc}" --y4m -i - -o "${output}"'
+        'nvencc': '"${smg}" --input "${input}" -d "${duration}" -c | "${nvencc}" --y4m -i - -o "${output}"',
+        'qsvencc': '"${smg}" --input "${input}" -d "${duration}" -c | "${qsvencc}" --y4m -i - -o "${output}"'
     };
-    constructor(input, output, encoder, encoderSettings) {
+    constructor(input, output, duration, encoder, encoderSettings) {
         super();
         this.input = input;
         this.output = output;
+        this.duration = duration;
         this.encoderName = encoder.encoderName;
         this.encoderSettings = encoderSettings;
         this.encoder = new encoder(this.input, this.output, this.encoderSettings);
         this.totalFrames = 0;
     }
     run() {
-        if (!AVSPipe.commandTemplates[this.encoderName]) {
-            throw new Error(`Avisynth can not pipe to ${this.encoderName}`);
+        if (!SMGPipe.commandTemplates[this.encoderName]) {
+            throw new Error(`StaticMovieGenerator can not pipe to ${this.encoderName}`);
         }
-        this.encoder.setCommandTemplate(AVSPipe.commandTemplates[this.encoderName]);
+        this.encoder.setCommandTemplate(template(SMGPipe.commandTemplates[this.encoderName], {
+            duration: this.duration
+        }));
         this.encoder.on('stderr', log => {
             if (!this.totalFrames) {
-                const match = log.match(/writing (\d+) frame/);
+                const match = log.match(/Total frames: (\d+)/);
                 if (match) {
                     this.totalFrames = parseInt(match[1]);
                 }
@@ -51,4 +53,4 @@ class AVSPipe extends EventEmitter {
     }
 }
 
-export default AVSPipe;
+export default SMGPipe;
