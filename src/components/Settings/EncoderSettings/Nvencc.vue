@@ -11,7 +11,7 @@
           ></v-select>
         </v-col>
         <v-col :cols="2">
-          <v-text-field dense label="码率" v-model="bitrateControlValue"></v-text-field>
+          <v-text-field dense label="码率" v-model="bitrateControlValue" suffix="Kbps"></v-text-field>
         </v-col>
       </v-row>
     </v-container>
