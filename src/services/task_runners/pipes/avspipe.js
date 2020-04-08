@@ -5,7 +5,8 @@ import { EventEmitter } from "events";
 class AVSPipe extends EventEmitter {
     static commandTemplates = {
         'nvencc': '"${avs2pipemod}" -y4mp "${input}" | "${nvencc}" --y4m -i - -o "${output}"',
-        'qsvencc': '"${avs2pipemod}" -y4mp "${input}" | "${qsvencc}" --y4m -i - -o "${output}"'
+        'qsvencc': '"${avs2pipemod}" -y4mp "${input}" | "${qsvencc}" --y4m -i - -o "${output}"',
+        'x264': '"${avs2pipemod}" -y4mp "${input}" | "${x264}" --demuxer y4m - -o "${output}"'
     };
     constructor(input, output, encoder, encoderSettings) {
         super();
