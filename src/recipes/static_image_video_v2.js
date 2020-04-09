@@ -22,7 +22,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
             return false;
         }
         for (let index = 0; index < files.length; index++) {
-            const audioRegex = new RegExp('^.+(mp3|flac|aac|alac|wav)$', 'i')
+            const audioRegex = new RegExp('^.+(mp3|flac|aac|alac|wav|m4a|ac3|ogg|wma|opus|mp4)$', 'i')
             const isAudio = audioRegex.test(files[index].path);
             if (!isAudio && index !== imageFileIndex) {
                 return false;
@@ -52,17 +52,17 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                     type: 'pipe_encode',
                     pipe: 'smg',
                     input: imageFile.path,
-                    output: `${audioFile.path}.smg.mp4`,
+                    output: `${audioFile.path}.smg.264`,
                     duration: Math.ceil(audioDuration)
                 }, {
                     stepName: '混流',
                     type: 'execute',
-                    command: '"${ffmpeg}"' + ` -i "${audioFile.path + '.smg.mp4'}" -i "${audioFile.path}" -c:v copy -c:a aac -b:a 320k "${audioFile.path + '.smg.mux.mp4'}"`
+                    command: '"${ffmpeg}"' + ` -i "${audioFile.path + '.smg.264'}" -i "${audioFile.path}" -c:v copy -c:a aac -b:a 320k "${audioFile.path + '.smg.mux.mp4'}"`
                 }, {
                     stepName: '清理文件',
                     type: 'delete',
                     files: [
-                        audioFile.path + '.smg.mp4',
+                        audioFile.path + '.smg.264',
                     ]
                 }]
             })

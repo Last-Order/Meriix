@@ -5,7 +5,7 @@ class SMGPipe extends EventEmitter {
     static commandTemplates = {
         'nvencc': '"${smg}" --input "${input}" -d "${duration}" -c | "${nvencc}" --y4m -i - -o "${output}"',
         'qsvencc': '"${smg}" --input "${input}" -d "${duration}" -c | "${qsvencc}" --y4m -i - -o "${output}"',
-        'x264': '"${smg}" --input "${input}" -d "${duration}" -c | "${x264}" --demuxer y4m -i - -o "${output}"'
+        'x264': '"${smg}" --input "${input}" -d "${duration}" -c | "${x264}" --demuxer y4m -o "${output}" -'
     };
     constructor(input, output, duration, encoder, encoderSettings) {
         super();
