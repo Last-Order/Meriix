@@ -14,6 +14,7 @@
         <v-tabs-items v-model="active">
           <v-tab-item key="quickAction">
             <quick-action />
+            <div class="quick-action-tip">将文件拖至此处</div>
           </v-tab-item>
           <v-tab-item key="videoEncode">
             <video-encode />
@@ -67,6 +68,15 @@ body {
 
 .v-application {
   background-color: #fff !important;
+}
+
+.quick-action-tip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: xx-large;
+  height: calc(100vh - 102px);
+  color: #aaa;
 }
 </style>
 <script>
