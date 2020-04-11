@@ -4,7 +4,7 @@ export default class System {
         return app.getGPUInfo('complete');
     }
     static async getAvailableEncoders() {
-        const GPUDevices = (await System.getGPUInfo()).gpuDevice;
+        const GPUDevices = (await System.getGPUInfo("complete")).gpuDevice;
         const availableEncoders = ['x264'];
         for (const device of GPUDevices) {
             const vendor = device.driverVendor;
