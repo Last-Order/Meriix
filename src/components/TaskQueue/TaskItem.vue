@@ -6,7 +6,7 @@
       <v-progress-linear v-if="task.progress !== undefined" :value="task.progress"></v-progress-linear>
     </v-list-item-content>
     <v-list-item-action>
-      <v-btn text icon @click="viewLog(task.uuid)">
+      <v-btn text icon @click="viewDetail(task.uuid)">
         <v-icon>mdi-file-document-box</v-icon>
       </v-btn>
       <v-btn v-if="task.category === 'unfinished'" text icon @click="killTask(task.uuid)">
@@ -30,8 +30,8 @@ export default {
     }
   },
   methods: {
-    viewLog(uuid) {
-      this.$emit("viewLog", uuid);
+    viewDetail(uuid) {
+      this.$emit("viewDetail", uuid);
     },
     killTask(uuid) {
       this.$emit('killTask', uuid);

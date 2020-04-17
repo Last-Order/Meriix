@@ -3,7 +3,9 @@ import DependenceService from '@/services/dependence';
 const uuid = require('uuid/v4');
 const kill = require('tree-kill');
 const state = {
-    tasks: [],
+    tasks: [
+        
+    ],
     runningTasks: 0
 };
 
@@ -50,6 +52,14 @@ const actions = {
     runTask({ commit, state, dispatch }, uuid) {
         const task = state.tasks.find(t => t.uuid === uuid);
         const executer = new TaskExecuter(task);
+        executer.on('step', (currentStepIndex) => {
+            commit('updateTask', {
+                uuid,
+                payload: {
+                    currentStepIndex
+                }
+            });
+        })
         executer.on('output', log => {
             commit('addTaskLog', {
                 uuid,
@@ -133,6 +143,7 @@ const mutations = {
                 status: 'pending',
                 category: 'unfinished',
                 child: undefined,
+                currentStepIndex: -1
             }
         }));
     },

@@ -17,6 +17,7 @@ class TaskService extends EventEmitter {
     }
     runNextStep() {
         this.currentStepIndex++;
+        this.emit('step', this.currentStepIndex);
         if (this.currentStepIndex === this.task.steps.length) {
             this.emit('finish', this.task);
             return;
