@@ -92,6 +92,7 @@ const actions = {
                     phase: '发生错误'
                 }
             });
+            commit('decRunningTasksCount');
             dispatch('checkQueue');
         });
         executer.on('finish', (task) => {
