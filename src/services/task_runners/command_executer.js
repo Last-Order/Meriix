@@ -11,7 +11,8 @@ export default class CommandExecuter extends EventEmitter {
         // eslint-disable-next-line no-console
         console.log('RUN: ' + command);
         const child = exec(command, {
-            encoding: 'binary'
+            encoding: 'binary',
+            maxBuffer: 4000 * 1024
         });
         this.emit('start', child);
         if (output.includes('stdout')) {
