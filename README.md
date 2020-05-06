@@ -78,7 +78,7 @@ interface PipeEncodeStep extends BaseStep {
     /** 输出文件路径 */
     output: string;
     /** 编码器额外参数 */
-    settings: object;
+    encoderSettings: object;
 }
 
 /** 混流 */
