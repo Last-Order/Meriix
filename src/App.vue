@@ -77,6 +77,7 @@ body {
   font-size: xx-large;
   height: calc(100vh - 102px);
   color: #aaa;
+  user-select: none;
 }
 </style>
 <script>

@@ -8,7 +8,14 @@ export default class StaticImageVideoV2 extends BaseRecipe {
         return {
             name: '一图流 V2',
             description: '将图片和音频压制为一图流视频',
-            dependencies: ['smg', 'ffmpeg', 'nvencc']
+            dependencies: ['smg', 'ffmpeg', 'nvencc'],
+            userOptions: [{
+                name: 'resolution',
+                label: '分辨率',
+                type: 'select',
+                values: ['1080p', '720p'],
+                defaultValue: '720p'
+            }]
         };
     }
 
@@ -31,10 +38,20 @@ export default class StaticImageVideoV2 extends BaseRecipe {
         return true;
     }
 
-    static async generateTasks(files) {
+    static async generateTasks(files, options) {
         const tasks = [];
         const imageFile = Array.prototype.find.call(files, f => f.type.startsWith('image'));
         const audioFiles = Array.prototype.filter.call(files, f => !f.type.startsWith('image'));
+        const resolutionMapping = {
+            '1080p': {
+                width: 1920,
+                height: 1080
+            },
+            '720p': {
+                width: 1280,
+                height: 720
+            }
+        };
 
         for (const audioFile of audioFiles) {
             let audioDuration;
@@ -53,7 +70,9 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                     pipe: 'smg',
                     input: imageFile.path,
                     output: `${audioFile.path}.smg.264`,
-                    duration: Math.ceil(audioDuration)
+                    duration: Math.ceil(audioDuration),
+                    width: resolutionMapping[options.resolution].width,
+                    height: resolutionMapping[options.resolution].height
                 }, {
                     stepName: '混流',
                     type: 'execute',

@@ -1,26 +1,43 @@
 <template>
   <v-container grid-list-md>
     <v-dialog v-model="recipeDialogVisible" width="600">
-      <v-card>
+      <v-card v-if="step === 'select'">
         <v-card-title>
           <span class="headline">可用操作</span>
         </v-card-title>
         <v-card-text>
-            <recipe-list :recipes="suitableRecipes" @selected="handleRecipeSelected" />
+          <recipe-list :recipes="suitableRecipes" @selected="handleRecipeSelected" />
         </v-card-text>
+      </v-card>
+      <v-card v-if="step === 'option'" style="float: left; width: 100%;">
+        <v-card-title>
+          <span class="headline">参数设置</span>
+        </v-card-title>
+        <v-card-text>
+          <option-form :scheme="formScheme" @change="handleOptionFormUpdated"></option-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text color="primary" @click="handleOptionFormFinished">加入队列</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-container>
 </template>
 <script>
 import RecipeList from "./RecipeList";
+import OptionForm from "./OptionForm";
 import RecipeService from "@/services/recipe";
 export default {
   data() {
     return {
       recipeDialogVisible: false,
+      step: "select",
       suitableRecipes: [],
-      files: []
+      selectedRecipe: undefined,
+      files: [],
+      form: {},
+      formScheme: []
     };
   },
   mounted() {
@@ -41,15 +58,40 @@ export default {
         return;
       }
       this.suitableRecipes = suitableRecipes;
+      this.step = "select";
       this.recipeDialogVisible = true;
     },
-    async handleRecipeSelected(recipe) {
-      const taskGernerationResult = recipe.generateTasks(this.files);
+    handleRecipeSelected(recipe) {
+      this.selectedRecipe = recipe;
+      if (!recipe.definition.userOptions) {
+        this.generateTasks(recipe);
+      } else {
+        this.formScheme = recipe.definition.userOptions;
+        this.step = "option";
+      }
+    },
+    handleOptionFormFinished() {
+      const defaults = {};
+      this.selectedRecipe.definition.userOptions.forEach(item => {
+        defaults[item.name] = item.defaultValue;
+      });
+      this.generateTasks(this.selectedRecipe, {
+        ...defaults,
+        ...this.form
+      });
+    },
+    handleOptionFormUpdated(form) {
+      this.form = form;
+    },
+    async generateTasks(recipe, options) {
+      const taskGernerationResult = recipe.generateTasks(this.files, options);
       const encoderName = this.$store.state.global.encoderPriority[0];
-      const encoderSettings = this.$store.getters.getEncoderCommandArgumentsByName(encoderName);
+      const encoderSettings = this.$store.getters.getEncoderCommandArgumentsByName(
+        encoderName
+      );
       // check if task generation result is a promise
-      if (typeof taskGernerationResult.then === 'function') {
-        this.$store.dispatch('addTasks', {
+      if (typeof taskGernerationResult.then === "function") {
+        this.$store.dispatch("addTasks", {
           tasks: await taskGernerationResult,
           settings: {
             encoderSettings,
@@ -57,7 +99,7 @@ export default {
           }
         });
       } else {
-        this.$store.dispatch('addTasks', {
+        this.$store.dispatch("addTasks", {
           tasks: taskGernerationResult,
           settings: {
             encoderSettings,
@@ -69,7 +111,8 @@ export default {
     }
   },
   components: {
-    RecipeList
+    RecipeList,
+    OptionForm
   }
 };
 </script>

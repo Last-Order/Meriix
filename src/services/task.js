@@ -68,7 +68,11 @@ class TaskService extends EventEmitter {
                 });
             } else if (currentStep.pipe === 'smg') {
                 const SMGPipe = require('./task_runners/pipes/smgpipe').default;
-                executer = new SMGPipe(currentStep.input, currentStep.output, currentStep.duration, encoderClass);
+                executer = new SMGPipe(currentStep.input, currentStep.output, {
+                    duration: currentStep.duration,
+                    height: currentStep.height,
+                    width: currentStep.width
+                }, encoderClass);
             }
         } else if (currentStep.type === 'mux') {
             // 混流

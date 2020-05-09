@@ -3,15 +3,17 @@ import template from '../../../utils/string_template';
 
 class SMGPipe extends EventEmitter {
     static commandTemplates = {
-        'nvencc': '"${smg}" --input "${input}" -d "${duration}" -c | "${nvencc}" --y4m -i - -o "${output}"',
-        'qsvencc': '"${smg}" --input "${input}" -d "${duration}" -c | "${qsvencc}" --y4m -i - -o "${output}"',
-        'x264': '"${smg}" --input "${input}" -d "${duration}" -c | "${x264}" --demuxer y4m -o "${output}" -'
+        'nvencc': '"${smg}" --input "${input}" -d "${duration}" -c -w ${width} -h ${height} | "${nvencc}" --y4m -i - -o "${output}"',
+        'qsvencc': '"${smg}" --input "${input}" -d "${duration}" -c -w ${width} -h ${height} | "${qsvencc}" --y4m -i - -o "${output}"',
+        'x264': '"${smg}" --input "${input}" -d "${duration}" -c -w ${width} -h ${height} | "${x264}" --demuxer y4m -o "${output}" -'
     };
-    constructor(input, output, duration, encoder, encoderSettings) {
+    constructor(input, output, { duration, width = 1280, height = 720 }, encoder, encoderSettings) {
         super();
         this.input = input;
         this.output = output;
         this.duration = duration;
+        this.width = width;
+        this.height = height;
         this.encoderName = encoder.encoderName;
         this.encoderSettings = encoderSettings;
         this.encoder = new encoder(this.input, this.output, this.encoderSettings);
@@ -22,7 +24,9 @@ class SMGPipe extends EventEmitter {
             throw new Error(`StaticMovieGenerator can not pipe to ${this.encoderName}`);
         }
         this.encoder.setCommandTemplate(template(SMGPipe.commandTemplates[this.encoderName], {
-            duration: this.duration
+            duration: this.duration,
+            width: this.width,
+            height: this.height
         }));
         this.encoder.on('stderr', log => {
             if (!this.totalFrames) {
