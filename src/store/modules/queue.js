@@ -40,7 +40,7 @@ const actions = {
         if (state.runningTasks > 0) {
             return;
         }
-        const task = state.tasks.find(t => t.category === 'unfinished');
+        const task = state.tasks.find(t => t.category === 'unfinished' && t.status !== 'fail');
         if (task) {
             dispatch('runTask', task.uuid);
         } else {
