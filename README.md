@@ -3,6 +3,7 @@
 Meriix is a multi-function GUI based on Electron.
 
 ## 任务定义
+
 ```TypeScript
 class RecipeName extends BaseRecipe {
     /** 任务基本属性定义 */
@@ -22,6 +23,8 @@ interface RecipeDefinition {
     description: string;
     /** 外部依赖模块名 */
     dependencies: string[];
+    /** 编码器白名单 */
+    encoderWhitelist: string[];
 }
 ```
 
