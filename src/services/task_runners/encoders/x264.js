@@ -1,7 +1,7 @@
-import BaseEncoder from './base_encoder';
+import BaseEncoder from "./base_encoder";
 
 class X264 extends BaseEncoder {
-    static encoderName = 'x264';
+    static encoderName = "x264";
     constructor(input, output, settings) {
         super(input, output, settings);
         this.commandTemplate = '${x264} -o "${output}" "${input}"';
@@ -11,9 +11,9 @@ class X264 extends BaseEncoder {
     onLogPrinted(log) {
         if (log.match(/(\d+) frames:/)) {
             this.encodedFrames = parseInt(log.match(/(\d+) frames:/)[1]);
-            this.emit('frame-encoded', this.encodedFrames);
+            this.emit("frame-encoded", this.encodedFrames);
         }
-        this.emit('stderr', log);
+        this.emit("stderr", log);
     }
 }
 

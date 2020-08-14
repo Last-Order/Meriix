@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require("path");
 import BaseRecipe from "./base_recipe";
 
 export default class HLG2SDR extends BaseRecipe {
@@ -57,7 +57,7 @@ export default class HLG2SDR extends BaseRecipe {
         // 全部文件以 TS/M2TS 为后缀
         for (const file of files) {
             const fp = path.parse(file.path);
-            if (fp.ext !== ".ts" || fp.ext !== "m2ts") {
+            if (fp.ext !== ".ts" && fp.ext !== "m2ts") {
                 return false;
             }
         }
@@ -80,11 +80,10 @@ export default class HLG2SDR extends BaseRecipe {
                     {
                         stepName: "压制",
                         type: "encode",
-                        input: path.dirname(file.path),
+                        input: file.path,
                         output: `${file.path}.sdr.mp4`,
                         encoderSettings: {
-                            "vpp-colorspace":
-                                `transfer=arib-std-b67:bt709,matrix=bt2020nc:bt709,colorprim=bt2020:bt709,hdr2sdr=hable,ldr_nits=${HLG2SDR.lightnessMap[targetLightness]}`,
+                            "vpp-colorspace": `transfer=arib-std-b67:bt709,matrix=bt2020nc:bt709,colorprim=bt2020:bt709,hdr2sdr=hable,ldr_nits=${HLG2SDR.lightnessMap[targetLightness]}`,
                             vbr: HLG2SDR.bitrateMap[bitrate],
                             "audio-codec": `${audioTrackIndex}?aac`,
                         },
@@ -92,5 +91,6 @@ export default class HLG2SDR extends BaseRecipe {
                 ],
             });
         }
+        return tasks;
     }
 }

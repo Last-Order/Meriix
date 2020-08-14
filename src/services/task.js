@@ -52,8 +52,10 @@ class TaskService extends EventEmitter {
         } else if (currentStep.type === 'encode') {
             // 直接使用编码器
             executer = new (EncoderLoader(this.task.encoderName))(currentStep.input, currentStep.output, {
-                ...this.task.encoderSettings,
-                ...currentStep.settings
+                encoderSettings: {
+                    ...this.task.encoderSettings,
+                    ...currentStep.encoderSettings
+                }
             });
         } else if (currentStep.type === 'pipe_encode') {
             // 管道输出到编码器

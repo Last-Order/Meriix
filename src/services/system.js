@@ -1,18 +1,23 @@
-const { app } = require('electron').remote;
+const { app } = require("electron").remote;
+export const VendorIds = {
+    NVIDIA: 0x10de,
+    INTEL: 0x8086,
+    AMD: 0x1002,
+};
 export default class System {
     static getGPUInfo() {
-        return app.getGPUInfo('complete');
+        return app.getGPUInfo("complete");
     }
     static async getAvailableEncoders() {
         const GPUDevices = (await System.getGPUInfo("complete")).gpuDevice;
-        const availableEncoders = ['x264'];
+        const availableEncoders = ["x264"];
         for (const device of GPUDevices) {
-            const vendor = device.driverVendor;
-            if (vendor.toLowerCase().startsWith('intel')) {
-                availableEncoders.push('qsvencc');
+            const vendorId = device.vendorId;
+            if (vendorId === VendorIds.INTEL) {
+                availableEncoders.push("qsvencc");
             }
-            if (vendor.toLowerCase().startsWith('nvidia')) {
-                availableEncoders.push('nvencc');
+            if (vendorId === VendorIds.NVIDIA) {
+                availableEncoders.push("nvencc");
             }
         }
         return availableEncoders;

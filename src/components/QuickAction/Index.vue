@@ -106,11 +106,13 @@ export default {
                 // check if task generation result is a promise
                 taskGernerationResult = await taskGernerationResult;
             }
-            if (taskGernerationResult.encoderWhitelist) {
+            if (taskGernerationResult?.[0]?.encoderWhitelist) {
                 // if task only support specified encoders
                 taskSettings.encoderName = this.$store.state.global.encoderPriority.filter(
                     (encoder) =>
-                        taskGernerationResult.encoderWhitelist.includes(encoder)
+                        taskGernerationResult[0].encoderWhitelist.includes(
+                            encoder
+                        )
                 )[0];
             } else {
                 // task support all encoders, use the top priority encoder
@@ -121,7 +123,7 @@ export default {
             );
             this.$store.dispatch("addTasks", {
                 tasks: taskGernerationResult,
-                taskSettings,
+                settings: taskSettings,
             });
             this.recipeDialogVisible = false;
         },
