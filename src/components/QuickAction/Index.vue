@@ -117,7 +117,7 @@ export default {
                 taskSettings.encoderName = this.$store.state.global.encoderPriority[0];
             }
             taskSettings.encoderSettings = this.$store.getters.getEncoderCommandArgumentsByName(
-                encoderName
+                taskSettings.encoderName
             );
             this.$store.dispatch("addTasks", {
                 tasks: taskGernerationResult,
