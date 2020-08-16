@@ -36,6 +36,8 @@ interface Task {
     description: string;
     /** 外部依赖模块名 */
     dependencies: string[];
+    /** 编码器白名单 */
+    encoderWhitelist: string[];
     /** 任务队列中显示名 */
     displayName: string;
     /** 输出文件路径 */
@@ -68,7 +70,7 @@ interface EncodeStep extends BaseStep {
     /** 输出文件路径 */
     output: string;
     /** 编码器额外参数 */
-    settings: object;
+    encoderSettings: object;
 }
 
 /** 经过管道编码 */
