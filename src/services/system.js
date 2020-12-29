@@ -14,10 +14,10 @@ export default class System {
         for (const device of GPUDevices) {
             const vendorId = device.vendorId;
             if (vendorId === VendorIds.INTEL) {
-                availableEncoders.push("qsvencc");
+                !availableEncoders.includes("qsvencc") && availableEncoders.push("qsvencc");
             }
             if (vendorId === VendorIds.NVIDIA) {
-                availableEncoders.push("nvencc");
+                !availableEncoders.includes("nvencc") && availableEncoders.push("nvencc");
             }
         }
         return availableEncoders;

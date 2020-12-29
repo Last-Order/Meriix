@@ -108,7 +108,7 @@ export default {
             }
             if (taskGernerationResult?.[0]?.encoderWhitelist) {
                 // if task only support specified encoders
-                taskSettings.encoderName = this.$store.state.global.encoderPriority.filter(
+                taskSettings.encoderName = this.$store.state.global.availableEncoders.filter(
                     (encoder) =>
                         taskGernerationResult[0].encoderWhitelist.includes(
                             encoder
@@ -116,7 +116,7 @@ export default {
                 )[0];
             } else {
                 // task support all encoders, use the top priority encoder
-                taskSettings.encoderName = this.$store.state.global.encoderPriority[0];
+                taskSettings.encoderName = this.$store.state.global.availableEncoders[0];
             }
             taskSettings.encoderSettings = this.$store.getters.getEncoderCommandArgumentsByName(
                 taskSettings.encoderName
