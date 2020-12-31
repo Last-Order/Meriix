@@ -9,7 +9,7 @@
             target="_blank"
           >https://github.com/Last-Order/Meriix</a>
         </div>
-        <div>Open-sourced under GPLv3. © 2019, Eridanus Sora, member of MeowSound Idols.</div>
+        <div>Open-sourced under GPLv3. © 2019-2021, Eridanus Sora, member of MeowSound Idols.</div>
       </v-flex>
     </v-layout>
     <v-layout>
