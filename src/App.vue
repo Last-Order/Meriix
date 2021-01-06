@@ -47,6 +47,7 @@
           <v-card-actions>
             <v-spacer />
             <v-btn text @click="remoteDependenceLibraryUrlSettingTipVisble = false">以后再说</v-btn>
+            <v-btn text @click="disableDependenceLibraryUrlSettingTip">不再提示</v-btn>
             <v-btn text color="primary" @click="showSettings">设置</v-btn>
           </v-card-actions>
         </v-card>
@@ -147,7 +148,9 @@ export default {
     }
     // Check Remote Dependence Library
     if (!this.$store.state.settings.dependence.remoteLibraryRepositoryUrl) {
-      this.remoteDependenceLibraryUrlSettingTipVisble = true;
+      if (!Storage.getSetting('others.disableDependenceLibraryUrlSettingTip')) {
+        this.remoteDependenceLibraryUrlSettingTipVisble = true;
+      }
     } else {
       try {
         await Dependence.downloadRemoteLibraryDefinition(
@@ -169,6 +172,10 @@ export default {
     showSettings() {
       this.remoteDependenceLibraryUrlSettingTipVisble = false;
       this.settingsVisible = true;
+    },
+    disableDependenceLibraryUrlSettingTip() {
+      this.remoteDependenceLibraryUrlSettingTipVisble = false;
+      Storage.setSetting('others.disableDependenceLibraryUrlSettingTip', true);
     }
   },
   errorCaptured(err) {
