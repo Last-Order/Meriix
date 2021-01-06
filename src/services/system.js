@@ -1,4 +1,4 @@
-const { app } = require("electron").remote;
+import { app } from 'electron';
 export const VendorIds = {
     NVIDIA: 0x10de,
     INTEL: 0x8086,

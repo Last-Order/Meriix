@@ -82,6 +82,7 @@ body {
 }
 </style>
 <script>
+import { ipcRenderer } from 'electron';
 import QuickAction from "@/components/QuickAction/Index";
 import VideoEncode from "@/components/VideoEncode/Index";
 import DropHelper from "@/components/Common/DropHelper";
@@ -93,7 +94,6 @@ import Settings from "@/components/Settings/Index";
 import Dependence from "@/services/dependence";
 import Version from "@/services/version";
 import Storage from "@/services/storage";
-import System from "@/services/system";
 import DefaultEncoderPriority from "@/definitions/default_encoder_priority";
 
 export default {
@@ -120,13 +120,13 @@ export default {
   },
   async mounted() {
     // Check Available Encoders
-    const availableEncoders = await System.getAvailableEncoders();
+    const availableEncoders = await ipcRenderer.invoke('get-available-encoders');
     const encoderPriority = this.$store.state.global.encoderPriority || DefaultEncoderPriority;
     this.$store.commit("setAvailableEncoders", availableEncoders.sort((a, b) => encoderPriority.indexOf(a) - encoderPriority.indexOf(b)));
     // Check Version
     try {
       const latestVersion = await Version.getLatestVersion();
-      const localVersion = Version.getLocalVersion();
+      const localVersion = await ipcRenderer.invoke('get-version');
       const skippedVersions = Storage.getSetting("skippedVersions") || [];
       if (
         latestVersion.tag_name !== localVersion &&
