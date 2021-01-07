@@ -1,13 +1,13 @@
 import BaseRecipe from "./base_recipe";
-const path = require('path');
+const path = require("path");
 
 export default class ExtractAudioFromTS extends BaseRecipe {
-    static get definition() { 
+    static get definition() {
         return {
-            id: 'extract_aac_from_ts',
-            name: '音频抽取',
-            description: '从 TS 容器抽取音频',
-            dependencies: ['eac3to']
+            id: "extract_aac_from_ts",
+            name: "音频抽取",
+            description: "从 TS 容器抽取音频",
+            dependencies: ["eac3to"],
         };
     }
 
@@ -17,7 +17,7 @@ export default class ExtractAudioFromTS extends BaseRecipe {
     static check(files) {
         // 全部文件都是 TS 容器
         for (let index = 0; index < files.length; index++) {
-            if (!files[index].path.toLowerCase().endsWith('ts')) {
+            if (!files[index].path.toLowerCase().endsWith("ts")) {
                 return false;
             }
         }
@@ -25,7 +25,7 @@ export default class ExtractAudioFromTS extends BaseRecipe {
     }
 
     /**
-     * @param {FileList} files 
+     * @param {FileList} files
      */
     static generateTasks(files) {
         const tasks = [];
@@ -36,11 +36,13 @@ export default class ExtractAudioFromTS extends BaseRecipe {
                 ...ExtractAudioFromTS.definition,
                 output: outputPath,
                 displayName: `${ExtractAudioFromTS.definition.name} - ${files[index].name}`,
-                steps: [{
-                    stepName: '抽取',
-                    type: 'execute',
-                    command: '"${eac3to}"' + ` "${files[index].path}" "${outputPath}"`
-                }]
+                steps: [
+                    {
+                        stepName: "抽取",
+                        type: "execute",
+                        command: '"${eac3to}"' + ` "${files[index].path}" "${outputPath}"`,
+                    },
+                ],
             });
         }
         return tasks;

@@ -1,5 +1,5 @@
 const state = {
-    logs: []
+    logs: [],
 };
 
 const getters = {};
@@ -9,14 +9,14 @@ const mutations = {
         state.logs.push({
             type,
             content,
-            time: new Date().valueOf()
+            time: new Date().valueOf(),
         });
-    }
+    },
 };
 
 export default {
     state,
     getters,
     actions,
-    mutations
-}
+    mutations,
+};

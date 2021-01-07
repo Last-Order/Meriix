@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import { app } from "electron";
 export const VendorIds = {
     NVIDIA: 0x10de,
     INTEL: 0x8086,

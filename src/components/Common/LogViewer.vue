@@ -1,26 +1,26 @@
 <template>
-  <div class="log-viewer-container" v-if="logs" ref="container">
-    <template v-for="(log, index) in logs">
-      <div class="log-viewer-line" :key="index">{{ log.content }}</div>
-    </template>
-  </div>
+    <div class="log-viewer-container" v-if="logs" ref="container">
+        <template v-for="(log, index) in logs">
+            <div class="log-viewer-line" :key="index">{{ log.content }}</div>
+        </template>
+    </div>
 </template>
 <style>
 .log-viewer-container {
-  max-height: 350px;
-  overflow-y: scroll;
+    max-height: 350px;
+    overflow-y: scroll;
 }
 .log-viewer-line {
-  font-size: smaller;
+    font-size: smaller;
 }
 </style>
 <script>
 export default {
-  props: ["logs"],
-  watch: {
-    logs() {
-      this.$refs.container.scrollTop = this.$refs.container.scrollHeight;
-    }
-  }
+    props: ["logs"],
+    watch: {
+        logs() {
+            this.$refs.container.scrollTop = this.$refs.container.scrollHeight;
+        },
+    },
 };
 </script>

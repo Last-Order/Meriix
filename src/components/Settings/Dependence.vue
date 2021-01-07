@@ -1,158 +1,164 @@
 <template>
-  <v-container>
-    <v-flex>
-      <h3>依赖设置</h3>
-      <v-row>
-        <v-col cols="6">
-          <v-form>
-            <v-text-field label="外部依赖仓库地址 / 刷新后生效" v-model="remoteLibraryRepositoryUrl"></v-text-field>
-            <v-btn text color="primary" @click="saveRemoteLibraryRepositoryUrl">
-              <template v-if="saveRemoteLibraryRepositoryUrlLoading">
-                <v-icon class="loading">mdi-loading</v-icon>
-              </template>
-              <template v-else>保存</template>
-            </v-btn>
-          </v-form>
-        </v-col>
-      </v-row>
-      <h3>依赖列表</h3>
-      <v-row>
-        <v-spacer />
-        <v-col cols="4">
-          <v-text-field v-model="search" label="搜索" single-line hide-details></v-text-field>
-        </v-col>
-      </v-row>
-    </v-flex>
-    <v-data-table :headers="headers" :items="dependencies" :search="search">
-      <template v-slot:item.version="{ item }">
-        <template v-if="item.type === 'local'">{{ item.version }}</template>
-        <template v-else>未下载</template>
-      </template>
-      <template
-        v-slot:item.remote_version="{ item }"
-      >{{ remoteDependenceInfo[item.name] && remoteDependenceInfo[item.name].version || '不适用' }}</template>
-      <template v-slot:item.operations="{ item }">
-        <template v-if="item.type === 'local'">无可用操作</template>
-        <template v-if="item.type === 'remote'">
-          <v-btn text @click="downloadModule(item.name)">下载</v-btn>
-        </template>
-      </template>
-    </v-data-table>
-  </v-container>
+    <v-container>
+        <v-flex>
+            <h3>依赖设置</h3>
+            <v-row>
+                <v-col cols="6">
+                    <v-form>
+                        <v-text-field
+                            label="外部依赖仓库地址 / 刷新后生效"
+                            v-model="remoteLibraryRepositoryUrl"
+                        ></v-text-field>
+                        <v-btn text color="primary" @click="saveRemoteLibraryRepositoryUrl">
+                            <template v-if="saveRemoteLibraryRepositoryUrlLoading">
+                                <v-icon class="loading">mdi-loading</v-icon>
+                            </template>
+                            <template v-else>保存</template>
+                        </v-btn>
+                    </v-form>
+                </v-col>
+            </v-row>
+            <h3>依赖列表</h3>
+            <v-row>
+                <v-spacer />
+                <v-col cols="4">
+                    <v-text-field
+                        v-model="search"
+                        label="搜索"
+                        single-line
+                        hide-details
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+        </v-flex>
+        <v-data-table :headers="headers" :items="dependencies" :search="search">
+            <template v-slot:item.version="{ item }">
+                <template v-if="item.type === 'local'">{{ item.version }}</template>
+                <template v-else>未下载</template>
+            </template>
+            <template v-slot:item.remote_version="{ item }">{{
+                (remoteDependenceInfo[item.name] && remoteDependenceInfo[item.name].version) ||
+                "不适用"
+            }}</template>
+            <template v-slot:item.operations="{ item }">
+                <template v-if="item.type === 'local'">无可用操作</template>
+                <template v-if="item.type === 'remote'">
+                    <v-btn text @click="downloadModule(item.name)">下载</v-btn>
+                </template>
+            </template>
+        </v-data-table>
+    </v-container>
 </template>
 <style scoped>
 @keyframes loading {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 .loading {
-  animation: 1s loading 0s infinite;
+    animation: 1s loading 0s infinite;
 }
 </style>
 <script>
 import DependenceService from "@/services/dependence";
 export default {
-  data() {
-    return {
-      dependenceInfo: {},
-      remoteDependenceInfo: {},
-      headers: [
-        {
-          text: "依赖项",
-          value: "name"
-        },
-        {
-          text: "本地版本号",
-          value: "version"
-        },
-        {
-          text: "远程版本号",
-          value: "remote_version"
-        },
-        {
-          text: "操作",
-          value: "operations"
-        }
-      ],
-      search: "",
-      saveRemoteLibraryRepositoryUrlLoading: false
-    };
-  },
-  computed: {
-    dependencies() {
-      const result = [];
-      let remoteDependenceInfo = {};
-      try {
-        remoteDependenceInfo = DependenceService.getRemoteDependenceInfo();
-      } catch {
-        // pass
-      }
-      for (const key of Object.keys(this.dependenceInfo)) {
-        result.push({
-          ...this.dependenceInfo[key],
-          name: key,
-          type: "local"
-        });
-      }
-      for (const key of Object.keys(remoteDependenceInfo).filter(
-        k => !Object.keys(this.dependenceInfo).includes(k)
-      )) {
-        result.push({
-          ...remoteDependenceInfo[key],
-          name: key,
-          type: "remote"
-        });
-      }
-      return result;
+    data() {
+        return {
+            dependenceInfo: {},
+            remoteDependenceInfo: {},
+            headers: [
+                {
+                    text: "依赖项",
+                    value: "name",
+                },
+                {
+                    text: "本地版本号",
+                    value: "version",
+                },
+                {
+                    text: "远程版本号",
+                    value: "remote_version",
+                },
+                {
+                    text: "操作",
+                    value: "operations",
+                },
+            ],
+            search: "",
+            saveRemoteLibraryRepositoryUrlLoading: false,
+        };
     },
-    remoteLibraryRepositoryUrl: {
-      get() {
-        return this.$store.state.settings.dependence.remoteLibraryRepositoryUrl;
-      },
-      set(remoteLibraryRepositoryUrl) {
-        if (remoteLibraryRepositoryUrl.endsWith("/")) {
-          remoteLibraryRepositoryUrl = remoteLibraryRepositoryUrl.slice(
-            0,
-            remoteLibraryRepositoryUrl.length - 1
-          );
-        }
-        this.$store.commit(
-          "updateRemoteLibraryRepositoryUrl",
-          remoteLibraryRepositoryUrl
-        );
-      }
-    }
-  },
-  mounted() {
-    this.dependenceInfo = DependenceService.getCurrentDependenceInfo();
-    this.remoteDependenceInfo = DependenceService.getRemoteDependenceInfo();
-  },
-  methods: {
-    async saveRemoteLibraryRepositoryUrl() {
-      this.saveRemoteLibraryRepositoryUrlLoading = true;
-      try {
-        await DependenceService.downloadRemoteLibraryDefinition(
-          this.remoteLibraryRepositoryUrl
-        );
-      } finally {
-        this.saveRemoteLibraryRepositoryUrlLoading = false;
-      }
+    computed: {
+        dependencies() {
+            const result = [];
+            let remoteDependenceInfo = {};
+            try {
+                remoteDependenceInfo = DependenceService.getRemoteDependenceInfo();
+            } catch {
+                // pass
+            }
+            for (const key of Object.keys(this.dependenceInfo)) {
+                result.push({
+                    ...this.dependenceInfo[key],
+                    name: key,
+                    type: "local",
+                });
+            }
+            for (const key of Object.keys(remoteDependenceInfo).filter(
+                (k) => !Object.keys(this.dependenceInfo).includes(k)
+            )) {
+                result.push({
+                    ...remoteDependenceInfo[key],
+                    name: key,
+                    type: "remote",
+                });
+            }
+            return result;
+        },
+        remoteLibraryRepositoryUrl: {
+            get() {
+                return this.$store.state.settings.dependence.remoteLibraryRepositoryUrl;
+            },
+            set(remoteLibraryRepositoryUrl) {
+                if (remoteLibraryRepositoryUrl.endsWith("/")) {
+                    remoteLibraryRepositoryUrl = remoteLibraryRepositoryUrl.slice(
+                        0,
+                        remoteLibraryRepositoryUrl.length - 1
+                    );
+                }
+                this.$store.commit("updateRemoteLibraryRepositoryUrl", remoteLibraryRepositoryUrl);
+            },
+        },
     },
-    downloadModule(name) {
-      const { commit } = this.$store;
-      commit("setNowDownloadingNames", [name]);
-      commit("setDownloadVisible", true);
-      commit("setNowDownloadingPercent", 0);
-      commit("setTasksAfterDownload", []);
-      commit("setCallbackAfterDownload", () => {
-        // refresh table
+    mounted() {
         this.dependenceInfo = DependenceService.getCurrentDependenceInfo();
-      });
-    }
-  }
+        this.remoteDependenceInfo = DependenceService.getRemoteDependenceInfo();
+    },
+    methods: {
+        async saveRemoteLibraryRepositoryUrl() {
+            this.saveRemoteLibraryRepositoryUrlLoading = true;
+            try {
+                await DependenceService.downloadRemoteLibraryDefinition(
+                    this.remoteLibraryRepositoryUrl
+                );
+            } finally {
+                this.saveRemoteLibraryRepositoryUrlLoading = false;
+            }
+        },
+        downloadModule(name) {
+            const { commit } = this.$store;
+            commit("setNowDownloadingNames", [name]);
+            commit("setDownloadVisible", true);
+            commit("setNowDownloadingPercent", 0);
+            commit("setTasksAfterDownload", []);
+            commit("setCallbackAfterDownload", () => {
+                // refresh table
+                this.dependenceInfo = DependenceService.getCurrentDependenceInfo();
+            });
+        },
+    },
 };
 </script>

@@ -1,6 +1,6 @@
 const state = {
     show: false,
-    message: ''
+    message: "",
 };
 
 const getters = {};
@@ -12,12 +12,12 @@ const mutations = {
     },
     hideError(state) {
         state.show = false;
-    }
+    },
 };
 
 export default {
     state,
     getters,
     actions,
-    mutations
-}
+    mutations,
+};

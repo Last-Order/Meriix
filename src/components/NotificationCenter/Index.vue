@@ -1,10 +1,14 @@
 <template>
     <div class="notification-center-container">
         <v-row justify="center">
-            <v-col lg="11" class="message-preview">{{ logs.length > 0 ? logs[0].content : '' }}</v-col>
+            <v-col lg="11" class="message-preview">{{
+                logs.length > 0 ? logs[0].content : ""
+            }}</v-col>
             <v-col lg="1" class="expand-button">
                 <v-spacer />
-                <v-icon color="white" @click="toggleLogWindowVisible">{{ logWindowVisible ? 'mdi-chevron-down' : 'mdi-chevron-up' }}</v-icon>
+                <v-icon color="white" @click="toggleLogWindowVisible">{{
+                    logWindowVisible ? "mdi-chevron-down" : "mdi-chevron-up"
+                }}</v-icon>
             </v-col>
         </v-row>
         <v-row v-if="logWindowVisible">
@@ -17,65 +21,65 @@
     </div>
 </template>
 <style lang="scss" scoped>
-    .notification-center-container {
-        bottom: 0;
-        background-color: rgb(66, 66, 66);
-        &.hide-log-window {
-            height: 1.8rem;
+.notification-center-container {
+    bottom: 0;
+    background-color: rgb(66, 66, 66);
+    &.hide-log-window {
+        height: 1.8rem;
+    }
+    &.show-hide-window {
+        height: 4.8rem;
+    }
+    .message-preview {
+        line-height: 1.8rem;
+        margin: 0;
+        padding: 0;
+        font-size: 0.8rem;
+        color: white;
+        padding-left: 1.2rem;
+    }
+    .expand-button {
+        display: flex;
+        line-height: 1.8rem;
+        padding: 0;
+        padding-right: 1rem;
+        i {
+            cursor: pointer;
         }
-        &.show-hide-window {
-            height: 4.8rem;
-        }
-        .message-preview {
-            line-height: 1.8rem;
-            margin: 0;
-            padding: 0;
-            font-size: .8rem;
-            color: white;
-            padding-left: 1.2rem;
-        }
-        .expand-button {
-            display: flex;
-            line-height: 1.8rem;
-            padding: 0;
-            padding-right: 1rem;
-            i {
-                cursor: pointer;
+    }
+    .main {
+        min-height: 7rem;
+        background-color: white;
+        .log-item {
+            padding-left: 0.5rem;
+            font-size: 0.8rem;
+            &:hover {
+                background-color: rgba(10, 10, 10, 0.05);
             }
-        }
-        .main {
-            min-height: 7rem;
-            background-color: white;
-            .log-item {
-                padding-left: .5rem;
-                font-size: .8rem;
-                &:hover {
-                    background-color: rgba(10, 10, 10, 0.05)
-                }
-                &.log-error {
-                    color: #ff5252;
-                }
-                &.log-warning {
-                    color: #fb8c00;
-                }
-                &.log-info {
-                    color: #aaa;
-                }
+            &.log-error {
+                color: #ff5252;
+            }
+            &.log-warning {
+                color: #fb8c00;
+            }
+            &.log-info {
+                color: #aaa;
             }
         }
     }
+}
 </style>
 <script>
 export default {
     data() {
         return {
-            logWindowVisible: false
-        }
+            logWindowVisible: false,
+        };
     },
     computed: {
         logs() {
             return this.$store.state.notification.logs;
-        }
+        },
     },
     methods: {
         toggleLogWindowVisible() {
@@ -83,10 +87,10 @@ export default {
         },
         logClassNames(log) {
             return {
-                'log-item': true,
-                ['log-' + log.type]: true
+                "log-item": true,
+                ["log-" + log.type]: true,
             };
-        }
-    }
-}
+        },
+    },
+};
 </script>

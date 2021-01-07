@@ -1,1 +1,1 @@
-export default ['qsvencc', 'nvencc', 'x264'];
+export default ["qsvencc", "nvencc", "x264"];

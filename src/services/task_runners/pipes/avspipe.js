@@ -4,9 +4,9 @@ import { EventEmitter } from "events";
  */
 class AVSPipe extends EventEmitter {
     static commandTemplates = {
-        'nvencc': '"${avs2pipemod}" -y4mp "${input}" | "${nvencc}" --y4m -i - -o "${output}"',
-        'qsvencc': '"${avs2pipemod}" -y4mp "${input}" | "${qsvencc}" --y4m -i - -o "${output}"',
-        'x264': '"${avs2pipemod}" -y4mp "${input}" | "${x264}" --demuxer y4m - -o "${output}"'
+        nvencc: '"${avs2pipemod}" -y4mp "${input}" | "${nvencc}" --y4m -i - -o "${output}"',
+        qsvencc: '"${avs2pipemod}" -y4mp "${input}" | "${qsvencc}" --y4m -i - -o "${output}"',
+        x264: '"${avs2pipemod}" -y4mp "${input}" | "${x264}" --demuxer y4m - -o "${output}"',
     };
     constructor(input, output, encoder, encoderSettings) {
         super();
@@ -22,31 +22,31 @@ class AVSPipe extends EventEmitter {
             throw new Error(`Avisynth can not pipe to ${this.encoderName}`);
         }
         this.encoder.setCommandTemplate(AVSPipe.commandTemplates[this.encoderName]);
-        this.encoder.on('stderr', log => {
+        this.encoder.on("stderr", (log) => {
             if (!this.totalFrames) {
                 const match = log.match(/writing (\d+) frame/);
                 if (match) {
                     this.totalFrames = parseInt(match[1]);
                 }
             }
-            this.emit('stderr', log);
+            this.emit("stderr", log);
         });
-        this.encoder.on('frame-encoded', encodedFrames => {
+        this.encoder.on("frame-encoded", (encodedFrames) => {
             if (this.totalFrames) {
-                this.emit('progress', {
-                    phase: '压制',
-                    progress: Math.round(encodedFrames / this.totalFrames * 100)
+                this.emit("progress", {
+                    phase: "压制",
+                    progress: Math.round((encodedFrames / this.totalFrames) * 100),
                 });
             }
         });
-        this.encoder.on('fail', (child) => {
-            this.emit('fail', child);
+        this.encoder.on("fail", (child) => {
+            this.emit("fail", child);
         });
-        this.encoder.on('success', () => {
-            this.emit('success');
+        this.encoder.on("success", () => {
+            this.emit("success");
         });
-        this.encoder.on('start', (child) => {
-            this.emit('start', child);
+        this.encoder.on("start", (child) => {
+            this.emit("start", child);
         });
         this.encoder.run();
     }

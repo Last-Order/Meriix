@@ -1,28 +1,15 @@
 <template>
     <v-flex class="option-form">
-        <div
-            v-if="
-                scheme &&
-                    scheme.length > 0 &&
-                    Object.keys(nameMapping).length > 0
-            "
-        >
+        <div v-if="scheme && scheme.length > 0 && Object.keys(nameMapping).length > 0">
             <v-form>
                 <template v-for="item in scheme">
                     <v-row :key="item.name">
                         <template v-if="item.type === 'select'">
                             <v-col cols="6">
                                 <v-select
-                                    :value="
-                                        getSchemeItemByName(item.name)
-                                            .defaultValue
-                                    "
-                                    :items="
-                                        getSchemeItemByName(item.name).values
-                                    "
-                                    :label="
-                                        getSchemeItemByName(item.name).label
-                                    "
+                                    :value="getSchemeItemByName(item.name).defaultValue"
+                                    :items="getSchemeItemByName(item.name).values"
+                                    :label="getSchemeItemByName(item.name).label"
                                     @change="(v) => updateForm(item.name, v)"
                                 ></v-select>
                             </v-col>
@@ -30,13 +17,8 @@
                         <template v-if="item.type === 'input'">
                             <v-col cols="6">
                                 <v-text-field
-                                    :value="
-                                        getSchemeItemByName(item.name)
-                                            .defaultValue
-                                    "
-                                    :label="
-                                        getSchemeItemByName(item.name).label
-                                    "
+                                    :value="getSchemeItemByName(item.name).defaultValue"
+                                    :label="getSchemeItemByName(item.name).label"
                                     @change="(v) => updateForm(item.name, v)"
                                 ></v-text-field>
                             </v-col>

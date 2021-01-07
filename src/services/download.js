@@ -1,7 +1,7 @@
-const path = require('path');
-const fs = require('fs');
+const path = require("path");
+const fs = require("fs");
 import { EventEmitter } from "events";
-import axios from 'axios';
+import axios from "axios";
 import SystemUtils from "@/utils/system";
 import Dependence from "@/services/dependence";
 
@@ -29,31 +29,37 @@ class DownloadService extends EventEmitter {
         this.downloadedFileCount = 0;
         this.totalFileCount = this.files.length;
         for (const file of this.files) {
-            this.emit('download', file.name);
+            this.emit("download", file.name);
             const response = await axios({
                 url: file.url,
-                method: 'GET',
-                responseType: 'arraybuffer',
+                method: "GET",
+                responseType: "arraybuffer",
             });
-            this.saveFile(response.data, path.resolve(SystemUtils.externalBasePath(), `.${file.path}`));
+            this.saveFile(
+                response.data,
+                path.resolve(SystemUtils.externalBasePath(), `.${file.path}`)
+            );
             this.downloadedFileCount++;
-            this.emit('progress', (this.downloadedFileCount / this.totalFileCount * 100).toFixed(2));
+            this.emit(
+                "progress",
+                ((this.downloadedFileCount / this.totalFileCount) * 100).toFixed(2)
+            );
         }
-        this.emit('finish');
+        this.emit("finish");
     }
     /**
      * 保存文件
-     * @param {any} data 
-     * @param {string} savePath 
+     * @param {any} data
+     * @param {string} savePath
      */
     saveFile(data, savePath) {
         const parsedPath = path.parse(savePath);
         if (!fs.existsSync(parsedPath.dir)) {
             fs.mkdirSync(parsedPath.dir, {
-                recursive: true
+                recursive: true,
             });
         }
-        fs.writeFileSync(savePath, Buffer.from(data), 'binary')
+        fs.writeFileSync(savePath, Buffer.from(data), "binary");
     }
 }
 

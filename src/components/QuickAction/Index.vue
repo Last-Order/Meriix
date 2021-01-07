@@ -6,13 +6,10 @@
                     <span class="headline">可用操作</span>
                 </v-card-title>
                 <v-card-text>
-                    <recipe-list
-                        :recipes="suitableRecipes"
-                        @selected="handleRecipeSelected"
-                    />
+                    <recipe-list :recipes="suitableRecipes" @selected="handleRecipeSelected" />
                 </v-card-text>
             </v-card>
-            <v-card v-if="step === 'option'" style="float: left; width: 100%;">
+            <v-card v-if="step === 'option'" style="float: left; width: 100%">
                 <v-card-title>
                     <span class="headline">参数设置</span>
                 </v-card-title>
@@ -24,12 +21,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer />
-                    <v-btn
-                        text
-                        color="primary"
-                        @click="handleOptionFormFinished"
-                        >加入队列</v-btn
-                    >
+                    <v-btn text color="primary" @click="handleOptionFormFinished">加入队列</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -63,9 +55,7 @@ export default {
     methods: {
         handleFileDropped(event) {
             this.files = event.files;
-            const suitableRecipes = RecipeService.getSuitableRecipes(
-                event.files
-            );
+            const suitableRecipes = RecipeService.getSuitableRecipes(event.files);
             if (suitableRecipes.length === 0) {
                 this.$store.commit("showError", "无可用的快速操作");
                 return;
@@ -98,10 +88,7 @@ export default {
         },
         async generateTasks(recipe, options) {
             const taskSettings = {};
-            let taskGernerationResult = recipe.generateTasks(
-                this.files,
-                options
-            );
+            let taskGernerationResult = recipe.generateTasks(this.files, options);
             if (typeof taskGernerationResult.then === "function") {
                 // check if task generation result is a promise
                 taskGernerationResult = await taskGernerationResult;
@@ -109,10 +96,7 @@ export default {
             if (taskGernerationResult?.[0]?.encoderWhitelist) {
                 // if task only support specified encoders
                 taskSettings.encoderName = this.$store.state.global.availableEncoders.filter(
-                    (encoder) =>
-                        taskGernerationResult[0].encoderWhitelist.includes(
-                            encoder
-                        )
+                    (encoder) => taskGernerationResult[0].encoderWhitelist.includes(encoder)
                 )[0];
             } else {
                 // task support all encoders, use the top priority encoder

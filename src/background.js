@@ -93,13 +93,13 @@ if (isDevelopment) {
     }
 }
 
-import SystemService from './services/system';
+import SystemService from "./services/system";
 
 // Handle IPC Events
-ipcMain.handle('get-available-encoders', async () => {
-  return await SystemService.getAvailableEncoders();
+ipcMain.handle("get-available-encoders", async () => {
+    return await SystemService.getAvailableEncoders();
 });
 
-ipcMain.handle('get-version', async () => {
+ipcMain.handle("get-version", async () => {
     return app.getVersion();
 });

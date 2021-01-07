@@ -1,15 +1,13 @@
 const state = {
     nowDownloadingNames: [],
     nowDownloadingPercent: 0,
-    nowDownloadingPercentText: '',
+    nowDownloadingPercentText: "",
     tasksAfterDownload: [],
-    callbackAfterDownload: undefined
+    callbackAfterDownload: undefined,
 };
 
 const getters = {};
-const actions = {
-
-};
+const actions = {};
 const mutations = {
     setNowDownloadingNames: (state, name) => {
         state.nowDownloadingNames = name;
@@ -25,12 +23,12 @@ const mutations = {
     },
     setCallbackAfterDownload: (state, callback) => {
         state.callbackAfterDownload = callback;
-    }
+    },
 };
 
 export default {
     state,
     getters,
     actions,
-    mutations
-}
+    mutations,
+};

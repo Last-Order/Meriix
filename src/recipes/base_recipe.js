@@ -2,8 +2,8 @@ export default class BaseRecipe {
     /** 规则基本信息定义 */
     static get definition() {
         return {
-            name: '名称',
-            description: '描述'
+            name: "名称",
+            description: "描述",
         };
     }
     /**
@@ -17,7 +17,7 @@ export default class BaseRecipe {
 
     /**
      * 生成任务
-     * @param {FileList} files 
+     * @param {FileList} files
      */
     // eslint-disable-next-line no-unused-vars
     static generateTasks(files) {

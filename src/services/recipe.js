@@ -1,4 +1,4 @@
-import * as recipes from '@/recipes/index';
+import * as recipes from "@/recipes/index";
 class RecipeService {
     getSuitableRecipes(files) {
         const result = [];
