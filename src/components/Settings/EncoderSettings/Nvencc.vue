@@ -33,7 +33,7 @@ export default {
                 },
                 {
                     text: "可变码率（VBR）",
-                    value: "vbrhq",
+                    value: "vbr",
                 },
             ],
         };

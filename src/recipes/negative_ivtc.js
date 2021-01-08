@@ -72,7 +72,7 @@ class NegativeIVTC extends BaseRecipe {
                         pipe: "avs",
                         output: file.path + ".ivtc.mp4",
                         encoderSettings: {
-                            vbrhq: 5950,
+                            vbr: 5950,
                         },
                     },
                     {

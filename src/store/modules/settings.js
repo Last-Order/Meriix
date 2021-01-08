@@ -10,7 +10,7 @@ const state = {
             preset: Storage.getSetting("encoders.x264.preset", "medium"),
         },
         nvencc: {
-            bitrateControlMode: Storage.getSetting("encoders.nvencc.bitrateControlMode", "vbrhq"),
+            bitrateControlMode: Storage.getSetting("encoders.nvencc.bitrateControlMode", "vbr"),
             bitrateControlValue: Storage.getSetting("encoders.nvencc.bitrateControlValue", 5980),
         },
         qsvencc: {
