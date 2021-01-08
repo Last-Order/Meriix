@@ -4,7 +4,7 @@ class X264 extends BaseEncoder {
     static encoderName = "x264";
     constructor(input, output, settings) {
         super(input, output, settings);
-        this.commandTemplate = '${x264} -o "${output}" "${input}"';
+        this.commandTemplate = '"${x264}" -o "${output}" "${input}"';
         this.encodedFrames = 0;
         this.progress = 0;
     }

@@ -4,7 +4,7 @@ class QsvenccEncoder extends BaseEncoder {
     static encoderName = "qsvencc";
     constructor(input, output, settings) {
         super(input, output, settings);
-        this.commandTemplate = '${qsvencc} -i "${input}" -o "${output}"';
+        this.commandTemplate = '"${qsvencc}" -i "${input}" -o "${output}"';
         this.encodedFrames = 0;
         this.progress = 0;
     }

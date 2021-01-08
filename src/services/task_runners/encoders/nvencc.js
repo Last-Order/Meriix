@@ -4,7 +4,7 @@ class NvenccEncoder extends BaseEncoder {
     static encoderName = "nvencc";
     constructor(input, output, settings) {
         super(input, output, settings);
-        this.commandTemplate = '${nvencc} -i "${input}" -o "${output}"';
+        this.commandTemplate = '"${nvencc}" -i "${input}" -o "${output}"';
         this.encodedFrames = 0;
         this.progress = 0;
     }
