@@ -49,16 +49,21 @@
             <v-dialog v-model="settingsVisible" width="70vw">
                 <settings />
             </v-dialog>
-            <v-dialog v-model="remoteDependenceLibraryUrlSettingTipVisble" width="70vw">
+            <v-dialog v-if="!showNewVersionTip" v-model="remoteDependenceLibraryUrlSettingTipVisble" width="70vw">
                 <v-card>
                     <v-card-title>提示</v-card-title>
                     <v-card-text>暂未设置远程依赖库地址，无法下载依赖，是否设置？</v-card-text>
                     <v-card-actions>
                         <v-spacer />
-                        <v-btn text @click="remoteDependenceLibraryUrlSettingTipVisble = false"
+                        <v-btn
+                            text
+                            color="#aaa"
+                            @click="remoteDependenceLibraryUrlSettingTipVisble = false"
                             >以后再说</v-btn
                         >
-                        <v-btn text @click="disableDependenceLibraryUrlSettingTip">不再提示</v-btn>
+                        <v-btn text color="#aaa" @click="disableDependenceLibraryUrlSettingTip"
+                            >不再提示</v-btn
+                        >
                         <v-btn text color="primary" @click="showSettings">设置</v-btn>
                     </v-card-actions>
                 </v-card>

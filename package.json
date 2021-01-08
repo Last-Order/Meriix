@@ -1,7 +1,7 @@
 {
   "name": "meriix",
   "version": "0.2.1",
-  "description": "A Erii App",
+  "description": "An Erii App",
   "author": {
     "name": "Eridanus Sora"
   },
@@ -21,6 +21,8 @@
     "axios": "^0.21.1",
     "core-js": "^3.4.4",
     "iconv-lite": "^0.5.1",
+    "install": "^0.13.0",
+    "markdown-it-vue": "^1.1.6",
     "music-metadata": "^5.4.3",
     "tree-kill": "^1.2.2",
     "vue": "^2.6.12",

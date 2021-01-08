@@ -5,10 +5,10 @@
         </v-card-title>
         <v-card-text>
             <div>新版本：{{ version && version.tag_name }} 可供更新</div>
-            <div>
+            <div v-if="version && version.body">
                 更新内容：
                 <br />
-                {{ version && version.body }}
+                <markdown-it-vue class="version-content" :content="version.body" />
             </div>
         </v-card-text>
         <v-card-actions>
@@ -19,9 +19,17 @@
         </v-card-actions>
     </v-card>
 </template>
+<style lang="scss" scoped>
+.version-content {
+    max-height: 45vh;
+    overflow-y: scroll;
+}
+</style>
 <script>
 const shell = require("electron").shell;
 import Storage from "@/services/storage";
+import MarkdownItVue from "markdown-it-vue";
+import "markdown-it-vue/dist/markdown-it-vue.css";
 export default {
     props: ["version"],
     methods: {
@@ -41,6 +49,9 @@ export default {
         downloadNewVersion() {
             shell.openExternal("https://github.com/Last-Order/Meriix/releases");
         },
+    },
+    components: {
+        MarkdownItVue,
     },
 };
 </script>
