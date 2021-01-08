@@ -21,20 +21,19 @@
     </v-container>
 </template>
 <script>
-import { remote } from "electron";
-import Version from "@/services/version";
+import { ipcRenderer } from "electron";
 export default {
     data() {
         return {
             version: "",
         };
     },
-    mounted() {
-        this.version = Version.getLocalVersion();
+    async mounted() {
+        this.version = await ipcRenderer.invoke('get-version');
     },
     methods: {
         openDevTools() {
-            remote.BrowserWindow.getFocusedWindow().webContents.openDevTools();
+            ipcRenderer.invoke('open-devtools');
         },
     },
 };

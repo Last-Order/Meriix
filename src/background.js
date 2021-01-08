@@ -103,3 +103,7 @@ ipcMain.handle("get-available-encoders", async () => {
 ipcMain.handle("get-version", async () => {
     return app.getVersion();
 });
+
+ipcMain.handle("open-devtools", async () => {
+    win.webContents.openDevTools();
+});
