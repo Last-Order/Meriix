@@ -6,7 +6,7 @@
         <v-card-text>
             <div>新版本：{{ version && version.tag_name }} 可供更新</div>
             <div v-if="version && version.body">
-                更新内容：
+                最近版本更新内容：
                 <br />
                 <markdown-it-vue class="version-content" :content="version.body" />
             </div>

@@ -14,7 +14,9 @@
         <v-row v-if="logWindowVisible">
             <v-col class="main">
                 <template v-for="log in logs">
-                    <div :key="log.time" :class="logClassNames(log)">{{ log.content }}</div>
+                    <div :key="log.time" :class="logClassNames(log)">
+                        [{{ new Date(log.time).toLocaleString() }}] {{ log.content }}
+                    </div>
                 </template>
             </v-col>
         </v-row>
@@ -22,7 +24,9 @@
 </template>
 <style lang="scss" scoped>
 .notification-center-container {
+    position: absolute;
     bottom: 0;
+    width: 100%;
     background-color: rgb(66, 66, 66);
     &.hide-log-window {
         height: 1.8rem;
@@ -32,8 +36,6 @@
     }
     .message-preview {
         line-height: 1.8rem;
-        margin: 0;
-        padding: 0;
         font-size: 0.8rem;
         color: white;
         padding-left: 1.2rem;
