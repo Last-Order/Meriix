@@ -7,7 +7,7 @@ export default class HLG2SDR extends BaseRecipe {
             id: "hlg_to_sdr",
             name: "HLG转换SDR（Nvidia）",
             description: "将HLG视频转换为SDR",
-            dependencies: ["nvencc"],
+            dependencies: [],
             encoderWhitelist: ["nvencc"],
             userOptions: [
                 {

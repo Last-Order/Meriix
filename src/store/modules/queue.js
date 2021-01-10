@@ -11,7 +11,7 @@ const getters = {};
 const actions = {
     addTasks({ commit, dispatch }, { tasks, settings }) {
         const taskDependencies = tasks[0].dependencies;
-        const missingDeps = [];
+        const missingDeps = [settings.encoderName];
         for (const dep of taskDependencies) {
             if (!DependenceService.isModuleInstalled(dep)) {
                 missingDeps.push(dep);

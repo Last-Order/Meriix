@@ -11,11 +11,7 @@
             </v-card>
             <v-card v-if="step === 'option'" :loading="loading" style="float: left; width: 100%">
                 <template slot="progress">
-                    <v-progress-linear
-                        color="primary"
-                        height="5"
-                        indeterminate
-                    ></v-progress-linear>
+                    <v-progress-linear color="primary" height="5" indeterminate></v-progress-linear>
                 </template>
                 <v-card-title>
                     <span class="headline">参数设置</span>
@@ -110,9 +106,15 @@ export default {
             this.loading = false;
             if (taskGernerationResult?.[0]?.encoderWhitelist) {
                 // if task only support specified encoders
-                taskSettings.encoderName = this.$store.state.global.availableEncoders.filter(
+                const availableEncoders = this.$store.state.global.availableEncoders.filter(
                     (encoder) => taskGernerationResult[0].encoderWhitelist.includes(encoder)
-                )[0];
+                );
+                if (availableEncoders.length > 0) {
+                    taskSettings.encoderName = availableEncoders[0];
+                } else {
+                    this.$store.commit("showError", "没有可用于该任务的编码器");
+                    return;
+                }
             } else {
                 // task support all encoders, use the top priority encoder
                 taskSettings.encoderName = this.$store.state.global.availableEncoders[0];

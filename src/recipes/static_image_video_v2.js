@@ -8,7 +8,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
         return {
             name: "一图流 V2",
             description: "将图片和音频压制为一图流视频",
-            dependencies: ["smg", "ffmpeg", "nvencc"],
+            dependencies: ["smg", "ffmpeg"],
             userOptions: [
                 {
                     name: "resolution",
