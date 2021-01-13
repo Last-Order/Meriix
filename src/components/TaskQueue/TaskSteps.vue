@@ -2,23 +2,27 @@
     <div>
         <v-stepper vertical>
             <template v-for="(step, index) in steps">
-                <v-stepper-step :complete="current > index" :step="index + 1" :key="step.uuid">
-                    {{ getStepTypeName(step.type) }}
-                </v-stepper-step>
-                <v-stepper-content :step="index + 1" :key="step.uuid">
-                    {{ step.stepName }}
+                <v-stepper-step :complete="current > index" :step="index" :key="step.uuid">
+                    <div class="step-name">{{ step.stepName || getStepTypeName(step.type) }}</div>
                     <v-progress-linear
-                        v-if="task.progress !== undefined"
+                        v-if="task.progress !== undefined && current == index"
                         :value="task.progress"
                     ></v-progress-linear>
-                </v-stepper-content>
+                </v-stepper-step>
             </template>
         </v-stepper>
     </div>
 </template>
-<style scoped>
+<style lang="scss">
 .v-stepper {
     box-shadow: none;
+}
+.v-stepper__label {
+    width: 100%;
+}
+.step-name {
+    width: 100%;
+    margin-bottom: 8px;
 }
 </style>
 <script>
