@@ -13,7 +13,12 @@
                     @click="handleRecipeSelected(recipe)"
                 >
                     <v-list-item-content>
-                        <v-list-item-title>{{ recipe.definition.name }}</v-list-item-title>
+                        <v-list-item-title>
+                            <div class="item-title-container">
+                                <div class="item-title">{{ recipe.definition.name }}</div>
+                                <div class="item-version">{{ recipe.definition.version }}</div>
+                            </div>
+                        </v-list-item-title>
                         <v-list-item-subtitle>{{
                             recipe.definition.description
                         }}</v-list-item-subtitle>
@@ -23,6 +28,19 @@
         </template>
     </v-list>
 </template>
+<style lang="scss" scoped>
+    .item-title-container {
+        display: flex;
+    }
+    .item-version {
+        margin-left: 6px;
+        background-color: rgb(156 156 156 / 70%);
+        color: #fff;
+        padding: 2px 4px;
+        border-radius: 2px;
+        font-size: smaller;
+    }
+</style>
 <script>
 export default {
     props: ["recipes"],

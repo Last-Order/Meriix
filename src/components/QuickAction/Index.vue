@@ -104,7 +104,7 @@ export default {
             }
             clearTimeout(loadingTimer);
             this.loading = false;
-            if (taskGernerationResult?.[0]?.encoderWhitelist) {
+            if (taskGernerationResult?.[0]?.encoderWhitelist && taskGernerationResult[0].encoderWhitelist.length > 0) {
                 // if task only support specified encoders
                 const availableEncoders = this.$store.state.global.availableEncoders.filter(
                     (encoder) => taskGernerationResult[0].encoderWhitelist.includes(encoder)

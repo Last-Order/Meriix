@@ -6,8 +6,10 @@ export class AudioParsingError extends Error {}
 export default class StaticImageVideoV2 extends BaseRecipe {
     static get definition() {
         return {
+            id: "static_image_video_v2",
             name: "一图流 V2",
             description: "将图片和音频压制为一图流视频",
+            version: '1.0.0',
             dependencies: ["smg", "ffmpeg"],
             userOptions: [
                 {

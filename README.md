@@ -17,14 +17,18 @@ class RecipeName extends BaseRecipe {
 
 ```TypeScript
 interface RecipeDefinition {
+    /** 标识符 */
+    id: string;
     /** 任务名 */
     name: string;
     /** 描述 */
     description: string;
+    /** 版本号 */
+    version: string;
     /** 外部依赖模块名 */
-    dependencies: string[];
+    dependencies?: string[];
     /** 编码器白名单 */
-    encoderWhitelist: string[];
+    encoderWhitelist?: string[];
 }
 ```
 

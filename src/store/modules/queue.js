@@ -10,7 +10,7 @@ const state = {
 const getters = {};
 const actions = {
     addTasks({ commit, dispatch }, { tasks, settings }) {
-        const taskDependencies = [...tasks[0].dependencies, settings.encoderName];
+        const taskDependencies = [...(tasks[0].dependencies || []), settings.encoderName];
         const missingDeps = [];
         for (const dep of taskDependencies) {
             if (!DependenceService.isModuleInstalled(dep)) {

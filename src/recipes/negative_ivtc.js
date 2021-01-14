@@ -11,8 +11,10 @@ const fs = require("fs");
 class NegativeIVTC extends BaseRecipe {
     static get definition() {
         return {
+            id: "negative_ivtc",
             name: "IVTC(消极、电视适用)",
             description: "进行消极的IVTC处理",
+            version: '1.0.0',
             dependencies: ["avs2pipemod", "eac3to", "ffmpeg"],
         };
     }
