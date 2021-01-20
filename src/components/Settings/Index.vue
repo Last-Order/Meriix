@@ -26,7 +26,7 @@
     </v-card>
 </template>
 <script>
-import Dependence from "./Dependence";
+import Dependence from "./Dependence/Index";
 import About from "./About";
 import Encoder from "./Encoder";
 export default {
