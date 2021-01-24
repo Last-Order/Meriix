@@ -13,14 +13,14 @@ module.exports = {
     },
     pluginOptions: {
         electronBuilder: {
+            nodeIntegration: true,
             chainWebpackMainProcess: config => {
                 // Chain webpack config for electron main process only
                 config.mode('development');
             },
-            externals: ['iconv-lite'],
+            externals: ['iconv-lite', 'music-metadata'],
             builderOptions: {
                 appId: 'moe.sound.sora.meriix',
-                // asar: false,
                 artifactName: "meriix-${os}-${version}.${ext}",
                 productName: 'Meriix',
                 win: {

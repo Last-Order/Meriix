@@ -68,6 +68,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                 audioDuration =
                     (await Media.getAudioMetadata(audioFile.path)).format.duration * 1000;
             } catch (e) {
+                console.log(e)
                 throw new AudioParsingError("音频信息解析失败");
             }
             tasks.push({
