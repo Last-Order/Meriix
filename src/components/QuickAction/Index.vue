@@ -76,6 +76,7 @@ export default {
             } else {
                 this.formScheme = recipe.definition.userOptions;
                 this.step = "option";
+                this.loading = false;
             }
         },
         handleOptionFormFinished() {
