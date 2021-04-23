@@ -19,6 +19,7 @@
                 <v-card-text>
                     <option-form
                         :scheme="formScheme"
+                        :initial="initialForm"
                         @change="handleOptionFormUpdated"
                     ></option-form>
                 </v-card-text>
@@ -34,6 +35,7 @@
 import RecipeList from "./RecipeList";
 import OptionForm from "./OptionForm";
 import RecipeService from "@/services/recipe";
+import StorageService from "@/services/storage";
 
 export default {
     data() {
@@ -44,6 +46,7 @@ export default {
             selectedRecipe: undefined,
             files: [],
             form: {},
+            initialForm: {},
             formScheme: [],
             loading: false,
         };
@@ -75,8 +78,14 @@ export default {
                 this.generateTasks(recipe);
             } else {
                 this.formScheme = recipe.definition.userOptions;
-                this.step = "option";
                 this.loading = false;
+                // Get last time user input options
+                const options = StorageService.getRecipeOptions(this.selectedRecipe.definition.id);
+                this.initialForm = {
+                    ...this.form,
+                    ...options,
+                };
+                this.step = "option";
             }
         },
         handleOptionFormFinished() {
@@ -88,6 +97,8 @@ export default {
                 ...defaults,
                 ...this.form,
             });
+            // Save option values
+            StorageService.setRecipeOptions(this.selectedRecipe.definition.id, this.form);
         },
         handleOptionFormUpdated(form) {
             this.form = form;
@@ -105,7 +116,10 @@ export default {
             }
             clearTimeout(loadingTimer);
             this.loading = false;
-            if (taskGernerationResult?.[0]?.encoderWhitelist && taskGernerationResult[0].encoderWhitelist.length > 0) {
+            if (
+                taskGernerationResult?.[0]?.encoderWhitelist &&
+                taskGernerationResult[0].encoderWhitelist.length > 0
+            ) {
                 // if task only support specified encoders
                 const availableEncoders = this.$store.state.global.availableEncoders.filter(
                     (encoder) => taskGernerationResult[0].encoderWhitelist.includes(encoder)

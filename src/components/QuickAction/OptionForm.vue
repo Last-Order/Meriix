@@ -31,7 +31,7 @@
 </template>
 <script>
 export default {
-    props: ["scheme"],
+    props: ["scheme", "initial"],
     watch: {
         scheme() {
             this.updateScheme();
@@ -54,7 +54,14 @@ export default {
                 if (item.type === "select" || item.type === "input") {
                     form[item.name] = "";
                 }
-                nameMapping[item.name] = item;
+                nameMapping[item.name] = {
+                    ...item,
+                    ...(this.initial?.[item.name] !== undefined
+                        ? {
+                              defaultValue: this.initial[item.name],
+                          }
+                        : {}),
+                };
             }
             this.form = form;
             this.nameMapping = nameMapping;
