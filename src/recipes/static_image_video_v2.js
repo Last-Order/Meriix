@@ -9,7 +9,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
             id: "static_image_video_v2",
             name: "一图流 V2",
             description: "将图片和音频压制为一图流视频",
-            version: '1.0.0',
+            version: "1.0.0",
             dependencies: ["smg", "ffmpeg"],
             userOptions: [
                 {
@@ -18,6 +18,12 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                     type: "select",
                     values: ["1080p", "720p"],
                     defaultValue: "720p",
+                },
+                {
+                    name: "useBlur",
+                    label: "封面毛玻璃效果",
+                    type: "checkbox",
+                    defaultValue: true,
                 },
             ],
         };
@@ -68,7 +74,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                 audioDuration =
                     (await Media.getAudioMetadata(audioFile.path)).format.duration * 1000;
             } catch (e) {
-                console.log(e)
+                console.log(e);
                 throw new AudioParsingError("音频信息解析失败");
             }
             tasks.push({

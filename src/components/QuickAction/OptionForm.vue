@@ -23,6 +23,14 @@
                                 ></v-text-field>
                             </v-col>
                         </template>
+                        <template v-if="item.type === 'checkbox'">
+                            <v-col cols="6">
+                                <v-checkbox
+                                    v-model="form[item.name]"
+                                    :label="getSchemeItemByName(item.name).label"
+                                ></v-checkbox>
+                            </v-col>
+                        </template>
                     </v-row>
                 </template>
             </v-form>
@@ -53,6 +61,12 @@ export default {
             for (const item of this.scheme) {
                 if (item.type === "select" || item.type === "input") {
                     form[item.name] = "";
+                }
+                if (item.type === "checkbox") {
+                    form[item.name] =
+                        this.initial?.[item.name] !== undefined
+                            ? this.initial?.[item.name] !== undefined
+                            : item.defaultValue;
                 }
                 nameMapping[item.name] = {
                     ...item,
