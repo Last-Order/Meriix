@@ -19,12 +19,6 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                     values: ["1080p", "720p"],
                     defaultValue: "720p",
                 },
-                {
-                    name: "useBlur",
-                    label: "封面毛玻璃效果",
-                    type: "checkbox",
-                    defaultValue: true,
-                },
             ],
         };
     }
@@ -53,7 +47,8 @@ export default class StaticImageVideoV2 extends BaseRecipe {
         return true;
     }
 
-    static async generateTasks(files, options) {
+    static async generateTasks(files, options = {}) {
+        const { resolution = "720p" } = options;
         const tasks = [];
         const imageFile = Array.prototype.find.call(files, (f) => f.type.startsWith("image"));
         const audioFiles = Array.prototype.filter.call(files, (f) => !f.type.startsWith("image"));
@@ -89,8 +84,8 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                         input: imageFile.path,
                         output: `${audioFile.path}.smg.264`,
                         duration: Math.ceil(audioDuration),
-                        width: resolutionMapping[options.resolution].width,
-                        height: resolutionMapping[options.resolution].height,
+                        width: resolutionMapping[resolution].width,
+                        height: resolutionMapping[resolution].height,
                     },
                     {
                         stepName: "混流",

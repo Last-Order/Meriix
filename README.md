@@ -11,7 +11,7 @@ class RecipeName extends BaseRecipe {
     /** 任务是否适用 */
     static check(files: FileList): boolean { }
     /** 生成任务 */
-    static generateTasks(files: FileList): Task[] { }
+    static generateTasks(files: FileList, options: Record<string, unknown>): Task[] { }
 }
 ```
 
@@ -29,6 +29,23 @@ interface RecipeDefinition {
     dependencies?: string[];
     /** 编码器白名单 */
     encoderWhitelist?: string[];
+    /** 用户输入设置 */
+    userOptions: RecipeUserOptionScheme[];
+}
+```
+
+```TypeScript
+interface RecipeUserOptionScheme {
+    /** 选项名 */
+    name: string;
+    /** 选项显示名 */
+    label: string;
+    /** 选项类型 */
+    type: 'select' | 'input' | 'checkbox';
+    /** select 类型用 可选值列表 */
+    values?: string[];
+    /** 默认值 */
+    defaultValue?: any;
 }
 ```
 
