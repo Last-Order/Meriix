@@ -16,10 +16,10 @@
                 <div class="right">
                     <div class="step-type">{{ step.type && getStepTypeName(step.type) }}</div>
                     <div class="step-name">{{ step.stepName }}</div>
-                    <v-progress-linear
-                        v-if="task.progress !== undefined && current == index"
-                        :value="task.progress"
-                    ></v-progress-linear>
+                    <div v-if="task.progress !== undefined && current == index" class="progress-container">
+                        <div class="progress-value">{{ task.progress }} %</div>
+                        <v-progress-linear :value="task.progress"></v-progress-linear>
+                    </div>
                 </div>
             </div>
         </template>
@@ -70,6 +70,16 @@
 .right {
     flex-grow: 1;
 }
+.progress-container {
+    position: relative;
+}
+.progress-value {
+    position: absolute;
+    right: 0;
+    top: -24px;
+    font-size: smaller;
+}
+
 </style>
 <script>
 export default {
