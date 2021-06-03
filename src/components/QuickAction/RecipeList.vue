@@ -29,17 +29,17 @@
     </v-list>
 </template>
 <style lang="scss" scoped>
-    .item-title-container {
-        display: flex;
-    }
-    .item-version {
-        margin-left: 6px;
-        background-color: rgb(156 156 156 / 70%);
-        color: #fff;
-        padding: 2px 4px;
-        border-radius: 2px;
-        font-size: smaller;
-    }
+.item-title-container {
+    display: flex;
+}
+.item-version {
+    margin-left: 6px;
+    background-color: rgb(156 156 156 / 70%);
+    color: #fff;
+    padding: 2px 4px;
+    border-radius: 2px;
+    font-size: smaller;
+}
 </style>
 <script>
 export default {

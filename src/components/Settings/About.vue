@@ -29,11 +29,11 @@ export default {
         };
     },
     async mounted() {
-        this.version = await ipcRenderer.invoke('get-version');
+        this.version = await ipcRenderer.invoke("get-version");
     },
     methods: {
         openDevTools() {
-            ipcRenderer.invoke('open-devtools');
+            ipcRenderer.invoke("open-devtools");
         },
     },
 };

@@ -7,7 +7,7 @@ export default class BaseRecipe {
             description: "描述",
             encoderWhitelist: [],
             dependencies: [],
-            version: '1.0.0',
+            version: "1.0.0",
         };
     }
     /**

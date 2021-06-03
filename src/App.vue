@@ -49,7 +49,11 @@
             <v-dialog v-model="settingsVisible" width="70vw">
                 <settings />
             </v-dialog>
-            <v-dialog v-if="!showNewVersionTip" v-model="remoteDependenceLibraryUrlSettingTipVisble" width="70vw">
+            <v-dialog
+                v-if="!showNewVersionTip"
+                v-model="remoteDependenceLibraryUrlSettingTipVisble"
+                width="70vw"
+            >
                 <v-card>
                     <v-card-title>提示</v-card-title>
                     <v-card-text>暂未设置远程依赖库地址，无法下载依赖，是否设置？</v-card-text>

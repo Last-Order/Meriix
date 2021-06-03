@@ -6,7 +6,7 @@ export default class ExtractAudioFromTS extends BaseRecipe {
         return {
             id: "extract_aac_from_ts",
             name: "音频抽取",
-            version: '1.0.0',
+            version: "1.0.0",
             description: "从 TS 容器抽取音频",
             dependencies: ["eac3to"],
         };
