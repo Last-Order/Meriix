@@ -18,7 +18,7 @@
             </div>
             <div class="d-flex justify-space-between align-center">
                 <h3 class="section-title">已安装依赖列表</h3>
-                <div>
+                <div v-if="remoteLibraryRepositoryUrl">
                     <v-btn @click="remoteDependencePanelVisible = true">从远端安装依赖</v-btn>
                 </div>
             </div>

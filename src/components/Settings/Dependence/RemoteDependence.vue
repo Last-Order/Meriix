@@ -48,6 +48,7 @@ export default {
                     sortable: false,
                 },
             ],
+            search: "",
         };
     },
     computed: {

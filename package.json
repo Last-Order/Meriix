@@ -20,6 +20,7 @@
     "@mdi/font": "^4.9.95",
     "axios": "^0.21.1",
     "core-js": "^3.4.4",
+    "electron-log": "^4.3.5",
     "iconv-lite": "^0.5.1",
     "install": "^0.13.0",
     "markdown-it-vue": "^1.1.6",

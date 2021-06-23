@@ -108,6 +108,7 @@ body {
 </style>
 <script>
 import { ipcRenderer } from "electron";
+import log from "electron-log";
 import QuickAction from "@/components/QuickAction/Index";
 import VideoEncode from "@/components/VideoEncode/Index";
 import DropHelper from "@/components/Common/DropHelper";
@@ -215,6 +216,7 @@ export default {
                 content: err.message,
             });
             this.$store.commit("showError", err.message);
+            log.error(err);
         }
     },
     components: {
