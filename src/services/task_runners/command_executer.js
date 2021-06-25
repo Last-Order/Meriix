@@ -1,3 +1,4 @@
+import log from "electron-log";
 import EventEmitter from "events";
 import { decode } from "@/utils/encoding";
 
@@ -10,6 +11,7 @@ export default class CommandExecuter extends EventEmitter {
     run(command, { output = ["stdout", "stderr"] } = {}) {
         // eslint-disable-next-line no-console
         console.log("RUN: " + command);
+        log.debug("命令执行", command);
         const child = exec(command, {
             encoding: "binary",
             maxBuffer: 4000 * 1024,

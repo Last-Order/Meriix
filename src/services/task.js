@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import log from 'electron-log';
+import log from "electron-log";
 import CommandExecuter from "./task_runners/command_executer";
 import EncoderLoader from "./task_runners/encoder_loader";
 import systemUtils from "@/utils/system";
@@ -11,6 +11,7 @@ class TaskService extends EventEmitter {
         super();
         this.task = task;
         this.currentStepIndex = -1;
+        log.info("Task 创建", this.task);
     }
     run() {
         this.emit("start");
@@ -24,11 +25,14 @@ class TaskService extends EventEmitter {
             return;
         }
         const currentStep = this.task.steps[this.currentStepIndex];
+        log.debug(`任务 步数 ${this.currentStepIndex} / ${this.task.steps.length}`);
+        log.debug(`当前步骤`, currentStep);
         this.emit("progress", {
             phase: currentStep.stepName,
         });
         // 自定义函数
         if (currentStep.type === "function") {
+            log.debug("执行自定义函数");
             currentStep.stepFunction().then(() => {
                 this.runNextStep();
             });
@@ -37,6 +41,7 @@ class TaskService extends EventEmitter {
         // 删除文件
         if (currentStep.type === "delete") {
             for (const file of currentStep.files) {
+                log.debug("删除文件", file);
                 try {
                     fs.unlinkSync(file);
                 } catch {
@@ -49,9 +54,16 @@ class TaskService extends EventEmitter {
         let executer;
         if (currentStep.type === "execute") {
             // 直接执行命令
+            log.debug("执行自定义命令");
             executer = new CommandExecuter();
         } else if (currentStep.type === "encode") {
             // 直接使用编码器
+            log.debug(
+                "执行编码器",
+                this.task.encoderName,
+                this.task.encoderSettings,
+                this.currentStepIndex.encoderSettings
+            );
             executer = new (EncoderLoader(this.task.encoderName))(
                 currentStep.input,
                 currentStep.output,
@@ -64,8 +76,15 @@ class TaskService extends EventEmitter {
             );
         } else if (currentStep.type === "pipe_encode") {
             // 管道输出到编码器
+            log.debug(
+                "管道输出到编码器",
+                this.task.encoderName,
+                this.task.encoderSettings,
+                this.currentStepIndex.encoderSettings
+            );
             const encoderClass = EncoderLoader(this.task.encoderName);
             if (currentStep.pipe === "avs") {
+                log.debug(`创建 AVS 管道 ${currentStep.input} -> ${currentStep.output}`);
                 const AVSPipe = require("./task_runners/pipes/avspipe").default;
                 executer = new AVSPipe(currentStep.input, currentStep.output, encoderClass, {
                     encoderSettings: {
@@ -74,6 +93,7 @@ class TaskService extends EventEmitter {
                     },
                 });
             } else if (currentStep.pipe === "smg") {
+                log.debug(`创建 SMG 管道 ${currentStep.input} -> ${currentStep.output}`);
                 const SMGPipe = require("./task_runners/pipes/smgpipe").default;
                 executer = new SMGPipe(
                     currentStep.input,
@@ -88,6 +108,13 @@ class TaskService extends EventEmitter {
             }
         } else if (currentStep.type === "mux") {
             // 混流
+            log.debug(
+                "混流操作",
+                currentStep.videoTracks,
+                currentStep.audioTracks,
+                "->",
+                currentStep.output
+            );
             if (currentStep.type === "mux") {
                 const videoMuxer = new VideoMuxer(currentStep.output);
                 if (currentStep.videoTracks) {
