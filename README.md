@@ -63,6 +63,8 @@ interface Task {
     displayName: string;
     /** 输出文件路径 */
     output: string;
+    /** 中间临时文件路径 */
+    temporaryFilePaths?: string[];
     /** 任务步骤 */
     steps: TaskStep[];
 }

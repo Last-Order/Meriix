@@ -1,5 +1,6 @@
-import BaseRecipe from "./base_recipe";
+import log from "electron-log";
 import Media from "@/services/media";
+import BaseRecipe from "./base_recipe";
 
 export class AudioParsingError extends Error {}
 
@@ -68,6 +69,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
             try {
                 audioDuration =
                     (await Media.getAudioMetadata(audioFile.path)).format.duration * 1000;
+                log.debug("音频长度", audioDuration);
             } catch (e) {
                 console.log(e);
                 throw new AudioParsingError("音频信息解析失败");

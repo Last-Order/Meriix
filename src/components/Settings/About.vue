@@ -15,13 +15,26 @@
         </v-layout>
         <v-layout>
             <v-flex>
-                <v-btn color="error" text @click="openDevTools">打开开发者工具</v-btn>
+                <v-btn color="error" tile @click="openDevTools" class="open-devtools-button"
+                    >打开开发者工具</v-btn
+                >
+                <v-btn tile @click="openLogDirectory" class="open-log-button">查看日志文件</v-btn>
             </v-flex>
         </v-layout>
     </v-container>
 </template>
+<style lang="scss" scoped>
+.open-devtools-button {
+    margin-top: 4px;
+}
+.open-log-button {
+    margin-top: 4px;
+    margin-left: 8px;
+}
+</style>
 <script>
-import { ipcRenderer } from "electron";
+import { ipcRenderer, shell } from "electron";
+import log from 'electron-log';
 export default {
     data() {
         return {
@@ -35,6 +48,9 @@ export default {
         openDevTools() {
             ipcRenderer.invoke("open-devtools");
         },
+        openLogDirectory() {
+            shell.showItemInFolder(log.transports.file.getFile().path);
+        }
     },
 };
 </script>

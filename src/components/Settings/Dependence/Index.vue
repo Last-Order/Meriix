@@ -1,54 +1,58 @@
 <template>
     <v-container>
-        <div class="d-flex flex-column">
-            <h3 class="section-title">依赖设置</h3>
-            <div class="d-flex">
+        <v-list subheader>
+            <v-subheader>依赖设置</v-subheader>
+            <v-list-item>
                 <v-form class="repository-form-container">
                     <v-text-field
                         label="外部依赖仓库地址 / 刷新后生效"
                         v-model="remoteLibraryRepositoryUrl"
                     ></v-text-field>
-                    <v-btn text color="primary" @click="saveRemoteLibraryRepositoryUrl">
+                    <v-btn tile color="primary" @click="saveRemoteLibraryRepositoryUrl">
                         <template v-if="saveRemoteLibraryRepositoryUrlLoading">
                             <v-icon class="loading">mdi-loading</v-icon>
                         </template>
                         <template v-else>保存</template>
                     </v-btn>
                 </v-form>
-            </div>
+            </v-list-item>
             <div class="d-flex justify-space-between align-center">
-                <h3 class="section-title">已安装依赖列表</h3>
+                <v-subheader class="section-title">已安装依赖列表</v-subheader>
                 <div v-if="remoteLibraryRepositoryUrl">
                     <v-btn @click="remoteDependencePanelVisible = true">从远端安装依赖</v-btn>
                 </div>
             </div>
-            <div class="d-flex">
-                <v-spacer />
+            <v-list-item>
+                <div class="d-flex" style="width: 100%">
+                    <v-spacer />
+                    <v-col cols="24">
+                        <v-text-field
+                            v-model="search"
+                            label="搜索"
+                            single-line
+                            hide-details
+                        ></v-text-field>
+                    </v-col>
+                </div>
+            </v-list-item>
+            <v-list-item>
+                <v-data-table :headers="headers" :items="dependencies" :search="search">
+                    <template v-slot:item.version="{ item }">
+                        {{ item.version }}
+                    </template>
+                    <template v-slot:item.remote_version="{ item }">
+                        {{ getRemoteVersion(item.name) || "不适用" }}
+                    </template>
+                    <template v-slot:item.operations="{ item }">
+                        <template v-if="getRemoteVersion(item.name) !== item.version">
+                            <v-btn text @click="downloadModule(item.name)">下载</v-btn>
+                        </template>
+                        <template v-else> 无可用操作 </template>
+                    </template>
+                </v-data-table>
+            </v-list-item>
+        </v-list>
 
-                <v-col cols="4">
-                    <v-text-field
-                        v-model="search"
-                        label="搜索"
-                        single-line
-                        hide-details
-                    ></v-text-field>
-                </v-col>
-            </div>
-        </div>
-        <v-data-table :headers="headers" :items="dependencies" :search="search">
-            <template v-slot:item.version="{ item }">
-                {{ item.version }}
-            </template>
-            <template v-slot:item.remote_version="{ item }">
-                {{ getRemoteVersion(item.name) || "不适用" }}
-            </template>
-            <template v-slot:item.operations="{ item }">
-                <template v-if="getRemoteVersion(item.name) !== item.version">
-                    <v-btn text @click="downloadModule(item.name)">下载</v-btn>
-                </template>
-                <template v-else> 无可用操作 </template>
-            </template>
-        </v-data-table>
         <v-dialog v-model="remoteDependencePanelVisible" width="70vw">
             <remote-dependence></remote-dependence>
         </v-dialog>
@@ -143,6 +147,9 @@ export default {
     },
     methods: {
         async saveRemoteLibraryRepositoryUrl() {
+            if (!this.remoteLibraryRepositoryUrl) {
+                this.$store.commit("showError", "请输入合法地址");
+            }
             this.saveRemoteLibraryRepositoryUrlLoading = true;
             try {
                 await DependenceService.downloadRemoteLibraryDefinition(

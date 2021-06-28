@@ -22,10 +22,11 @@ class TaskService extends EventEmitter {
         this.emit("step", this.currentStepIndex);
         if (this.currentStepIndex === this.task.steps.length) {
             this.emit("finish", this.task);
+            log.info("当前任务完成");
             return;
         }
         const currentStep = this.task.steps[this.currentStepIndex];
-        log.debug(`任务 步数 ${this.currentStepIndex} / ${this.task.steps.length}`);
+        log.debug(`任务 步数 ${this.currentStepIndex + 1} / ${this.task.steps.length}`);
         log.debug(`当前步骤`, currentStep);
         this.emit("progress", {
             phase: currentStep.stepName,
@@ -109,7 +110,7 @@ class TaskService extends EventEmitter {
         } else if (currentStep.type === "mux") {
             // 混流
             log.debug(
-                "混流操作",
+                "混流",
                 currentStep.videoTracks,
                 currentStep.audioTracks,
                 "->",

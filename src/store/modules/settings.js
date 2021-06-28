@@ -18,6 +18,12 @@ const state = {
             bitrateControlValue: Storage.getSetting("encoders.qsvencc.bitrateControlValue", 5980),
         },
     },
+    general: {
+        deleteTemporaryFilesWhenCancelTasks: Storage.getSetting(
+            "general.deleteTemporaryFilesWhenCancelTasks",
+            true
+        ),
+    },
 };
 
 const getters = {
@@ -57,6 +63,13 @@ const mutations = {
             ...state.encoders[name],
             ...settings,
         });
+    },
+    updateDeleteTemporaryFilesWhenCancelTasks(state, deleteTemporaryFilesWhenCancelTasks) {
+        state.general.deleteTemporaryFilesWhenCancelTasks = deleteTemporaryFilesWhenCancelTasks;
+        Storage.setSetting(
+            "general.deleteTemporaryFilesWhenCancelTasks",
+            deleteTemporaryFilesWhenCancelTasks
+        );
     },
 };
 
