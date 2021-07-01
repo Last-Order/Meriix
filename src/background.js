@@ -20,6 +20,7 @@ function createWindow() {
         height: 900,
         webPreferences: {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+            contextIsolation: false,
             // Enable CORS
             webSecurity: false,
         },

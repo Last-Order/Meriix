@@ -99,6 +99,11 @@ class NegativeIVTC extends BaseRecipe {
                         ],
                     },
                 ],
+                temporaryFilePaths: [
+                    path.resolve(path.dirname(file.path), "template.avs"),
+                    path.resolve(path.dirname(file.path), `${file.name}.ivtc.mp4`),
+                    path.resolve(path.dirname(file.path), `${file.name}.aac`),
+                ],
             });
         }
         return tasks;

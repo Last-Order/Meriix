@@ -1,3 +1,4 @@
+import log from 'electron-log';
 import TaskExecuter from "@/services/task";
 import DependenceService from "@/services/dependence";
 const uuid = require("uuid/v4");
@@ -24,11 +25,13 @@ const actions = {
             };
         });
         if (missingDeps.length > 0) {
+            log.info('缺少依赖', missingDeps);
             commit("setNowDownloadingNames", missingDeps);
             commit("setDownloadVisible", true);
             commit("setNowDownloadingPercent", 0);
             commit("setTasksAfterDownload", tasksToAdd);
         } else {
+            log.debug('队列添加任务', tasksToAdd);
             commit("addTasks", tasksToAdd);
             commit("setQueueDrawerVisible", true);
             dispatch("checkQueue");
@@ -40,8 +43,10 @@ const actions = {
         }
         const task = state.tasks.find((t) => t.category === "unfinished" && t.status !== "fail");
         if (task) {
+            log.info('开始执行下一任务');
             dispatch("runTask", task.uuid);
         } else {
+            log.info('全部任务完成');
             new Notification("Meriix", {
                 body: "队列内任务已全部完成",
             });
@@ -83,6 +88,7 @@ const actions = {
             });
         });
         executer.on("fail", () => {
+            log.error('任务执行发生错误', task.logs);
             commit("updateTask", {
                 uuid,
                 payload: {

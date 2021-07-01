@@ -104,6 +104,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                         files: [audioFile.path + ".smg.264"],
                     },
                 ],
+                temporaryFilePaths: [audioFile.path + ".smg.264"],
             });
         }
         return tasks;
