@@ -26,12 +26,11 @@
     </v-card>
 </template>
 <script>
-import log from 'electron-log';
 import Dependence from "./Dependence/Index";
 import General from "./General.vue";
 import About from "./About";
 import Encoder from "./Encoder";
-window.log = log;
+
 export default {
     data() {
         return {

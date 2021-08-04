@@ -36,7 +36,7 @@
                 </div>
             </v-list-item>
             <v-list-item>
-                <v-data-table :headers="headers" :items="dependencies" :search="search">
+                <v-data-table :headers="headers" :items="dependencies" :search="search" class="dependence-table">
                     <template v-slot:item.version="{ item }">
                         {{ item.version }}
                     </template>
@@ -76,6 +76,9 @@
 .repository-form-container {
     width: 50%;
     margin-bottom: 8px;
+}
+.dependence-table {
+    width: 100%;
 }
 </style>
 <script>

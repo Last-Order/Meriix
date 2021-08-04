@@ -14,7 +14,7 @@
                 <v-tabs-items v-model="active">
                     <v-tab-item key="quickAction">
                         <quick-action />
-                        <div class="quick-action-tip">将文件拖至此处</div>
+                        <div class="quick-action-tip">{{ quickActionTip }}</div>
                     </v-tab-item>
                     <v-tab-item key="videoEncode">
                         <video-encode />
@@ -130,6 +130,8 @@ export default {
         settingsVisible: false,
         remoteDependenceLibraryUrlSettingTipVisble: false,
         latestVersion: null,
+        quickActionTip: "请稍等..",
+        initialized: false,
     }),
     computed: {
         queueDrawerVisible: {
@@ -146,14 +148,15 @@ export default {
     },
     async mounted() {
         // Check Available Encoders
-        const availableEncoders = await ipcRenderer.invoke("get-available-encoders");
+        let availableEncoders = await ipcRenderer.invoke("get-available-encoders");
         const encoderPriority = this.$store.state.global.encoderPriority || DefaultEncoderPriority;
-        this.$store.commit(
-            "setAvailableEncoders",
-            availableEncoders.sort(
-                (a, b) => encoderPriority.indexOf(a) - encoderPriority.indexOf(b)
-            )
+        availableEncoders = availableEncoders.sort(
+            (a, b) => encoderPriority.indexOf(a) - encoderPriority.indexOf(b)
         );
+        log.debug("检查编码器支持情况完成，可用：", availableEncoders);
+        this.$store.commit("setAvailableEncoders", availableEncoders);
+        this.quickActionTip = "将文件拖至此处";
+        this.initialized = true;
         // Check Version
         try {
             const latestVersion = await Version.getLatestVersion();
@@ -198,6 +201,9 @@ export default {
     },
     methods: {
         droppedHandler(e) {
+            if (!this.initialized) {
+                return this.$store.commit("showError", "主程序尚未初始化完毕");
+            }
             this.$store.state.global.dropHandler(e);
         },
         showSettings() {
