@@ -34,7 +34,7 @@
 </style>
 <script>
 import { ipcRenderer, shell } from "electron";
-import log from 'electron-log';
+import log from "electron-log";
 export default {
     data() {
         return {
@@ -50,7 +50,7 @@ export default {
         },
         openLogDirectory() {
             shell.showItemInFolder(log.transports.file.getFile().path);
-        }
+        },
     },
 };
 </script>

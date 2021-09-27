@@ -8,7 +8,9 @@
                 </v-list-item-action>
                 <v-list-item-content>
                     <v-list-item-title>中断任务时删除中间文件</v-list-item-title>
-                    <v-list-item-subtitle>取消任务时将会删除任务产生的中间临时文件</v-list-item-subtitle>
+                    <v-list-item-subtitle
+                        >取消任务时将会删除任务产生的中间临时文件</v-list-item-subtitle
+                    >
                 </v-list-item-content>
             </v-list-item>
         </v-list>

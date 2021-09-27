@@ -18,7 +18,7 @@
   "main": "background.js",
   "dependencies": {
     "@mdi/font": "^4.9.95",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "core-js": "^3.4.4",
     "electron-log": "^4.4.1",
     "iconv-lite": "^0.5.1",

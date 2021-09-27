@@ -36,7 +36,12 @@
                 </div>
             </v-list-item>
             <v-list-item>
-                <v-data-table :headers="headers" :items="dependencies" :search="search" class="dependence-table">
+                <v-data-table
+                    :headers="headers"
+                    :items="dependencies"
+                    :search="search"
+                    class="dependence-table"
+                >
                     <template v-slot:item.version="{ item }">
                         {{ item.version }}
                     </template>
