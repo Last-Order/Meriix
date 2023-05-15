@@ -1,6 +1,6 @@
 <template>
     <div class="notification-center-container">
-        <v-row justify="center">
+        <v-row justify="center" align="center">
             <v-col lg="11" class="message-preview">{{
                 logs.length > 0 ? logs[0].content : ""
             }}</v-col>
@@ -13,9 +13,10 @@
         </v-row>
         <v-row v-if="logWindowVisible">
             <v-col class="main">
-                <template v-for="log in logs">
-                    <div :key="log.time" :class="logClassNames(log)">
-                        [{{ new Date(log.time).toLocaleString() }}] {{ log.content }}
+                <template v-for="log in logs" :key="log.time">
+                    <div :class="logClassNames(log)">
+                        [{{ new Date(log.time).toLocaleString() }}]
+                        {{ log.content }}
                     </div>
                 </template>
             </v-col>
@@ -24,7 +25,7 @@
 </template>
 <style lang="scss" scoped>
 .notification-center-container {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     background-color: rgb(66, 66, 66);

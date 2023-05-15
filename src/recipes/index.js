@@ -1,9 +1,13 @@
-const context = require.context(".", true, /^\.\/(?!(index|base_recipe)).+.js$/);
-const recipes = {};
-context.keys().forEach(function (key) {
-    const module = context(key);
-    const moduleName = module.default.name;
-    recipes[moduleName] = module.default;
-});
+import ExtractAudioFromTS from "./extract_aac_from_ts";
+import HLG2SDR from "./hlg2sdr";
+import NegativeIVTC from "./negative_ivtc";
+import NormalizeFLAC from "./normalize_flac";
+import StaticImageVideoV2 from "./static_image_video_v2";
 
-module.exports = recipes;
+export default [
+    ExtractAudioFromTS,
+    HLG2SDR,
+    NegativeIVTC,
+    NormalizeFLAC,
+    StaticImageVideoV2,
+];

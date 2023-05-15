@@ -1,4 +1,4 @@
-import log from "electron-log";
+const log = require("electron-log")
 import Media from "@/services/media";
 import BaseRecipe from "./base_recipe";
 

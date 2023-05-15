@@ -1,16 +1,31 @@
 <template>
     <div class="drop-helper" ref="container">
-        <div class="helper-overlay" :style="{ opacity: helperOverlayVisible ? 1 : 0 }">
-            <div class="top-overlay" :style="{ height: options.length > 1 ? '50%' : '100%' }">
-                <template v-for="item in options.slice(0, Math.ceil(options.length / 2))">
-                    <div class="overlay-item" :key="item.name" :data-name="item.name">
+        <div
+            class="helper-overlay"
+            :style="{ opacity: helperOverlayVisible ? 1 : 0 }"
+        >
+            <div
+                class="top-overlay"
+                :style="{ height: options.length > 1 ? '50%' : '100%' }"
+            >
+                <template
+                    v-for="item in options.slice(
+                        0,
+                        Math.ceil(options.length / 2)
+                    )"
+                    :key="item.name"
+                >
+                    <div class="overlay-item" :data-name="item.name">
                         <span>{{ item.text }}</span>
                     </div>
                 </template>
             </div>
             <div class="bottom-overlay" v-if="options.length > 1">
-                <template v-for="item in options.slice(Math.ceil(options.length / 2))">
-                    <div class="overlay-item" :key="item.name" :data-name="item.name">
+                <template
+                    v-for="item in options.slice(Math.ceil(options.length / 2))"
+                    :key="item.name"
+                >
+                    <div class="overlay-item" :data-name="item.name">
                         <span>{{ item.text }}</span>
                     </div>
                 </template>
@@ -68,8 +83,16 @@ export default {
     },
     mounted() {
         document.body.addEventListener("dragover", this.dragoverHandler, true);
-        document.body.addEventListener("dragenter", this.dragenterHandler, true);
-        document.body.addEventListener("dragleave", this.dragleaveHandler, true);
+        document.body.addEventListener(
+            "dragenter",
+            this.dragenterHandler,
+            true
+        );
+        document.body.addEventListener(
+            "dragleave",
+            this.dragleaveHandler,
+            true
+        );
         document.body.addEventListener("drop", this.dropHandler, true);
     },
     beforeDestroy() {
@@ -100,12 +123,18 @@ export default {
         },
         dropHandler(e) {
             Array.prototype.filter
-                .call(this.$refs.container.querySelectorAll(".overlay-item"), (el) => {
-                    const rect = el.getBoundingClientRect();
-                    return (
-                        e.x > rect.left && e.x < rect.right && e.y > rect.top && e.y < rect.bottom
-                    );
-                })
+                .call(
+                    this.$refs.container.querySelectorAll(".overlay-item"),
+                    (el) => {
+                        const rect = el.getBoundingClientRect();
+                        return (
+                            e.x > rect.left &&
+                            e.x < rect.right &&
+                            e.y > rect.top &&
+                            e.y < rect.bottom
+                        );
+                    }
+                )
                 .forEach((el) => {
                     this.$emit("dropped", {
                         name: el.dataset.name,
@@ -118,7 +147,9 @@ export default {
     },
     watch: {
         helperOverlayVisible() {
-            document.title = this.helperOverlayVisible ? "请在对应区域释放文件" : "Meriix";
+            document.title = this.helperOverlayVisible
+                ? "请在对应区域释放文件"
+                : "Meriix";
         },
     },
 };

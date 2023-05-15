@@ -1,27 +1,40 @@
 <template>
     <div class="task-steps-container">
-        <template v-for="(step, index) in steps">
-            <div class="step-item" :key="step.uuid" :class="{ upcoming: current <= index }">
+        <template v-for="(step, index) in steps" :key="step.uuid">
+            <div class="step-item" :class="{ upcoming: current <= index }">
                 <div class="left">
-                    <v-icon class="status-icon" color="#3f51b5" v-if="current > index"
+                    <v-icon
+                        class="status-icon"
+                        color="#3f51b5"
+                        v-if="current > index"
                         >mdi-check</v-icon
                     >
-                    <v-icon class="status-icon loading" color="#3f51b5" v-if="current === index"
+                    <v-icon
+                        class="status-icon loading"
+                        color="#3f51b5"
+                        v-if="current === index"
                         >mdi-loading</v-icon
                     >
-                    <v-icon class="status-icon" color="#3f51b5" v-if="current < index"
+                    <v-icon
+                        class="status-icon"
+                        color="#3f51b5"
+                        v-if="current < index"
                         >mdi-progress-clock</v-icon
                     >
                 </div>
                 <div class="right">
-                    <div class="step-type">{{ step.type && getStepTypeName(step.type) }}</div>
+                    <div class="step-type">
+                        {{ step.type && getStepTypeName(step.type) }}
+                    </div>
                     <div class="step-name">{{ step.stepName }}</div>
                     <div
                         v-if="task.progress !== undefined && current == index"
                         class="progress-container"
                     >
                         <div class="progress-value">{{ task.progress }} %</div>
-                        <v-progress-linear :value="task.progress"></v-progress-linear>
+                        <v-progress-linear
+                            :value="task.progress"
+                        ></v-progress-linear>
                     </div>
                 </div>
             </div>

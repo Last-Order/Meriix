@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import log from "electron-log";
+const log = require("electron-log")
 import CommandExecuter from "./task_runners/command_executer";
 import EncoderLoader from "./task_runners/encoder_loader";
 import systemUtils from "@/utils/system";

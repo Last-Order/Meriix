@@ -32,8 +32,8 @@
     </v-container>
 </template>
 <script>
-import RecipeList from "./RecipeList";
-import OptionForm from "./OptionForm";
+import RecipeList from "./RecipeList.vue";
+import OptionForm from "./OptionForm.vue";
 import RecipeService from "@/services/recipe";
 import StorageService from "@/services/storage";
 

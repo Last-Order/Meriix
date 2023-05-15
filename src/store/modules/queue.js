@@ -1,9 +1,8 @@
-import log from "electron-log";
+const log = require("electron-log")
 import * as fs from "fs";
 import TaskExecuter from "@/services/task";
 import DependenceService from "@/services/dependence";
 import Storage from "@/services/storage";
-const uuid = require("uuid/v4");
 const kill = require("tree-kill");
 const state = {
     tasks: [],
@@ -13,7 +12,10 @@ const state = {
 const getters = {};
 const actions = {
     addTasks({ commit, dispatch }, { tasks, settings }) {
-        const taskDependencies = [...(tasks[0].dependencies || []), settings.encoderName];
+        const taskDependencies = [
+            ...(tasks[0].dependencies || []),
+            settings.encoderName,
+        ];
         const missingDeps = [];
         for (const dep of taskDependencies) {
             if (!DependenceService.isModuleInstalled(dep)) {
@@ -43,7 +45,9 @@ const actions = {
         if (state.runningTasks > 0) {
             return;
         }
-        const task = state.tasks.find((t) => t.category === "unfinished" && t.status !== "fail");
+        const task = state.tasks.find(
+            (t) => t.category === "unfinished" && t.status !== "fail"
+        );
         if (task) {
             log.info("开始执行下一任务");
             dispatch("runTask", task.uuid);
@@ -129,7 +133,9 @@ const actions = {
         setTimeout(() => {
             // 延迟 2 秒删除文件 防止文件占用删除失败
             if (
-                Storage.getSetting("general.deleteTemporaryFilesWhenCancelTasks") &&
+                Storage.getSetting(
+                    "general.deleteTemporaryFilesWhenCancelTasks"
+                ) &&
                 task.temporaryFilePaths?.length
             ) {
                 for (const file of task.temporaryFilePaths) {
@@ -154,7 +160,7 @@ const mutations = {
             ...tasks.map((t) => {
                 return {
                     ...t,
-                    uuid: uuid(),
+                    uuid: window.crypto.randomUUID(),
                     addTime: new Date(),
                     startTime: undefined,
                     phase: undefined,

@@ -1,45 +1,39 @@
 <template>
     <div>
         <v-app light>
-            <v-tabs v-model="active" dark>
-                <v-tab key="quickAction" ripple>快速操作</v-tab>
-                <!-- <v-tab key="videoEncode" ripple>视频编码</v-tab> -->
-                <div class="flex-grow-1"></div>
-                <v-btn icon height="48px" width="48px" @click="settingsVisible = true">
-                    <v-icon>mdi-settings</v-icon>
+            <v-toolbar color="primary" density="compact">
+                <v-toolbar-title>Meriix</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn icon @click="settingsVisible = true">
+                    <v-icon icon="mdi-cog-outline"></v-icon>
                 </v-btn>
-                <v-btn icon height="48px" width="48px" @click="queueDrawerVisible = true">
-                    <v-icon>mdi-format-list-bulleted-square</v-icon>
+                <v-btn icon @click="queueDrawerVisible = true">
+                    <v-icon icon="mdi-format-list-bulleted-square"></v-icon>
                 </v-btn>
-                <v-tabs-items v-model="active">
-                    <v-tab-item key="quickAction">
-                        <quick-action />
-                        <div class="quick-action-tip">{{ quickActionTip }}</div>
-                    </v-tab-item>
-                    <v-tab-item key="videoEncode">
-                        <video-encode />
-                    </v-tab-item>
-                </v-tabs-items>
-            </v-tabs>
-            <v-navigation-drawer
-                v-model="queueDrawerVisible"
-                absolute
-                temporary
-                right
-                width="400px"
-            >
+                <template v-slot:extension>
+                    <v-tabs v-model="active" dark>
+                        <v-tab key="quickAction" ripple>快速操作</v-tab>
+                    </v-tabs>
+                </template>
+            </v-toolbar>
+            <v-window v-model="active">
+                <v-window-item key="quickAction">
+                    <quick-action />
+                    <div class="quick-action-tip">{{ quickActionTip }}</div>
+                </v-window-item>
+                <v-window-item key="videoEncode">
+                    <video-encode />
+                </v-window-item>
+            </v-window>
+
+            <v-navigation-drawer v-model="queueDrawerVisible" absolute temporary location="right" :width="400">
                 <v-list-item>
-                    <v-list-item-content>
-                        <v-list-item-title>任务队列</v-list-item-title>
-                    </v-list-item-content>
+                    <v-list-item-title>任务队列</v-list-item-title>
                 </v-list-item>
                 <v-divider></v-divider>
                 <task-queue />
             </v-navigation-drawer>
-            <drop-helper
-                :options="$store.state.global.dropHelperOptions"
-                @dropped="droppedHandler"
-            />
+            <drop-helper :options="$store.state.global.dropHelperOptions" @dropped="droppedHandler" />
             <v-dialog v-model="showNewVersionTip">
                 <new-version-tip :version="latestVersion" @close="showNewVersionTip = false" />
             </v-dialog>
@@ -49,37 +43,27 @@
             <v-dialog v-model="settingsVisible" width="70vw">
                 <settings />
             </v-dialog>
-            <v-dialog
-                v-if="!showNewVersionTip"
-                v-model="remoteDependenceLibraryUrlSettingTipVisble"
-                width="70vw"
-            >
+            <v-dialog v-if="!showNewVersionTip" v-model="remoteDependenceLibraryUrlSettingTipVisble" width="70vw">
                 <v-card>
                     <v-card-title>提示</v-card-title>
                     <v-card-text>暂未设置远程依赖库地址，无法下载依赖，是否设置？</v-card-text>
                     <v-card-actions>
                         <v-spacer />
-                        <v-btn
-                            text
-                            color="#aaa"
-                            @click="remoteDependenceLibraryUrlSettingTipVisble = false"
-                            >以后再说</v-btn
-                        >
-                        <v-btn text color="#aaa" @click="disableDependenceLibraryUrlSettingTip"
-                            >不再提示</v-btn
-                        >
+                        <v-btn text color="#aaa" @click="
+                            remoteDependenceLibraryUrlSettingTipVisble = false
+                        ">以后再说</v-btn>
+                        <v-btn text color="#aaa" @click="disableDependenceLibraryUrlSettingTip">不再提示</v-btn>
                         <v-btn text color="primary" @click="showSettings">设置</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
-            <v-snackbar
-                v-model="$store.state.error.show"
-                color="error"
-                :top="true"
-                :timeout="50000"
-            >
+            <v-snackbar v-model="$store.state.error.show" color="error" :top="true" :timeout="50000">
                 {{ $store.state.error.message }}
-                <v-btn dark text @click="$store.commit('hideError')">×</v-btn>
+                <template v-slot:actions>
+                    <v-btn color="white" variant="text" @click="$store.commit('hideError')">
+                        ×
+                    </v-btn>
+                </template>
             </v-snackbar>
             <notification-center />
         </v-app>
@@ -101,22 +85,22 @@ body {
     justify-content: center;
     align-items: center;
     font-size: xx-large;
-    height: calc(100vh - 102px);
+    height: calc(100vh - 122px);
     color: #aaa;
     user-select: none;
 }
 </style>
 <script>
 import { ipcRenderer } from "electron";
-import log from "electron-log";
-import QuickAction from "@/components/QuickAction/Index";
-import VideoEncode from "@/components/VideoEncode/Index";
-import DropHelper from "@/components/Common/DropHelper";
-import TaskQueue from "@/components/TaskQueue/Index";
-import NotificationCenter from "@/components/NotificationCenter/Index";
-import NewVersionTip from "@/components/Common/NewVersionTip";
-import DependenceDownload from "@/components/Dependence/Download";
-import Settings from "@/components/Settings/Index";
+const log = require("electron-log");
+import QuickAction from "@/components/QuickAction/Index.vue";
+import VideoEncode from "@/components/VideoEncode/Index.vue";
+import DropHelper from "@/components/Common/DropHelper.vue";
+import TaskQueue from "@/components/TaskQueue/Index.vue";
+import NotificationCenter from "@/components/NotificationCenter/Index.vue";
+import NewVersionTip from "@/components/Common/NewVersionTip.vue";
+import DependenceDownload from "@/components/Dependence/Download.vue";
+import Settings from "@/components/Settings/Index.vue";
 import Dependence from "@/services/dependence";
 import Version from "@/services/version";
 import Storage from "@/services/storage";
@@ -148,8 +132,11 @@ export default {
     },
     async mounted() {
         // Check Available Encoders
-        let availableEncoders = await ipcRenderer.invoke("get-available-encoders");
-        const encoderPriority = this.$store.state.global.encoderPriority || DefaultEncoderPriority;
+        let availableEncoders = await ipcRenderer.invoke(
+            "get-available-encoders"
+        );
+        const encoderPriority =
+            this.$store.state.global.encoderPriority || DefaultEncoderPriority;
         availableEncoders = availableEncoders.sort(
             (a, b) => encoderPriority.indexOf(a) - encoderPriority.indexOf(b)
         );
@@ -182,13 +169,18 @@ export default {
         }
         // Check Remote Dependence Library
         if (!this.$store.state.settings.dependence.remoteLibraryRepositoryUrl) {
-            if (!Storage.getSetting("others.disableDependenceLibraryUrlSettingTip")) {
+            if (
+                !Storage.getSetting(
+                    "others.disableDependenceLibraryUrlSettingTip"
+                )
+            ) {
                 this.remoteDependenceLibraryUrlSettingTipVisble = true;
             }
         } else {
             try {
                 await Dependence.downloadRemoteLibraryDefinition(
-                    this.$store.state.settings.dependence.remoteLibraryRepositoryUrl
+                    this.$store.state.settings.dependence
+                        .remoteLibraryRepositoryUrl
                 );
             } catch (e) {
                 this.$store.commit("showError", e.message);
@@ -212,7 +204,10 @@ export default {
         },
         disableDependenceLibraryUrlSettingTip() {
             this.remoteDependenceLibraryUrlSettingTipVisble = false;
-            Storage.setSetting("others.disableDependenceLibraryUrlSettingTip", true);
+            Storage.setSetting(
+                "others.disableDependenceLibraryUrlSettingTip",
+                true
+            );
         },
     },
     errorCaptured(err) {

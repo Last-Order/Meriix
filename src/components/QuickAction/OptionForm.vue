@@ -1,41 +1,47 @@
 <template>
-    <v-flex class="option-form">
-        <div v-if="scheme && scheme.length > 0 && Object.keys(nameMapping).length > 0">
-            <v-form>
-                <template v-for="item in scheme">
-                    <v-row :key="item.name">
-                        <template v-if="item.type === 'select'">
-                            <v-col cols="6">
-                                <v-select
-                                    :value="getSchemeItemByName(item.name).defaultValue"
-                                    :items="getSchemeItemByName(item.name).values"
-                                    :label="getSchemeItemByName(item.name).label"
-                                    @change="(v) => updateForm(item.name, v)"
-                                ></v-select>
-                            </v-col>
-                        </template>
-                        <template v-if="item.type === 'input'">
-                            <v-col cols="6">
-                                <v-text-field
-                                    :value="getSchemeItemByName(item.name).defaultValue"
-                                    :label="getSchemeItemByName(item.name).label"
-                                    @change="(v) => updateForm(item.name, v)"
-                                ></v-text-field>
-                            </v-col>
-                        </template>
-                        <template v-if="item.type === 'checkbox'">
-                            <v-col cols="6">
-                                <v-checkbox
-                                    v-model="form[item.name]"
-                                    :label="getSchemeItemByName(item.name).label"
-                                ></v-checkbox>
-                            </v-col>
-                        </template>
-                    </v-row>
-                </template>
-            </v-form>
-        </div>
-    </v-flex>
+    <div
+        v-if="
+            scheme && scheme.length > 0 && Object.keys(nameMapping).length > 0
+        "
+    >
+        <v-form>
+            <template v-for="item in scheme" :key="item.name">
+                <v-row>
+                    <template v-if="item.type === 'select'">
+                        <v-col cols="6">
+                            <v-select
+                                :value="
+                                    getSchemeItemByName(item.name).defaultValue
+                                "
+                                :items="getSchemeItemByName(item.name).values"
+                                :label="getSchemeItemByName(item.name).label"
+                                @change="(v) => updateForm(item.name, v)"
+                            ></v-select>
+                        </v-col>
+                    </template>
+                    <template v-if="item.type === 'input'">
+                        <v-col cols="6">
+                            <v-text-field
+                                :value="
+                                    getSchemeItemByName(item.name).defaultValue
+                                "
+                                :label="getSchemeItemByName(item.name).label"
+                                @change="(v) => updateForm(item.name, v)"
+                            ></v-text-field>
+                        </v-col>
+                    </template>
+                    <template v-if="item.type === 'checkbox'">
+                        <v-col cols="6">
+                            <v-checkbox
+                                v-model="form[item.name]"
+                                :label="getSchemeItemByName(item.name).label"
+                            ></v-checkbox>
+                        </v-col>
+                    </template>
+                </v-row>
+            </template>
+        </v-form>
+    </div>
 </template>
 <script>
 export default {

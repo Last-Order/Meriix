@@ -1,17 +1,20 @@
 <template>
     <v-container>
-        <v-list subheader flat two-line>
-            <v-subheader>任务</v-subheader>
+        <v-list subheader flat lines="two">
+            <v-list-subheader>任务</v-list-subheader>
             <v-list-item>
-                <v-list-item-action>
-                    <v-checkbox v-model="deleteTemporaryFilesWhenCancelTasks" />
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title>中断任务时删除中间文件</v-list-item-title>
-                    <v-list-item-subtitle
-                        >取消任务时将会删除任务产生的中间临时文件</v-list-item-subtitle
-                    >
-                </v-list-item-content>
+                <template v-slot:prepend>
+                    <v-list-item-action>
+                        <v-checkbox-btn
+                            v-model="deleteTemporaryFilesWhenCancelTasks"
+                        />
+                    </v-list-item-action>
+                </template>
+
+                <v-list-item-title>中断任务时删除中间文件</v-list-item-title>
+                <v-list-item-subtitle
+                    >取消任务时将会删除任务产生的中间临时文件</v-list-item-subtitle
+                >
             </v-list-item>
         </v-list>
     </v-container>
@@ -24,10 +27,14 @@ export default {
     computed: {
         deleteTemporaryFilesWhenCancelTasks: {
             get() {
-                return this.$store.state.settings.general.deleteTemporaryFilesWhenCancelTasks;
+                return this.$store.state.settings.general
+                    .deleteTemporaryFilesWhenCancelTasks;
             },
             set(value) {
-                this.$store.commit("updateDeleteTemporaryFilesWhenCancelTasks", value);
+                this.$store.commit(
+                    "updateDeleteTemporaryFilesWhenCancelTasks",
+                    value
+                );
             },
         },
     },

@@ -2,27 +2,28 @@
     <v-list two-line>
         <template v-if="loading">
             <div class="text-center">
-                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                <v-progress-circular
+                    indeterminate
+                    color="primary"
+                ></v-progress-circular>
             </div>
         </template>
         <template v-else>
-            <template v-for="recipe in recipes">
-                <v-list-item
-                    :key="recipe.definition.id"
-                    ripple
-                    @click="handleRecipeSelected(recipe)"
-                >
-                    <v-list-item-content>
-                        <v-list-item-title>
-                            <div class="item-title-container">
-                                <div class="item-title">{{ recipe.definition.name }}</div>
-                                <div class="item-version">{{ recipe.definition.version }}</div>
+            <template v-for="recipe in recipes" :key="recipe.definition.id">
+                <v-list-item ripple @click="handleRecipeSelected(recipe)">
+                    <v-list-item-title>
+                        <div class="item-title-container">
+                            <div class="item-title">
+                                {{ recipe.definition.name }}
                             </div>
-                        </v-list-item-title>
-                        <v-list-item-subtitle>{{
-                            recipe.definition.description
-                        }}</v-list-item-subtitle>
-                    </v-list-item-content>
+                            <div class="item-version">
+                                {{ recipe.definition.version }}
+                            </div>
+                        </div>
+                    </v-list-item-title>
+                    <v-list-item-subtitle>{{
+                        recipe.definition.description
+                    }}</v-list-item-subtitle>
                 </v-list-item>
             </template>
         </template>

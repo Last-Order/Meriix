@@ -1,7 +1,7 @@
 <template>
     <div class="log-viewer-container" v-if="logs" ref="container">
-        <template v-for="(log, index) in logs">
-            <div class="log-viewer-line" :key="index">{{ log.content }}</div>
+        <template v-for="(log, index) in logs" :key="index">
+            <div class="log-viewer-line">{{ log.content }}</div>
         </template>
     </div>
 </template>

@@ -1,14 +1,18 @@
 <template>
     <v-container>
         <v-list subheader>
-            <v-subheader>依赖设置</v-subheader>
+            <v-list-subheader>依赖设置</v-list-subheader>
             <v-list-item>
                 <v-form class="repository-form-container">
                     <v-text-field
                         label="外部依赖仓库地址 / 刷新后生效"
                         v-model="remoteLibraryRepositoryUrl"
                     ></v-text-field>
-                    <v-btn tile color="primary" @click="saveRemoteLibraryRepositoryUrl">
+                    <v-btn
+                        tile
+                        color="primary"
+                        @click="saveRemoteLibraryRepositoryUrl"
+                    >
                         <template v-if="saveRemoteLibraryRepositoryUrlLoading">
                             <v-icon class="loading">mdi-loading</v-icon>
                         </template>
@@ -17,9 +21,13 @@
                 </v-form>
             </v-list-item>
             <div class="d-flex justify-space-between align-center">
-                <v-subheader class="section-title">已安装依赖列表</v-subheader>
+                <v-list-subheader class="section-title"
+                    >已安装依赖列表</v-list-subheader
+                >
                 <div v-if="remoteLibraryRepositoryUrl">
-                    <v-btn @click="remoteDependencePanelVisible = true">从远端安装依赖</v-btn>
+                    <v-btn @click="remoteDependencePanelVisible = true"
+                        >从远端安装依赖</v-btn
+                    >
                 </div>
             </div>
             <v-list-item>
@@ -31,6 +39,7 @@
                             label="搜索"
                             single-line
                             hide-details
+                            density="compact"
                         ></v-text-field>
                     </v-col>
                 </div>
@@ -42,15 +51,21 @@
                     :search="search"
                     class="dependence-table"
                 >
-                    <template v-slot:item.version="{ item }">
-                        {{ item.version }}
-                    </template>
                     <template v-slot:item.remote_version="{ item }">
-                        {{ getRemoteVersion(item.name) || "不适用" }}
+                        {{ getRemoteVersion(item.raw.name) || "不适用" }}
                     </template>
                     <template v-slot:item.operations="{ item }">
-                        <template v-if="getRemoteVersion(item.name) !== item.version">
-                            <v-btn text @click="downloadModule(item.name)">下载</v-btn>
+                        <template
+                            v-if="
+                                getRemoteVersion(item.raw.name) !==
+                                item.raw.version
+                            "
+                        >
+                            <v-btn
+                                variant="text"
+                                @click="downloadModule(item.raw.name)"
+                                >下载</v-btn
+                            >
                         </template>
                         <template v-else> 无可用操作 </template>
                     </template>
@@ -88,7 +103,7 @@
 </style>
 <script>
 import DependenceService from "@/services/dependence";
-import RemoteDependence from "./RemoteDependence";
+import RemoteDependence from "./RemoteDependence.vue";
 export default {
     components: {
         RemoteDependence,
@@ -99,22 +114,20 @@ export default {
             remoteDependenceInfo: {},
             headers: [
                 {
-                    text: "依赖项",
-                    value: "name",
+                    title: "依赖项",
+                    key: "name",
                 },
                 {
-                    text: "本地版本号",
-                    value: "version",
+                    title: "本地版本号",
+                    key: "version",
                 },
                 {
-                    text: "远程版本号",
-                    value: "remote_version",
-                    sortable: false,
+                    title: "远程版本号",
+                    key: "remote_version",
                 },
                 {
-                    text: "操作",
-                    value: "operations",
-                    sortable: false,
+                    title: "操作",
+                    key: "operations",
                 },
             ],
             search: "",
@@ -132,20 +145,26 @@ export default {
                     type: "local",
                 });
             }
+            console.log(result);
             return result;
         },
         remoteLibraryRepositoryUrl: {
             get() {
-                return this.$store.state.settings.dependence.remoteLibraryRepositoryUrl;
+                return this.$store.state.settings.dependence
+                    .remoteLibraryRepositoryUrl;
             },
             set(remoteLibraryRepositoryUrl) {
                 if (remoteLibraryRepositoryUrl.endsWith("/")) {
-                    remoteLibraryRepositoryUrl = remoteLibraryRepositoryUrl.slice(
-                        0,
-                        remoteLibraryRepositoryUrl.length - 1
-                    );
+                    remoteLibraryRepositoryUrl =
+                        remoteLibraryRepositoryUrl.slice(
+                            0,
+                            remoteLibraryRepositoryUrl.length - 1
+                        );
                 }
-                this.$store.commit("updateRemoteLibraryRepositoryUrl", remoteLibraryRepositoryUrl);
+                this.$store.commit(
+                    "updateRemoteLibraryRepositoryUrl",
+                    remoteLibraryRepositoryUrl
+                );
             },
         },
     },
@@ -168,7 +187,10 @@ export default {
             }
         },
         getRemoteVersion(moduleName) {
-            if (this.remoteDependenceInfo && this.remoteDependenceInfo[moduleName]) {
+            if (
+                this.remoteDependenceInfo &&
+                this.remoteDependenceInfo[moduleName]
+            ) {
                 return this.remoteDependenceInfo[moduleName].version;
             }
             return "";
@@ -181,7 +203,8 @@ export default {
             commit("setTasksAfterDownload", []);
             commit("setCallbackAfterDownload", () => {
                 // refresh table
-                this.dependenceInfo = DependenceService.getCurrentDependenceInfo();
+                this.dependenceInfo =
+                    DependenceService.getCurrentDependenceInfo();
             });
         },
     },

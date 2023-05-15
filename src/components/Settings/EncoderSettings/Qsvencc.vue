@@ -4,15 +4,17 @@
             <v-row>
                 <v-col :cols="4">
                     <v-select
-                        dense
+                        density="compact"
                         :items="bitrateControlModeOptions"
+                        item-title="text"
+                        item-value="value"
                         label="码率控制模式"
                         v-model="bitrateControlMode"
                     ></v-select>
                 </v-col>
                 <v-col :cols="2">
                     <v-text-field
-                        dense
+                        density="compact"
                         label="码率"
                         v-model="bitrateControlValue"
                         suffix="Kbps"
@@ -45,7 +47,8 @@ export default {
     computed: {
         bitrateControlMode: {
             get() {
-                return this.$store.state.settings.encoders.qsvencc.bitrateControlMode;
+                return this.$store.state.settings.encoders.qsvencc
+                    .bitrateControlMode;
             },
             set(value) {
                 this.$store.commit("updateEncoderSettings", {
@@ -58,7 +61,8 @@ export default {
         },
         bitrateControlValue: {
             get() {
-                return this.$store.state.settings.encoders.qsvencc.bitrateControlValue;
+                return this.$store.state.settings.encoders.qsvencc
+                    .bitrateControlValue;
             },
             set(value) {
                 this.$store.commit("updateEncoderSettings", {

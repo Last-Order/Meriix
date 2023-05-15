@@ -2,9 +2,14 @@
     <div class="encoder-list-container">
         <v-card flat v-for="(encoder, index) in availableEncoders" :key="encoder.name">
             <v-card-title>
-                <div>{{ encoder.name }}</div>
-                <v-spacer />
-                <v-chip class="ma-2" small v-if="index === 0" color="primary">最优先</v-chip>
+                <v-row>
+                    <v-col>
+                        <div>
+                            {{ encoder.name }}
+                            <template v-if="index === 0">&nbsp;[最优先]</template>
+                        </div>
+                    </v-col>
+                </v-row>
             </v-card-title>
             <v-card-text>
                 <template v-if="encoder.isAvailable">
@@ -16,21 +21,17 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer />
-                <v-btn text v-if="index !== 0" @click="increasePriority(encoder)">上移</v-btn>
-                <v-btn
-                    text
-                    v-if="index !== availableEncoders.length - 1"
-                    @click="decreasePriority(encoder)"
-                    >下移</v-btn
-                >
+                <v-btn variant="text" v-if="index !== 0" @click="increasePriority(encoder)">上移</v-btn>
+                <v-btn variant="text" v-if="index !== availableEncoders.length - 1"
+                    @click="decreasePriority(encoder)">下移</v-btn>
             </v-card-actions>
         </v-card>
     </div>
 </template>
 <script>
-import X264 from "./EncoderSettings/X264";
-import Nvencc from "./EncoderSettings/Nvencc";
-import Qsvencc from "./EncoderSettings/Qsvencc";
+import X264 from "./EncoderSettings/X264.vue";
+import Nvencc from "./EncoderSettings/Nvencc.vue";
+import Qsvencc from "./EncoderSettings/Qsvencc.vue";
 import DefaultEncoderPriority from "@/definitions/default_encoder_priority";
 export default {
     data() {
@@ -39,11 +40,15 @@ export default {
     computed: {
         availableEncoders() {
             const encoders = DefaultEncoderPriority;
-            const priority = this.$store.state.global.encoderPriority || encoders;
+            const priority =
+                this.$store.state.global.encoderPriority || encoders;
             return priority.map((encoder) => {
                 return {
                     name: encoder,
-                    isAvailable: this.$store.state.global.availableEncoders.includes(encoder),
+                    isAvailable:
+                        this.$store.state.global.availableEncoders.includes(
+                            encoder
+                        ),
                 };
             });
         },
