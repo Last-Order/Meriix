@@ -1,9 +1,8 @@
+import { ipcRenderer } from "electron";
+
 class MediaService {
     static async getAudioMetadata(path) {
-        const mm = require("music-metadata");
-        return await mm.parseFile(path, {
-            duration: true,
-        });
+        return await ipcRenderer.invoke("parse-media-file", path);
     }
 }
 

@@ -1,10 +1,12 @@
+const log = require("electron-log");
+const fs = require("fs");
 import { EventEmitter } from "events";
-const log = require("electron-log")
 import CommandExecuter from "./task_runners/command_executer";
 import EncoderLoader from "./task_runners/encoder_loader";
 import systemUtils from "@/utils/system";
 import { VideoMuxer, VideoTrack, AudioTrack } from "./task_runners/video_muxer";
-const fs = require("fs");
+import SMGPipe from "./task_runners/pipes/smgpipe";
+import AVSPipe from "./task_runners/pipes/avspipe";
 
 class TaskService extends EventEmitter {
     constructor(task) {
@@ -26,7 +28,9 @@ class TaskService extends EventEmitter {
             return;
         }
         const currentStep = this.task.steps[this.currentStepIndex];
-        log.debug(`任务 步数 ${this.currentStepIndex + 1} / ${this.task.steps.length}`);
+        log.debug(
+            `任务 步数 ${this.currentStepIndex + 1} / ${this.task.steps.length}`
+        );
         log.debug(`当前步骤`, currentStep);
         this.emit("progress", {
             phase: currentStep.stepName,
@@ -84,18 +88,26 @@ class TaskService extends EventEmitter {
                 this.currentStepIndex.encoderSettings
             );
             const encoderClass = EncoderLoader(this.task.encoderName);
+            console.log(encoderClass)
             if (currentStep.pipe === "avs") {
-                log.debug(`创建 AVS 管道 ${currentStep.input} -> ${currentStep.output}`);
-                const AVSPipe = require("./task_runners/pipes/avspipe").default;
-                executer = new AVSPipe(currentStep.input, currentStep.output, encoderClass, {
-                    encoderSettings: {
-                        ...this.task.encoderSettings,
-                        ...currentStep.encoderSettings,
-                    },
-                });
+                log.debug(
+                    `创建 AVS 管道 ${currentStep.input} -> ${currentStep.output}`
+                );
+                executer = new AVSPipe(
+                    currentStep.input,
+                    currentStep.output,
+                    encoderClass,
+                    {
+                        encoderSettings: {
+                            ...this.task.encoderSettings,
+                            ...currentStep.encoderSettings,
+                        },
+                    }
+                );
             } else if (currentStep.pipe === "smg") {
-                log.debug(`创建 SMG 管道 ${currentStep.input} -> ${currentStep.output}`);
-                const SMGPipe = require("./task_runners/pipes/smgpipe").default;
+                log.debug(
+                    `创建 SMG 管道 ${currentStep.input} -> ${currentStep.output}`
+                );
                 executer = new SMGPipe(
                     currentStep.input,
                     currentStep.output,
@@ -120,12 +132,16 @@ class TaskService extends EventEmitter {
                 const videoMuxer = new VideoMuxer(currentStep.output);
                 if (currentStep.videoTracks) {
                     videoMuxer.addVideoTracks(
-                        currentStep.videoTracks.map((track) => new VideoTrack(track))
+                        currentStep.videoTracks.map(
+                            (track) => new VideoTrack(track)
+                        )
                     );
                 }
                 if (currentStep.AudioTracks) {
                     videoMuxer.addAudioTracks(
-                        currentStep.audioTracks.map((track) => new AudioTrack(track))
+                        currentStep.audioTracks.map(
+                            (track) => new AudioTrack(track)
+                        )
                     );
                 }
                 executer = videoMuxer;

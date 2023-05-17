@@ -123,6 +123,7 @@ ipcMain.handle("open-win", (_, arg) => {
 });
 
 import SystemService from "./services/system";
+import MediaService from "./services/media";
 
 // Handle IPC Events
 ipcMain.handle("get-available-encoders", async () => {
@@ -135,4 +136,8 @@ ipcMain.handle("get-version", async () => {
 
 ipcMain.handle("open-devtools", async () => {
     win.webContents.openDevTools();
+});
+
+ipcMain.handle("parse-media-file", async (event, filePath: string) => {
+    return await MediaService.getAudioMetadata(filePath);
 });

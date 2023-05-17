@@ -10,12 +10,9 @@
                     <template v-if="item.type === 'select'">
                         <v-col cols="6">
                             <v-select
-                                :value="
-                                    getSchemeItemByName(item.name).defaultValue
-                                "
+                                v-model="form[item.name]"
                                 :items="getSchemeItemByName(item.name).values"
                                 :label="getSchemeItemByName(item.name).label"
-                                @change="(v) => updateForm(item.name, v)"
                             ></v-select>
                         </v-col>
                     </template>
@@ -66,12 +63,15 @@ export default {
             const nameMapping = {};
             for (const item of this.scheme) {
                 if (item.type === "select" || item.type === "input") {
-                    form[item.name] = "";
+                    form[item.name] =
+                        this.initial?.[item.name] !== undefined
+                            ? this.initial?.[item.name]
+                            : item.defaultValue;
                 }
                 if (item.type === "checkbox") {
                     form[item.name] =
                         this.initial?.[item.name] !== undefined
-                            ? this.initial?.[item.name] !== undefined
+                            ? this.initial?.[item.name]
                             : item.defaultValue;
                 }
                 nameMapping[item.name] = {

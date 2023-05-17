@@ -17,11 +17,8 @@
                     <span class="headline">参数设置</span>
                 </v-card-title>
                 <v-card-text>
-                    <option-form
-                        :scheme="formScheme"
-                        :initial="initialForm"
-                        @change="handleOptionFormUpdated"
-                    ></option-form>
+                    <option-form :scheme="formScheme" :initial="initialForm"
+                        @change="handleOptionFormUpdated"></option-form>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer />
@@ -81,8 +78,10 @@ export default {
                 this.loading = false;
                 // Get last time user input options
                 const options = StorageService.getRecipeOptions(this.selectedRecipe.definition.id);
+                const defaultOptions = Object.fromEntries(this.formScheme.map(o => [o.name, o.defaultValue]))
                 this.initialForm = {
                     ...this.form,
+                    ...defaultOptions,
                     ...options,
                 };
                 this.step = "option";

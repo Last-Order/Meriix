@@ -1,6 +1,6 @@
 import BaseEncoder from "./base_encoder";
 
-class X264 extends BaseEncoder {
+class X264Encoder extends BaseEncoder {
     static encoderName = "x264";
     constructor(input, output, settings) {
         super(input, output, settings);
@@ -17,4 +17,4 @@ class X264 extends BaseEncoder {
     }
 }
 
-export default X264;
+export default X264Encoder;
