@@ -1,38 +1,27 @@
 <template>
-    <div
-        v-if="
-            scheme && scheme.length > 0 && Object.keys(nameMapping).length > 0
-        "
-    >
+    <div v-if="scheme && scheme.length > 0 && Object.keys(nameMapping).length > 0
+        ">
         <v-form>
             <template v-for="item in scheme" :key="item.name">
                 <v-row>
                     <template v-if="item.type === 'select'">
                         <v-col cols="6">
-                            <v-select
-                                v-model="form[item.name]"
-                                :items="getSchemeItemByName(item.name).values"
+                            <v-select :model-value="form[item.name]" :items="getSchemeItemByName(item.name).values"
                                 :label="getSchemeItemByName(item.name).label"
-                            ></v-select>
+                                @update:model-value="(v) => updateForm(item.name, v)"></v-select>
                         </v-col>
                     </template>
                     <template v-if="item.type === 'input'">
                         <v-col cols="6">
-                            <v-text-field
-                                :value="
-                                    getSchemeItemByName(item.name).defaultValue
-                                "
-                                :label="getSchemeItemByName(item.name).label"
-                                @change="(v) => updateForm(item.name, v)"
-                            ></v-text-field>
+                            <v-text-field :value="getSchemeItemByName(item.name).defaultValue
+                                " :label="getSchemeItemByName(item.name).label"
+                                @change="(v) => updateForm(item.name, v)"></v-text-field>
                         </v-col>
                     </template>
                     <template v-if="item.type === 'checkbox'">
                         <v-col cols="6">
-                            <v-checkbox
-                                v-model="form[item.name]"
-                                :label="getSchemeItemByName(item.name).label"
-                            ></v-checkbox>
+                            <v-checkbox v-model="form[item.name]"
+                                :label="getSchemeItemByName(item.name).label"></v-checkbox>
                         </v-col>
                     </template>
                 </v-row>
@@ -78,8 +67,8 @@ export default {
                     ...item,
                     ...(this.initial?.[item.name] !== undefined
                         ? {
-                              defaultValue: this.initial[item.name],
-                          }
+                            defaultValue: this.initial[item.name],
+                        }
                         : {}),
                 };
             }
@@ -88,6 +77,7 @@ export default {
         },
         updateForm(name, value) {
             this.form[name] = value;
+            console.log(this.form)
             this.$emit("change", this.form);
         },
         getSchemeItemByName(name) {

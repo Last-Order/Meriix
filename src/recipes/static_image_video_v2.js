@@ -18,7 +18,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
                     label: "分辨率",
                     type: "select",
                     values: ["1080p", "720p"],
-                    defaultValue: "720p",
+                    defaultValue: "1080p",
                 },
             ],
         };
@@ -49,7 +49,7 @@ export default class StaticImageVideoV2 extends BaseRecipe {
     }
 
     static async generateTasks(files, options = {}) {
-        const { resolution = "720p" } = options;
+        const { resolution = "1080p" } = options;
         const tasks = [];
         const imageFile = Array.prototype.find.call(files, (f) => f.type.startsWith("image"));
         const audioFiles = Array.prototype.filter.call(files, (f) => !f.type.startsWith("image"));

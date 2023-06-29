@@ -78,7 +78,7 @@ export default {
                 this.loading = false;
                 // Get last time user input options
                 const options = StorageService.getRecipeOptions(this.selectedRecipe.definition.id);
-                const defaultOptions = Object.fromEntries(this.formScheme.map(o => [o.name, o.defaultValue]))
+                const defaultOptions = Object.fromEntries(this.formScheme.map(o => [o.name, o.defaultValue]));
                 this.initialForm = {
                     ...this.form,
                     ...defaultOptions,
